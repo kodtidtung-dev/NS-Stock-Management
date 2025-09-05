@@ -315,7 +315,7 @@ export default function StaffPage() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             className="w-full px-4 py-3 border border-gray-600 rounded-xl focus:ring-2 focus:ring-white focus:border-white transition-all duration-200 outline-none resize-none bg-gray-700 text-white placeholder-gray-400"
-            rows="3"
+            rows={3}
             placeholder="เช่น มีของเสียหาย, พบของเพิ่มในตู้เย็น..."
           />
         </div>
