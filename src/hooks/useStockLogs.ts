@@ -62,7 +62,7 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
     } finally {
       setLoading(false)
     }
-  }
+  }, [productId])
 
   const createStockLog = async (data: {
     productId: number
@@ -95,8 +95,6 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
       return false
     }
   }
-
-  }, [productId])
 
   useEffect(() => {
     fetchStockLogs()
