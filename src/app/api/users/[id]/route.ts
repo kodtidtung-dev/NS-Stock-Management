@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { Role } from '@prisma/client'
 
 export async function GET(
   request: NextRequest,
@@ -94,12 +95,12 @@ export async function PUT(
     // Prepare update data
     const updateData: {
       name: string
-      role: string
+      role: Role
       active: boolean
       password?: string
     } = {
       name,
-      role: role || existingUser.role,
+      role: (role as Role) || existingUser.role,
       active: active !== undefined ? active : existingUser.active
     }
 
