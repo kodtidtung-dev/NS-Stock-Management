@@ -12,6 +12,10 @@ interface Product {
   isLowStock: boolean
   lastUpdated: string | null
   lastUpdatedBy: number | null
+  active: boolean
+  category?: {
+    name: string
+  }
 }
 
 interface UseProductsReturn {
