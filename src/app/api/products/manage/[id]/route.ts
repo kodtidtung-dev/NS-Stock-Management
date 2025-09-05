@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
 // PUT: แก้ไขสินค้า
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = getTokenFromRequest(request)
@@ -164,7 +164,8 @@ export async function PUT(
       )
     }
 
-    const productId = parseInt(params.id)
+    const { id } = await params
+    const productId = parseInt(id)
     if (isNaN(productId)) {
       return NextResponse.json(
         { success: false, message: 'ID สินค้าไม่ถูกต้อง' },
@@ -262,7 +263,7 @@ export async function PUT(
 // DELETE: ลบสินค้า (soft delete)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = getTokenFromRequest(request)
@@ -275,7 +276,8 @@ export async function DELETE(
       )
     }
 
-    const productId = parseInt(params.id)
+    const { id } = await params
+    const productId = parseInt(id)
     if (isNaN(productId)) {
       return NextResponse.json(
         { success: false, message: 'ID สินค้าไม่ถูกต้อง' },
@@ -335,7 +337,8 @@ export async function PATCH(
       )
     }
 
-    const productId = parseInt(params.id)
+    const { id } = await params
+    const productId = parseInt(id)
     if (isNaN(productId)) {
       return NextResponse.json(
         { success: false, message: 'ID สินค้าไม่ถูกต้อง' },

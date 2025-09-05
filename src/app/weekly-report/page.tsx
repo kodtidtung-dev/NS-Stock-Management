@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { 
   Calendar, 
   TrendingDown, 
@@ -64,11 +64,7 @@ const WeeklyReportPage = () => {
   const [weeklyData, setWeeklyData] = useState<WeeklyData | null>(null)
   const [selectedWeek, setSelectedWeek] = useState(0) // 0 = current week, 1 = last week, etc.
 
-  useEffect(() => {
-    fetchWeeklyData()
-  }, [selectedWeek])
-
-  const fetchWeeklyData = async () => {
+  const fetchWeeklyData = useCallback(async () => {
     try {
       const response = await fetch(`/api/weekly-report?week=${selectedWeek}`)
       if (response.ok) {
@@ -106,7 +102,11 @@ const WeeklyReportPage = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedWeek])
+
+  useEffect(() => {
+    fetchWeeklyData()
+  }, [fetchWeeklyData])
 
   const handleRefresh = async () => {
     setRefreshing(true)

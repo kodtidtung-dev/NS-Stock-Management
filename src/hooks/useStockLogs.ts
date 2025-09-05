@@ -1,7 +1,7 @@
 // src/hooks/useStockLogs.ts
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 interface StockLog {
   id: number
@@ -39,7 +39,7 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchStockLogs = async () => {
+  const fetchStockLogs = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
@@ -96,9 +96,11 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
     }
   }
 
+  }, [productId])
+
   useEffect(() => {
     fetchStockLogs()
-  }, [productId])
+  }, [fetchStockLogs])
 
   const submitStockData = async (
     date: string, 

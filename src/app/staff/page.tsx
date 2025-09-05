@@ -77,7 +77,7 @@ export default function StaffPage() {
 
   const handleSave = async () => {
     // Validate that at least some fields are filled
-    const filledItems = Object.entries(stockData).filter(([_, value]) => value !== '')
+    const filledItems = Object.entries(stockData).filter(([, value]) => value !== '')
     if (filledItems.length === 0) {
       alert('กรุณากรอกข้อมูลอย่างน้อย 1 รายการ')
       return
