@@ -324,7 +324,7 @@ export async function DELETE(
 // PATCH: เปลี่ยนสถานะสินค้า (active/inactive)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = getTokenFromRequest(request)
