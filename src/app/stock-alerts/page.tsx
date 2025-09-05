@@ -75,6 +75,7 @@ const StockAlertsPage = () => {
     setRefreshing(false)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'OUT_OF_STOCK':

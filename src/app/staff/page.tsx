@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useProducts } from '@/hooks/useProducts'
 import { useStockLogs } from '@/hooks/useStockLogs'
-import { Coffee, Package, Save, LogOut, User, CheckCircle2, AlertCircle, Clock, RefreshCw, Filter } from 'lucide-react'
+import { Coffee, Package, Save, LogOut, User, CheckCircle2, AlertCircle, Clock, Filter } from 'lucide-react'
 
 export default function StaffPage() {
   const { user, logout } = useAuth()
-  const { products, loading: productsLoading, refetch: refetchProducts } = useProducts()
+  const { products, refetch: refetchProducts } = useProducts()
   const { submitStockData, loading: submitting } = useStockLogs()
   const router = useRouter()
 
@@ -228,10 +228,10 @@ export default function StaffPage() {
           <div className="text-center py-8">
             <Package className="w-16 h-16 mx-auto mb-4 text-gray-500" />
             <h3 className="text-lg font-semibold text-gray-400 mb-2">
-              ไม่พบสินค้าในหมวดหมู่ "{selectedCategory}"
+              ไม่พบสินค้าในหมวดหมู่ &quot;{selectedCategory}&quot;
             </h3>
             <p className="text-gray-500">
-              ลองเลือกหมวดหมู่อื่น หรือเลือก "ทั้งหมด" เพื่อดูสินค้าทั้งหมด
+              ลองเลือกหมวดหมู่อื่น หรือเลือก &quot;ทั้งหมด&quot; เพื่อดูสินค้าทั้งหมด
             </p>
           </div>
         ) : (

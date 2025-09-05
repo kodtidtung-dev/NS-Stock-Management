@@ -170,7 +170,13 @@ const UserManagementPage = () => {
       const url = modalType === 'add' ? '/api/users' : `/api/users/${selectedUser?.id}`
       const method = modalType === 'add' ? 'POST' : 'PUT'
       
-      const body: any = {
+      const body: {
+        username: string
+        name: string
+        role: string
+        active: boolean
+        password?: string
+      } = {
         username: formData.username,
         name: formData.name,
         role: formData.role,
@@ -580,7 +586,7 @@ const UserManagementPage = () => {
             {modalType === 'delete' ? (
               <div>
                 <p className="text-gray-300 mb-6">
-                  คุณต้องการลบผู้ใช้ "{selectedUser?.name}" หรือไม่?
+                  คุณต้องการลบผู้ใช้ &quot;{selectedUser?.name}&quot; หรือไม่?
                 </p>
                 {formErrors.submit && (
                   <div className="text-red-400 text-sm mb-4">{formErrors.submit}</div>

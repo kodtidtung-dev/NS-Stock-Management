@@ -90,7 +90,12 @@ export async function PUT(
     }
 
     // Prepare update data
-    const updateData: any = {
+    const updateData: {
+      name: string
+      role: string
+      active: boolean
+      password?: string
+    } = {
       name,
       role: role || existingUser.role,
       active: active !== undefined ? active : existingUser.active

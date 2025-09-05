@@ -34,7 +34,7 @@ const CoffeeLoginMinimalist = () => {
       if (!success) {
         setError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')
       }
-    } catch (err) {
+    } catch {
       setError('เกิดข้อผิดพลาด กรุณาลองใหม่')
     } finally {
       setLoading(false)

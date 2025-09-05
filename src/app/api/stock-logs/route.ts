@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const productId = searchParams.get('productId')
     const limit = parseInt(searchParams.get('limit') || '10')
 
-    const where: any = {}
+    const where: { productId?: number } = {}
     if (productId) {
       where.productId = parseInt(productId)
     }
@@ -127,9 +127,10 @@ export async function POST(request: NextRequest) {
             })
             
             createdLogs.push(stockLog)
-          } catch (error: any) {
+          } catch (error: unknown) {
             // Handle unique constraint violation - update existing log instead
-            if (error.code === 'P2002') {
+            const prismaError = error as { code?: string }
+            if (prismaError.code === 'P2002') {
               const updatedLog = await prisma.stockLog.update({
                 where: {
                   productId_date: {
@@ -235,9 +236,10 @@ export async function POST(request: NextRequest) {
         },
         { status: HTTP_STATUS.CREATED }
       )
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Handle unique constraint violation
-      if (error.code === 'P2002') {
+      const prismaError = error as { code?: string }
+      if (prismaError.code === 'P2002') {
         return NextResponse.json(
           { error: API_MESSAGES.STOCK.DUPLICATE_LOG },
           { status: HTTP_STATUS.CONFLICT }
