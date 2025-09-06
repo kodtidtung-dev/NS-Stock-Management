@@ -10,6 +10,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "npx prisma studio",
     "db:reset": "npx prisma db push --force-reset && npm run db:seed",
+    "db:clear-except-users": "tsx scripts/clear-except-users.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {

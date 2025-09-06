@@ -297,7 +297,13 @@ export async function DELETE(
       )
     }
 
-    // Hard delete - ลบจริงออกจาก database
+    // Hard delete - ลบข้อมูลที่เกี่ยวข้องก่อนแล้วลบสินค้า
+    // 1. ลบ StockLog ที่เกี่ยวข้องกับสินค้านี้ก่อน
+    await prisma.stockLog.deleteMany({
+      where: { productId: productId }
+    })
+    
+    // 2. ลบสินค้า
     const deletedProduct = await prisma.product.delete({
       where: { id: productId },
       select: {

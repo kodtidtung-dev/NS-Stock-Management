@@ -127,11 +127,11 @@ const OwnerDashboard = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "OUT_OF_STOCK":
-        return "bg-white";
+        return "bg-red-600 border border-gray-600";
       case "LOW_STOCK":
-        return "bg-gray-300";
+        return "bg-yellow-300 border border-gray-600";
       default:
-        return "bg-gray-600";
+        return "bg-white";
     }
   };
 
@@ -149,26 +149,26 @@ const OwnerDashboard = () => {
   const getBadgeColor = (status: string) => {
     switch (status) {
       case "OUT_OF_STOCK":
-        return "bg-gray-800 text-white border-gray-700";
+        return "bg-red-600 text-white border border-gray-600";
       case "LOW_STOCK":
-        return "bg-gray-600 text-white border-gray-500";
+        return "bg-yellow-300 text-black border border-gray-600";
       default:
-        return "bg-gray-400 text-black border-gray-300";
+        return "bg-white text-white border border-gray-300";
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-white">กำลังโหลด...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-black border-b border-white">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6">
           {/* Mobile Layout */}
           <div className="md:hidden">
@@ -182,31 +182,31 @@ const OwnerDashboard = () => {
                   className="object-contain"
                 />
                 <div>
-                  <h1 className="text-lg font-bold text-white">NS Dashboard</h1>
-                  <p className="text-xs text-gray-300">ภาพรวมสต็อก</p>
+                  <h1 className="text-xl font-extrabold text-white tracking-tight">NS Dashboard</h1>
+                  <p className="text-sm text-white font-medium">ภาพรวมสต็อก</p>
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <LogOut className="w-4 h-4 text-gray-300" />
+                <LogOut className="w-4 h-4 text-white" />
               </button>
             </div>
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-xs text-gray-300">
+              <div className="flex items-center space-x-2 text-xs text-white">
                 <User className="w-3 h-3" />
                 <span>{user.name}</span>
               </div>
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="flex items-center space-x-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 px-3 py-2 bg-white hover:bg-gray-100 text-white rounded-lg transition-colors disabled:opacity-50"
               >
                 <RefreshCw
-                  className={`w-3 h-3 ${refreshing ? "animate-spin" : ""}`}
+                  className={`w-3 h-3 text-black ${refreshing ? "animate-spin" : ""}`}
                 />
-                <span className="text-xs font-medium">รีเฟรช</span>
+                <span className="text-sm font-semibold text-black">รีเฟรช</span>
               </button>
             </div>
           </div>
@@ -222,10 +222,10 @@ const OwnerDashboard = () => {
                 className="object-contain"
               />
               <div>
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-3xl font-extrabold text-white tracking-tight">
                   NS Coffee Dashboard
                 </h1>
-                <p className="text-gray-300">ภาพรวมสต็อของในร้าน</p>
+                <p className="text-lg text-white font-medium">ภาพรวมสต็อของในร้าน</p>
               </div>
             </div>
 
@@ -233,24 +233,24 @@ const OwnerDashboard = () => {
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 px-4 py-2 bg-white hover:bg-gray-100 text-white rounded-lg transition-colors disabled:opacity-50"
               >
                 <RefreshCw
-                  className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+                  className={`w-4 h-4 text-black ${refreshing ? "animate-spin" : ""}`}
                 />
-                <span className="text-sm font-medium">รีเฟรช</span>
+                <span className="text-black font-semibold">รีเฟรช</span>
               </button>
 
-              <div className="flex items-center space-x-2 text-sm text-gray-300">
+              <div className="flex items-center space-x-2 text-sm text-white">
                 <User className="w-4 h-4" />
                 <span>{user.name}</span>
               </div>
 
               <button
                 onClick={handleLogout}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <LogOut className="w-5 h-5 text-gray-300" />
+                <LogOut className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
@@ -260,56 +260,56 @@ const OwnerDashboard = () => {
       <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Status Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-6 border border-gray-700 shadow-sm">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <p className="text-xs sm:text-sm text-gray-400">สินค้าทั้งหมด</p>
-                <p className="text-lg sm:text-2xl font-bold text-white">
+                <p className="text-sm sm:text-base text-gray-800 font-medium">สินค้าทั้งหมด</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {dashboardData?.summary.total || 0}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-6 border border-gray-700 shadow-sm">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-600 rounded-lg flex items-center justify-center">
                 <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <p className="text-xs sm:text-sm text-gray-400">สถานะปกติ</p>
-                <p className="text-lg sm:text-2xl font-bold text-white">
+                <p className="text-sm sm:text-base text-gray-800 font-medium">สถานะปกติ</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {dashboardData?.summary.ok || 0}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-6 border border-gray-700 shadow-sm">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-400 rounded-lg flex items-center justify-center">
                 <AlertTriangle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <p className="text-xs sm:text-sm text-gray-400">ใกล้หมด</p>
-                <p className="text-lg sm:text-2xl font-bold text-white">
+                <p className="text-sm sm:text-base text-gray-800 font-medium">ใกล้หมด</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {dashboardData?.summary.lowStock || 0}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-6 border border-gray-700 shadow-sm">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-red-600 rounded-lg flex items-center justify-center">
                 <TrendingDown className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <p className="text-xs sm:text-sm text-gray-400">หมดแล้ว</p>
-                <p className="text-lg sm:text-2xl font-bold text-white">
+                <p className="text-sm sm:text-base text-gray-800 font-medium">หมดแล้ว</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {dashboardData?.summary.outOfStock || 0}
                 </p>
               </div>
@@ -318,27 +318,27 @@ const OwnerDashboard = () => {
         </div>
 
         {/* Last Update Info */}
-        <div className="bg-gray-800 rounded-xl p-4 sm:p-6 border border-gray-700 shadow-sm">
+        <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-300 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-600 rounded-full flex items-center justify-center">
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <p className="text-xs sm:text-sm text-gray-400">อัปเดตล่าสุด</p>
-                <p className="text-sm sm:text-base font-semibold text-white">
+                <p className="text-sm sm:text-base text-gray-800 font-medium">อัปเดตล่าสุด</p>
+                <p className="text-base sm:text-lg font-bold text-gray-900 tracking-wide">
                   {new Date(
                     dashboardData?.lastUpdateDate || new Date()
                   ).toLocaleDateString("th-TH")}{" "}
                   เวลา {dashboardData?.lastUpdateTime || "--:--"} น.
                 </p>
-                <p className="text-xs sm:text-sm text-gray-500">
+                <p className="text-sm sm:text-base text-gray-800 font-medium">
                   บันทึกโดย {dashboardData?.updatedBy || "ระบบ"}
                 </p>
               </div>
             </div>
             <div className="text-left sm:text-right">
-              <div className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full bg-gray-600 text-gray-200 text-xs sm:text-sm font-medium">
+              <div className="inline-flex items-center px-3 sm:px-4 py-2 rounded-full bg-black text-white text-sm sm:text-base font-semibold">
                 <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                 ข้อมูลล่าสุด
               </div>
@@ -348,17 +348,17 @@ const OwnerDashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Low Stock Alerts */}
-          <div className="bg-gray-800 rounded-xl border border-gray-700 shadow-sm">
-            <div className="p-4 sm:p-6 border-b border-gray-700">
+          <div className="bg-white rounded-xl border border-gray-300 shadow-sm">
+            <div className="p-4 sm:p-6 border-b border-gray-300">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-600 rounded-lg flex items-center justify-center">
                     <Bell className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </div>
-                  <h2 className="text-base sm:text-lg font-bold text-white">
-                    สินค้าที่ต้องแจ้งเตือน
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+                    รายการแจ้งเตือนสินค้า
                   </h2>
-                  <span className="bg-gray-600 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                  <span className="bg-gray-300 text-black text-sm px-3 py-1 rounded-full font-bold">
                     {dashboardData?.lowStockProducts?.length || 0}
                   </span>
                 </div>
@@ -380,16 +380,16 @@ const OwnerDashboard = () => {
             <div className="p-4 sm:p-6">
               {!dashboardData?.lowStockProducts ||
               dashboardData.lowStockProducts.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
-                  <CheckCircle className="w-12 h-12 mx-auto mb-4 text-gray-500" />
-                  <p>ไม่มีสินค้าที่ต้องแจ้งเตือน</p>
+                <div className="text-center py-8 text-gray-600">
+                  <CheckCircle className="w-12 h-12 mx-auto mb-4 text-gray-800" />
+                  <p>ไม่มีสินค้าที่ใกล้จะหมด</p>
                 </div>
               ) : (
                 <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-gray-700 scrollbar-thumb-gray-500 hover:scrollbar-thumb-gray-400">
                   {dashboardData.lowStockProducts.slice(0, 10).map((product) => (
                     <div
                       key={product.id}
-                      className="flex items-center justify-between p-3 sm:p-4 bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 transition-colors"
+                      className="flex items-center justify-between p-3 sm:p-4 bg-gray-100 rounded-lg border border-gray-600 hover:bg-gray-200 transition-colors"
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-3">
@@ -399,10 +399,10 @@ const OwnerDashboard = () => {
                             )}`}
                           ></div>
                           <div className="min-w-0 flex-1">
-                            <p className="font-semibold text-white text-sm sm:text-base truncate">
+                            <p className="font-bold text-gray-900 text-base sm:text-lg tracking-wide truncate">
                               {product.name}
                             </p>
-                            <p className="text-xs sm:text-sm text-gray-400">
+                            <p className="text-sm sm:text-base text-gray-800 font-medium">
                               คงเหลือ: {product.currentStock} {product.unit} | 
                               ขั้นต่ำ: {product.minStock} {product.unit}
                             </p>
@@ -421,7 +421,7 @@ const OwnerDashboard = () => {
                   
                   {dashboardData.lowStockProducts.length > 10 && (
                     <div className="text-center pt-4 border-t border-gray-700">
-                      <p className="text-sm text-gray-400 mb-3">
+                      <p className="text-base text-gray-800 font-medium mb-3">
                         สินค้าทั้งหมด {dashboardData.lowStockProducts.length} รายการ
                       </p>
                       <button
@@ -441,17 +441,17 @@ const OwnerDashboard = () => {
           </div>
 
           {/* Today's Usage */}
-          <div className="bg-gray-800 rounded-xl border border-gray-700 shadow-sm">
-            <div className="p-4 sm:p-6 border-b border-gray-700">
+          <div className="bg-white rounded-xl border border-gray-300 shadow-sm">
+            <div className="p-4 sm:p-6 border-b border-gray-300">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <div className="w-6 h-6 sm:w-8 sm:h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                     <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </div>
-                  <h2 className="text-base sm:text-lg font-bold text-white">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
                     การใช้งานวันนี้
                   </h2>
-                  <span className="bg-gray-600 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                  <span className="bg-gray-300 text-black text-sm px-3 py-1 rounded-full font-bold">
                     {dashboardData?.todayUsage?.length || 0}
                   </span>
                 </div>
@@ -473,8 +473,8 @@ const OwnerDashboard = () => {
             <div className="p-4 sm:p-6">
               {!dashboardData?.todayUsage ||
               dashboardData.todayUsage.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
-                  <ShoppingCart className="w-12 h-12 mx-auto mb-4 text-gray-500" />
+                <div className="text-center py-8 text-gray-600">
+                  <ShoppingCart className="w-12 h-12 mx-auto mb-4 text-gray-800" />
                   <p>ยังไม่มีการใช้งานวันนี้</p>
                 </div>
               ) : (
@@ -482,29 +482,29 @@ const OwnerDashboard = () => {
                   {dashboardData.todayUsage.slice(0, 10).map((item, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-3 sm:p-4 bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 transition-colors"
+                      className="flex items-center justify-between p-3 sm:p-4 bg-gray-100 rounded-lg border border-gray-600 hover:bg-gray-200 transition-colors"
                     >
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
                           <Package className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="font-semibold text-white text-sm sm:text-base truncate">{item.name}</p>
-                          <p className="text-xs sm:text-sm text-gray-400">การใช้งานวันนี้</p>
+                          <p className="font-bold text-gray-900 text-base sm:text-lg tracking-wide truncate">{item.name}</p>
+                          <p className="text-sm sm:text-base text-gray-800 font-medium">การใช้งานวันนี้</p>
                         </div>
                       </div>
                       <div className="text-right flex-shrink-0 ml-2">
-                        <p className="font-bold text-white text-sm sm:text-base">
+                        <p className="font-extrabold text-gray-900 text-base sm:text-lg tracking-wide">
                           {item.used} {item.unit}
                         </p>
-                        <p className="text-xs text-gray-400">ใช้ไปแล้ว</p>
+                        <p className="text-base text-gray-800 font-medium">ใช้ไปแล้ว</p>
                       </div>
                     </div>
                   ))}
                   
                   {dashboardData.todayUsage.length > 10 && (
                     <div className="text-center pt-4 border-t border-gray-700">
-                      <p className="text-sm text-gray-400 mb-3">
+                      <p className="text-base text-gray-800 font-medium mb-3">
                         รายการทั้งหมด {dashboardData.todayUsage.length} รายการ
                       </p>
                       <button
@@ -525,33 +525,41 @@ const OwnerDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-gray-800 rounded-xl p-4 sm:p-6 border border-gray-700 shadow-sm">
-          <h2 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4">
-            การดำเนินการด่วน
+        <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-300 shadow-sm">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight mb-4 sm:mb-6">
+            Maganement Panel
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <button
               onClick={() => (window.location.href = "/products")}
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors border border-gray-600"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-600"
             >
-              <Package className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              <span className="text-sm sm:text-base font-medium text-white">จัดการสินค้า</span>
+              <Package className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+              <span className="text-base sm:text-lg font-semibold text-black">ดู / จัดการสินค้า</span>
+            </button>
+
+            <button
+              onClick={() => (window.location.href = "/staff")}
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-600"
+            >
+              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+              <span className="text-base sm:text-lg font-semibold text-black">อัปเดตสต็อก</span>
             </button>
 
             <button
               onClick={() => (window.location.href = "/weekly-report")}
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors border border-gray-600"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-600"
             >
-              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              <span className="text-sm sm:text-base font-medium text-white">รายงานประจำสัปดาห์</span>
+              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+              <span className="text-base sm:text-lg font-semibold text-black">รายงานประจำสัปดาห์</span>
             </button>
 
             <button
               onClick={() => (window.location.href = "/user-management")}
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors border border-gray-600"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-600"
             >
-              <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              <span className="text-sm sm:text-base font-medium text-white">จัดการพนักงาน</span>
+              <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+              <span className="text-base sm:text-lg font-semibold text-black">จัดการพนักงาน</span>
             </button>
           </div>
         </div>

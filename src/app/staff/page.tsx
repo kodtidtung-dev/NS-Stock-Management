@@ -18,9 +18,9 @@ export default function StaffPage() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string>('ทั้งหมด')
 
-  // Redirect if not staff
+  // Redirect if not staff or owner
   useEffect(() => {
-    if (user && user.role !== 'STAFF') {
+    if (user && user.role !== 'STAFF' && user.role !== 'OWNER') {
       router.push('/dashboard')
     }
   }, [user, router])
@@ -59,19 +59,19 @@ export default function StaffPage() {
 
   const getStockIcon = (status: string) => {
     switch (status) {
-      case 'ok': return <CheckCircle2 className="w-5 h-5 text-gray-300" />
-      case 'low': return <AlertCircle className="w-5 h-5 text-gray-400" />
-      case 'out': return <AlertCircle className="w-5 h-5 text-white" />
-      default: return <Package className="w-5 h-5 text-gray-500" />
+      case 'ok': return <CheckCircle2 className="w-5 h-5 text-green-600" />
+      case 'low': return <AlertCircle className="w-5 h-5 text-yellow-600" />
+      case 'out': return <AlertCircle className="w-5 h-5 text-red-600" />
+      default: return <Package className="w-5 h-5 text-black" />
     }
   }
 
   const getInputBorderColor = (status: string) => {
     switch (status) {
-      case 'ok': return 'border-gray-500 focus:border-gray-300 focus:ring-gray-300'
-      case 'low': return 'border-gray-400 focus:border-gray-300 focus:ring-gray-300'
-      case 'out': return 'border-white focus:border-gray-300 focus:ring-gray-300'
-      default: return 'border-gray-600 focus:border-white focus:ring-white'
+      case 'ok': return 'border-green-300 focus:border-green-500 focus:ring-green-500'
+      case 'low': return 'border-yellow-300 focus:border-yellow-500 focus:ring-yellow-500'
+      case 'out': return 'border-red-300 focus:border-red-500 focus:ring-red-500'
+      default: return 'border-gray-300 focus:border-black focus:ring-black'
     }
   }
 
@@ -151,43 +151,43 @@ export default function StaffPage() {
   const filteredTotalCount = filteredProducts.length
 
   if (!user) {
-    return <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+    return <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
     </div>
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 sticky top-0 z-10">
+      <div className="bg-white border-b-2 border-black sticky top-0 z-10">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <Coffee className="w-5 h-5 text-black" />
+              <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center border border-black">
+                <Coffee className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-white">อัปเดตสต็อก</h1>
-                <p className="text-sm text-gray-300">{getCurrentDate()}</p>
+                <h1 className="text-xl font-extrabold text-black tracking-tight">อัปเดตสต็อก</h1>
+                <p className="text-sm text-black font-medium">{getCurrentDate()}</p>
               </div>
             </div>
             <button 
               onClick={logout}
-              className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-gray-300"
             >
-              <LogOut className="w-5 h-5 text-gray-300" />
+              <LogOut className="w-5 h-5 text-black" />
             </button>
           </div>
 
           {/* Category Filter */}
           <div className="mt-4 mb-4">
             <div className="flex items-center space-x-3">
-              <Filter className="w-4 h-4 text-gray-300" />
-              <span className="text-sm text-gray-300">กรองตามหมวดหมู่:</span>
+              <Filter className="w-4 h-4 text-black" />
+              <span className="text-sm text-black font-medium">กรองตามหมวดหมู่:</span>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-2 bg-gray-700 text-white text-sm rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 bg-gray-100 text-black text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black"
               >
                 {allCategories.map((category) => (
                   <option key={category} value={category}>
@@ -201,16 +201,16 @@ export default function StaffPage() {
           {/* Progress Bar */}
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-black font-medium">
                 ความคืบหน้า {selectedCategory !== 'ทั้งหมด' && `(${selectedCategory})`}
               </span>
-              <span className="text-sm font-semibold text-white">
+              <span className="text-sm font-extrabold text-black">
                 {selectedCategory === 'ทั้งหมด' ? `${completedCount}/${totalCount}` : `${filteredCompletedCount}/${filteredTotalCount}`}
               </span>
             </div>
-            <div className="w-full bg-gray-700 rounded-full h-2">
+            <div className="w-full bg-gray-300 rounded-full h-2">
               <div 
-                className="bg-white h-2 rounded-full transition-all duration-300"
+                className="bg-black h-2 rounded-full transition-all duration-300"
                 style={{ 
                   width: selectedCategory === 'ทั้งหมด' 
                     ? `${totalCount > 0 ? (completedCount / totalCount) * 100 : 0}%`
@@ -226,11 +226,11 @@ export default function StaffPage() {
       <div className="p-4 space-y-6">
         {sortedCategoryNames.length === 0 ? (
           <div className="text-center py-8">
-            <Package className="w-16 h-16 mx-auto mb-4 text-gray-500" />
-            <h3 className="text-lg font-semibold text-gray-400 mb-2">
+            <Package className="w-16 h-16 mx-auto mb-4 text-white" />
+            <h3 className="text-lg font-extrabold text-white mb-2 tracking-tight">
               ไม่พบสินค้าในหมวดหมู่ &quot;{selectedCategory}&quot;
             </h3>
-            <p className="text-gray-500">
+            <p className="text-white">
               ลองเลือกหมวดหมู่อื่น หรือเลือก &quot;ทั้งหมด&quot; เพื่อดูสินค้าทั้งหมด
             </p>
           </div>
@@ -239,11 +239,11 @@ export default function StaffPage() {
           <div key={categoryName} className="space-y-3">
             {/* Category Header */}
             <div className="flex items-center space-x-3 mb-4">
-              <div className="h-1 bg-gray-600 flex-1 rounded"></div>
-              <h2 className="text-lg font-bold text-white px-3 py-1 bg-gray-700 rounded-full border border-gray-600">
+              <div className="h-1 bg-white flex-1 rounded"></div>
+              <h2 className="text-lg font-extrabold text-black px-4 py-2 bg-white rounded-full border-2 border-black tracking-tight">
                 {categoryName}
               </h2>
-              <div className="h-1 bg-gray-600 flex-1 rounded"></div>
+              <div className="h-1 bg-white flex-1 rounded"></div>
             </div>
 
             {/* Products in this category */}
@@ -252,15 +252,15 @@ export default function StaffPage() {
                 const currentValue = stockData[product.id] || ''
                 const status = getStockStatus(currentValue, product.minimumStock)
                 return (
-                  <div key={product.id} className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
+                  <div key={product.id} className="bg-white rounded-xl p-4 border-2 border-black shadow-sm">
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0 mt-1">
                         {getStockIcon(status)}
                       </div>
                       
                       <div className="flex-1">
-                        <h3 className="font-semibold text-white mb-1">{product.name}</h3>
-                        <p className="text-sm text-gray-400 mb-3">
+                        <h3 className="font-extrabold text-black mb-1 tracking-tight">{product.name}</h3>
+                        <p className="text-sm text-black mb-3 font-medium">
                           หน่วย: {product.unit} • ขั้นต่ำ: {product.minimumStock} {product.unit}
                           {product.currentStock > 0 && (
                             <span className="ml-2">• เหลือเดิม: {product.currentStock} {product.unit}</span>
@@ -274,7 +274,7 @@ export default function StaffPage() {
                             min="0"
                             value={currentValue}
                             onChange={(e) => handleInputChange(product.id, e.target.value)}
-                            className={`w-full px-4 py-3 border-2 rounded-xl text-lg font-semibold text-center transition-all duration-200 outline-none bg-gray-700 text-white placeholder-gray-400 ${getInputBorderColor(status)}`}
+                            className={`w-full px-4 py-3 border-2 rounded-xl text-lg font-extrabold text-center transition-all duration-200 outline-none bg-gray-100 text-black placeholder-gray-500 ${getInputBorderColor(status)}`}
                             placeholder={`คงเหลือ (${product.unit})`}
                           />
                           
@@ -282,12 +282,12 @@ export default function StaffPage() {
                           {currentValue !== '' && (
                             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                               {status === 'low' && (
-                                <div className="bg-gray-600 text-gray-200 text-xs px-2 py-1 rounded-full font-semibold">
+                                <div className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-extrabold border border-yellow-300">
                                   ใกล้หมด
                                 </div>
                               )}
                               {status === 'out' && (
-                                <div className="bg-gray-700 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                                <div className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-extrabold border border-red-300">
                                   หมดแล้ว
                                 </div>
                               )}
@@ -307,14 +307,14 @@ export default function StaffPage() {
 
       {/* Notes Section */}
       <div className="p-4">
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
-          <label className="block text-sm font-semibold text-gray-300 mb-2">
+        <div className="bg-white rounded-xl p-4 border-2 border-black shadow-sm">
+          <label className="block text-sm font-extrabold text-black mb-2 tracking-tight">
             หมายเหตุเพิ่มเติม (ไม่บังคับ)
           </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-600 rounded-xl focus:ring-2 focus:ring-white focus:border-white transition-all duration-200 outline-none resize-none bg-gray-700 text-white placeholder-gray-400"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black transition-all duration-200 outline-none resize-none bg-gray-100 text-black placeholder-gray-500 font-medium"
             rows={3}
             placeholder="เช่น มีของเสียหาย, พบของเพิ่มในตู้เย็น..."
           />
@@ -322,13 +322,13 @@ export default function StaffPage() {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="sticky bottom-0 bg-gray-800 border-t border-gray-700 p-4">
+      <div className="sticky bottom-0 bg-white border-t-2 border-black p-4">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2 text-sm text-gray-300">
+          <div className="flex items-center space-x-2 text-sm text-black font-medium">
             <Clock className="w-4 h-4" />
             <span>อัปเดตล่าสุด: {getCurrentTime()}</span>
           </div>
-          <div className="flex items-center space-x-2 text-sm text-gray-300">
+          <div className="flex items-center space-x-2 text-sm text-black font-medium">
             <User className="w-4 h-4" />
             <span>{user.name}</span>
           </div>
@@ -337,11 +337,11 @@ export default function StaffPage() {
         <button
           onClick={handleSave}
           disabled={submitting || completedCount === 0}
-          className="w-full bg-white text-black py-4 px-6 rounded-xl font-semibold text-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-black text-white py-4 px-6 rounded-xl font-extrabold text-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-black tracking-tight"
         >
           {submitting ? (
             <>
-              <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               <span>กำลังบันทึก...</span>
             </>
           ) : (
@@ -355,11 +355,11 @@ export default function StaffPage() {
 
       {/* Success Toast */}
       {showSuccess && (
-        <div className="fixed top-4 left-4 right-4 bg-gray-700 text-white p-4 rounded-xl shadow-lg z-50 flex items-center space-x-3 border border-gray-600">
-          <CheckCircle2 className="w-6 h-6" />
+        <div className="fixed top-4 left-4 right-4 bg-white text-black p-4 rounded-xl shadow-lg z-50 flex items-center space-x-3 border-2 border-black">
+          <CheckCircle2 className="w-6 h-6 text-green-600" />
           <div>
-            <p className="font-semibold">บันทึกสำเร็จ!</p>
-            <p className="text-sm opacity-90">ข้อมูลสต็อกได้รับการอัปเดตแล้ว</p>
+            <p className="font-extrabold">บันทึกสำเร็จ!</p>
+            <p className="text-sm font-medium">ข้อมูลสต็อกได้รับการอัปเดตแล้ว</p>
           </div>
         </div>
       )}

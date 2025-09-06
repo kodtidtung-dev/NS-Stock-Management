@@ -56,70 +56,64 @@ const CoffeeLoginMinimalist = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
       
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-gray-300/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-white/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+      {/* Minimal Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-20 left-20 w-32 h-32 bg-white rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-white rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
-
-      {/* Coffee Bean Decorations */}
-      <div className="absolute top-10 left-10 w-3 h-3 bg-gray-400 rounded-full opacity-40 animate-bounce" style={{animationDelay: '0s', animationDuration: '4s'}}></div>
-      <div className="absolute top-32 right-16 w-2 h-2 bg-white rounded-full opacity-60 animate-bounce" style={{animationDelay: '1s', animationDuration: '3s'}}></div>
-      <div className="absolute bottom-24 left-16 w-4 h-4 bg-gray-500 rounded-full opacity-30 animate-bounce" style={{animationDelay: '2s', animationDuration: '5s'}}></div>
 
       <div className="w-full max-w-md relative z-10">
         
         {/* Header Section */}
         <div className="text-center mb-12">
           <div className="relative inline-block mb-6">
-            <div className="w-24 h-24 bg-gradient-to-br from-gray-800 to-black rounded-3xl flex items-center justify-center shadow-2xl shadow-black/50 relative border border-gray-700">
+            <div className="w-24 h-24 bg-black rounded-3xl flex items-center justify-center shadow-2xl shadow-black/50 relative border-2 border-black">
               <Image 
                 src="/ns.logowhite.png" 
                 alt="NS Logo" 
-                width={100} 
-                height={100} 
+                width={200} 
+                height={200} 
                 className="drop-shadow-lg"
               />
               
               {/* Sparkle Effect */}
               <div className="absolute -top-2 -right-2">
-                <Sparkles className="w-6 h-6 text-gray-300 animate-pulse" />
+                <Sparkles className="w-6 h-6 text-black animate-pulse" />
               </div>
             </div>
             
             {/* Glow Effect */}
-            <div className="absolute inset-0 w-24 h-24 bg-gradient-to-br from-gray-600 to-gray-800 rounded-3xl blur-xl opacity-20 animate-pulse"></div>
+            <div className="absolute inset-0 w-24 h-24 bg-white rounded-3xl blur-xl opacity-20 animate-pulse"></div>
           </div>
           
-          <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
-            NS-<span className="text-gray-300">Stock</span>
+          <h1 className="text-5xl font-extrabold text-white mb-3 tracking-tight">
+            NS-<span className="text-white">Stock</span>
           </h1>
-          <p className="text-gray-400 text-lg font-medium">ระบบจัดการสต็อกภายในร้าน</p>
-          <div className="w-24 h-1 bg-gradient-to-r from-gray-600 to-gray-400 rounded-full mx-auto mt-4"></div>
+          <p className="text-white text-lg font-medium">ระบบจัดการสต็อกภายในร้าน</p>
+          <div className="w-24 h-1 bg-white rounded-full mx-auto mt-4"></div>
         </div>
 
         {/* Login Card */}
-        <div className="bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-700/50 p-8 relative overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-2xl border-2 border-black p-8 relative overflow-hidden">
           
-          {/* Card Header Glow */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-600 via-white to-gray-600"></div>
+          {/* Card Header Line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-black"></div>
           
           <div className="space-y-6">
             
             {/* Username Field */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-300 flex items-center space-x-2">
-                <User className="w-4 h-4 text-gray-400" />
+              <label className="text-sm font-semibold text-black flex items-center space-x-2">
+                <User className="w-4 h-4 text-black" />
                 <span>ชื่อผู้ใช้</span>
               </label>
               <div className="relative">
@@ -130,10 +124,10 @@ const CoffeeLoginMinimalist = () => {
                   onChange={handleInputChange}
                   onFocus={() => setFocusField('username')}
                   onBlur={() => setFocusField('')}
-                  className={`w-full px-4 py-4 bg-gray-800/50 border-2 rounded-2xl transition-all duration-300 outline-none font-medium text-white placeholder-gray-400 ${
+                  className={`w-full px-4 py-4 bg-gray-100 border-2 rounded-2xl transition-all duration-300 outline-none font-medium text-black placeholder-gray-500 ${
                     focusField === 'username' 
-                      ? 'border-white bg-gray-800/80 shadow-lg shadow-white/10' 
-                      : 'border-gray-600 hover:border-gray-500'
+                      ? 'border-black bg-gray-50 shadow-lg shadow-black/10' 
+                      : 'border-gray-300 hover:border-gray-400'
                   }`}
                   placeholder="owner หรือ staff1"
                   required
@@ -143,7 +137,7 @@ const CoffeeLoginMinimalist = () => {
                 {/* Focus Indicator */}
                 {focusField === 'username' && (
                   <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-black rounded-full animate-pulse"></div>
                   </div>
                 )}
               </div>
@@ -151,8 +145,8 @@ const CoffeeLoginMinimalist = () => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-300 flex items-center space-x-2">
-                <Lock className="w-4 h-4 text-gray-400" />
+              <label className="text-sm font-semibold text-black flex items-center space-x-2">
+                <Lock className="w-4 h-4 text-black" />
                 <span>รหัสผ่าน</span>
               </label>
               <div className="relative">
@@ -163,10 +157,10 @@ const CoffeeLoginMinimalist = () => {
                   onChange={handleInputChange}
                   onFocus={() => setFocusField('password')}
                   onBlur={() => setFocusField('')}
-                  className={`w-full px-4 py-4 bg-gray-800/50 border-2 rounded-2xl transition-all duration-300 outline-none font-medium text-white placeholder-gray-400 ${
+                  className={`w-full px-4 py-4 bg-gray-100 border-2 rounded-2xl transition-all duration-300 outline-none font-medium text-black placeholder-gray-500 ${
                     focusField === 'password' 
-                      ? 'border-white bg-gray-800/80 shadow-lg shadow-white/10' 
-                      : 'border-gray-600 hover:border-gray-500'
+                      ? 'border-black bg-gray-50 shadow-lg shadow-black/10' 
+                      : 'border-gray-300 hover:border-gray-400'
                   }`}
                   placeholder="รหัสผ่าน"
                   required
@@ -176,7 +170,7 @@ const CoffeeLoginMinimalist = () => {
                 {/* Focus Indicator */}
                 {focusField === 'password' && (
                   <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-black rounded-full animate-pulse"></div>
                   </div>
                 )}
               </div>
@@ -184,10 +178,10 @@ const CoffeeLoginMinimalist = () => {
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-900/50 border-l-4 border-red-500 p-4 rounded-r-2xl animate-pulse">
+              <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-2xl animate-pulse">
                 <div className="flex items-center space-x-3">
-                  <AlertCircle className="w-5 h-5 text-red-400" />
-                  <p className="text-red-300 font-medium">{error}</p>
+                  <AlertCircle className="w-5 h-5 text-red-600" />
+                  <p className="text-red-800 font-medium">{error}</p>
                 </div>
               </div>
             )}
@@ -197,7 +191,7 @@ const CoffeeLoginMinimalist = () => {
               type="submit"
               onClick={handleSubmit}
               disabled={loading || !formData.username || !formData.password}
-              className="w-full relative overflow-hidden bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 shadow-xl border border-gray-600 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="w-full relative overflow-hidden bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white font-extrabold py-4 px-6 rounded-2xl transition-all duration-300 shadow-xl border-2 border-black hover:border-gray-800 disabled:opacity-50 disabled:cursor-not-allowed group tracking-tight"
             >
               <div className="flex items-center justify-center space-x-3 relative z-10">
                 {loading ? (
@@ -220,9 +214,9 @@ const CoffeeLoginMinimalist = () => {
             {/* Quick Login Buttons */}
             <div className="space-y-3">
               <div className="flex items-center space-x-4">
-                <div className="flex-1 h-px bg-gray-700"></div>
-                <span className="text-gray-500 text-sm font-medium">เข้าสู่ระบบด่วน</span>
-                <div className="flex-1 h-px bg-gray-700"></div>
+                <div className="flex-1 h-px bg-black"></div>
+                <span className="text-black text-sm font-medium">เข้าสู่ระบบด่วน</span>
+                <div className="flex-1 h-px bg-black"></div>
               </div>
               
               <div className="grid grid-cols-2 gap-3">
@@ -230,7 +224,7 @@ const CoffeeLoginMinimalist = () => {
                   type="button"
                   onClick={() => quickLogin('owner', '123456')}
                   disabled={loading}
-                  className="bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600 text-gray-300 py-3 px-4 rounded-xl transition-all duration-200 text-sm font-medium hover:border-gray-500 disabled:opacity-50"
+                  className="bg-gray-100 hover:bg-gray-50 border border-gray-300 text-black py-3 px-4 rounded-xl transition-all duration-200 text-sm font-medium hover:border-black disabled:opacity-50"
                 >
                   <div className="flex items-center justify-center space-x-2">
                     <CheckCircle className="w-4 h-4" />
@@ -242,7 +236,7 @@ const CoffeeLoginMinimalist = () => {
                   type="button"
                   onClick={() => quickLogin('staff1', '123456')}
                   disabled={loading}
-                  className="bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600 text-gray-300 py-3 px-4 rounded-xl transition-all duration-200 text-sm font-medium hover:border-gray-500 disabled:opacity-50"
+                  className="bg-gray-100 hover:bg-gray-50 border border-gray-300 text-black py-3 px-4 rounded-xl transition-all duration-200 text-sm font-medium hover:border-black disabled:opacity-50"
                 >
                   <div className="flex items-center justify-center space-x-2">
                     <CheckCircle className="w-4 h-4" />
@@ -257,8 +251,8 @@ const CoffeeLoginMinimalist = () => {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm">
-            © 2024 NS-Stock Management System
+          <p className="text-white text-sm font-medium">
+            © 2025 NS-Stock Management System
           </p>
         </div>
       </div>

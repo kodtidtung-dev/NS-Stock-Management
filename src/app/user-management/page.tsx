@@ -244,37 +244,37 @@ const UserManagementPage = () => {
 
   const getRoleBadgeColor = (role: string) => {
     return role === 'OWNER' 
-      ? 'bg-purple-600 text-white' 
-      : 'bg-blue-600 text-white'
+      ? 'bg-purple-600 text-black' 
+      : 'bg-blue-600 text-black'
   }
 
   const getStatusBadgeColor = (active: boolean) => {
     return active 
-      ? 'bg-green-600 text-white' 
-      : 'bg-gray-600 text-white'
+      ? 'bg-green-600 text-black' 
+      : 'bg-gray-200 text-black'
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white">กำลังโหลดข้อมูลผู้ใช้...</div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-black">กำลังโหลดข้อมูลผู้ใช้...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-black border-b border-white">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6">
           {/* Mobile Header */}
           <div className="flex items-center justify-between md:hidden">
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => window.location.href = '/dashboard'}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-300" />
+                <ArrowLeft className="w-5 h-5 text-white" />
               </button>
               
               <Image 
@@ -292,9 +292,9 @@ const UserManagementPage = () => {
             
             <button 
               onClick={handleLogout}
-              className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-800 rounded-full transition-colors"
             >
-              <LogOut className="w-5 h-5 text-gray-300" />
+              <LogOut className="w-5 h-5 text-white" />
             </button>
           </div>
           
@@ -303,9 +303,9 @@ const UserManagementPage = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => window.location.href = '/dashboard'}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-300" />
+                <ArrowLeft className="w-5 h-5 text-white" />
               </button>
               
               <Image 
@@ -318,7 +318,7 @@ const UserManagementPage = () => {
               
               <div>
                 <h1 className="text-2xl font-bold text-white">จัดการพนักงาน</h1>
-                <p className="text-gray-300">จัดการข้อมูลผู้ใช้และสิทธิ์การเข้าถึง</p>
+                <p className="text-white">จัดการข้อมูลผู้ใช้และสิทธิ์การเข้าถึง</p>
               </div>
             </div>
             
@@ -326,22 +326,22 @@ const UserManagementPage = () => {
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-black rounded-lg transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                 <span className="text-sm font-medium">รีเฟรช</span>
               </button>
               
-              <div className="flex items-center space-x-2 text-sm text-gray-300">
+              <div className="flex items-center space-x-2 text-sm text-white">
                 <User className="w-4 h-4" />
                 <span>{currentUser.name}</span>
               </div>
               
               <button 
                 onClick={handleLogout}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <LogOut className="w-5 h-5 text-gray-300" />
+                <LogOut className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
@@ -354,18 +354,18 @@ const UserManagementPage = () => {
           {/* Mobile Controls */}
           <div className="block md:hidden space-y-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
               <input
                 type="text"
                 placeholder="ค้นหาผู้ใช้..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                className="pl-10 pr-4 py-2 bg-white text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black w-full"
               />
             </div>
             
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-white">
                 ทั้งหมด {filteredUsers.length} คน
               </div>
               
@@ -373,14 +373,14 @@ const UserManagementPage = () => {
                 <button
                   onClick={handleRefresh}
                   disabled={refreshing}
-                  className="p-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                  className="p-2 bg-gray-100 hover:bg-gray-200 text-black rounded-lg transition-colors disabled:opacity-50"
                 >
                   <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                 </button>
                 
                 <button
                   onClick={() => openModal('add')}
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black rounded-lg transition-colors"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span className="hidden sm:inline">เพิ่มผู้ใช้</span>
@@ -393,23 +393,23 @@ const UserManagementPage = () => {
           <div className="hidden md:flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
                 <input
                   type="text"
                   placeholder="ค้นหาผู้ใช้..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-64"
+                  className="pl-10 pr-4 py-2 bg-white text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black w-64"
                 />
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-white">
                 ทั้งหมด {filteredUsers.length} คน
               </div>
             </div>
             
             <button
               onClick={() => openModal('add')}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black rounded-lg transition-colors"
             >
               <UserPlus className="w-4 h-4" />
               <span>เพิ่มผู้ใช้</span>
@@ -418,29 +418,29 @@ const UserManagementPage = () => {
         </div>
 
         {/* Users List */}
-        <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-300 overflow-hidden">
           {/* Mobile Cards View */}
           <div className="block md:hidden">
             {filteredUsers.length === 0 ? (
-              <div className="px-6 py-8 text-center text-gray-400">
+              <div className="px-6 py-8 text-center text-gray-600">
                 ไม่พบข้อมูลผู้ใช้
               </div>
             ) : (
-              <div className="divide-y divide-gray-600">
+              <div className="divide-y divide-gray-200">
                 {filteredUsers.map((user) => (
-                  <div key={user.id} className="p-4 hover:bg-gray-700 transition-colors">
+                  <div key={user.id} className="p-4 hover:bg-gray-800 transition-colors">
                     <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <User className="w-6 h-6 text-gray-300" />
+                      <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <User className="w-6 h-6 text-gray-700" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-base font-medium text-white truncate">{user.name}</div>
-                        <div className="text-sm text-gray-400">@{user.username}</div>
+                        <div className="text-base font-medium text-black truncate">{user.name}</div>
+                        <div className="text-sm text-gray-600">@{user.username}</div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => openModal('edit', user)}
-                          className="p-2 text-blue-400 hover:text-blue-300 transition-colors bg-gray-700 rounded-lg"
+                          className="p-2 text-blue-400 hover:text-blue-300 transition-colors bg-gray-100 rounded-lg"
                           title="แก้ไข"
                         >
                           <Edit className="w-4 h-4" />
@@ -448,7 +448,7 @@ const UserManagementPage = () => {
                         {user.id !== 1 && (
                           <button
                             onClick={() => openModal('delete', user)}
-                            className="p-2 text-red-400 hover:text-red-300 transition-colors bg-gray-700 rounded-lg"
+                            className="p-2 text-red-400 hover:text-red-300 transition-colors bg-gray-100 rounded-lg"
                             title="ลบ"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -469,7 +469,7 @@ const UserManagementPage = () => {
                         </div>
                       </div>
                       
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-gray-600">
                         {new Date(user.createdAt).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: '2-digit' })}
                       </div>
                     </div>
@@ -482,43 +482,43 @@ const UserManagementPage = () => {
           {/* Desktop Table View */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-700">
+              <thead className="bg-gray-100">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     ผู้ใช้
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     บทบาท
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     สถานะ
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     วันที่สร้าง
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider">
                     จัดการ
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-600">
+              <tbody className="divide-y divide-gray-200">
                 {filteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
+                    <td colSpan={5} className="px-6 py-8 text-center text-gray-600">
                       ไม่พบข้อมูลผู้ใช้
                     </td>
                   </tr>
                 ) : (
                   filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-700">
+                    <tr key={user.id} className="hover:bg-gray-200">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
-                            <User className="w-5 h-5 text-gray-300" />
+                          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                            <User className="w-5 h-5 text-gray-700" />
                           </div>
                           <div>
-                            <div className="text-sm font-medium text-white">{user.name}</div>
-                            <div className="text-sm text-gray-400">@{user.username}</div>
+                            <div className="text-sm font-medium text-black">{user.name}</div>
+                            <div className="text-sm text-gray-600">@{user.username}</div>
                           </div>
                         </div>
                       </td>
@@ -533,7 +533,7 @@ const UserManagementPage = () => {
                           {user.active ? 'ใช้งาน' : 'ปิดใช้งาน'}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {new Date(user.createdAt).toLocaleDateString('th-TH')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -568,16 +568,16 @@ const UserManagementPage = () => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 w-full max-w-md border border-gray-700 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md border border-gray-300 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="text-lg font-bold text-black">
                 {modalType === 'add' && 'เพิ่มผู้ใช้ใหม่'}
                 {modalType === 'edit' && 'แก้ไขข้อมูลผู้ใช้'}
                 {modalType === 'delete' && 'ยืนยันการลบ'}
               </h3>
               <button
                 onClick={closeModal}
-                className="p-1 text-gray-400 hover:text-gray-300"
+                className="p-1 text-gray-600 hover:text-gray-700"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -585,7 +585,7 @@ const UserManagementPage = () => {
 
             {modalType === 'delete' ? (
               <div>
-                <p className="text-gray-300 mb-6">
+                <p className="text-gray-700 mb-6">
                   คุณต้องการลบผู้ใช้ &quot;{selectedUser?.name}&quot; หรือไม่?
                 </p>
                 {formErrors.submit && (
@@ -594,13 +594,13 @@ const UserManagementPage = () => {
                 <div className="flex space-x-4">
                   <button
                     onClick={closeModal}
-                    className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                    className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-black rounded-lg transition-colors"
                   >
                     ยกเลิก
                   </button>
                   <button
                     onClick={handleDelete}
-                    className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                    className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-black rounded-lg transition-colors"
                   >
                     ลบ
                   </button>
@@ -609,14 +609,14 @@ const UserManagementPage = () => {
             ) : (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Username
                   </label>
                   <input
                     type="text"
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 bg-gray-100 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black"
                     disabled={modalType === 'edit'}
                   />
                   {formErrors.username && (
@@ -625,14 +625,14 @@ const UserManagementPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     ชื่อ-นามสกุล
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 bg-gray-100 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black"
                   />
                   {formErrors.name && (
                     <div className="text-red-400 text-sm mt-1">{formErrors.name}</div>
@@ -640,7 +640,7 @@ const UserManagementPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     รหัสผ่าน {modalType === 'edit' && '(ไม่ระบุหากไม่ต้องการเปลี่ยน)'}
                   </label>
                   <div className="relative">
@@ -648,12 +648,12 @@ const UserManagementPage = () => {
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="w-full px-3 py-2 pr-10 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 pr-10 bg-gray-100 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-700"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -664,13 +664,13 @@ const UserManagementPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     บทบาท
                   </label>
                   <select
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value as 'OWNER' | 'STAFF' })}
-                    className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 bg-gray-100 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black"
                   >
                     <option value="STAFF">พนักงาน</option>
                     <option value="OWNER">เจ้าของร้าน</option>
@@ -683,9 +683,9 @@ const UserManagementPage = () => {
                     id="active"
                     checked={formData.active}
                     onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-black"
                   />
-                  <label htmlFor="active" className="text-sm text-gray-300">
+                  <label htmlFor="active" className="text-sm text-gray-700">
                     เปิดใช้งาน
                   </label>
                 </div>
@@ -697,13 +697,13 @@ const UserManagementPage = () => {
                 <div className="flex space-x-4 pt-4">
                   <button
                     onClick={closeModal}
-                    className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                    className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-black rounded-lg transition-colors"
                   >
                     ยกเลิก
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                    className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black rounded-lg transition-colors"
                   >
                     <Save className="w-4 h-4" />
                     <span>บันทึก</span>
