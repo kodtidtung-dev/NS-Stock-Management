@@ -4,8 +4,9 @@ import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const params = await context.params
   try {
     const token = getTokenFromRequest(request)
     const user = verifyToken(token || '')
