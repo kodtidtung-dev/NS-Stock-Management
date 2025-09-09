@@ -3,7 +3,6 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { Coffee } from 'lucide-react'
 
 export default function HomePage() {
   const { user, loading } = useAuth()
@@ -25,9 +24,6 @@ export default function HomePage() {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 mx-auto">
-            <Coffee className="w-8 h-8 text-black animate-pulse" />
-          </div>
           <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-300">กำลังโหลด...</p>
         </div>

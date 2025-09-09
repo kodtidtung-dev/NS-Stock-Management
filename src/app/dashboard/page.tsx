@@ -385,7 +385,7 @@ const OwnerDashboard = () => {
                   <p>ไม่มีสินค้าที่ใกล้จะหมด</p>
                 </div>
               ) : (
-                <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-gray-700 scrollbar-thumb-gray-500 hover:scrollbar-thumb-gray-400">
+                <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-600 pr-2">
                   {dashboardData.lowStockProducts.slice(0, 10).map((product) => (
                     <div
                       key={product.id}
@@ -478,7 +478,7 @@ const OwnerDashboard = () => {
                   <p>ยังไม่มีการใช้งานวันนี้</p>
                 </div>
               ) : (
-                <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-gray-700 scrollbar-thumb-gray-500 hover:scrollbar-thumb-gray-400">
+                <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-600 pr-2">
                   {dashboardData.todayUsage.slice(0, 10).map((item, index) => (
                     <div
                       key={index}
@@ -527,9 +527,9 @@ const OwnerDashboard = () => {
         {/* Quick Actions */}
         <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-300 shadow-sm">
           <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight mb-4 sm:mb-6">
-            Maganement Panel
+            Management Panel
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
             <button
               onClick={() => (window.location.href = "/products")}
               className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-600"
@@ -544,6 +544,14 @@ const OwnerDashboard = () => {
             >
               <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
               <span className="text-base sm:text-lg font-semibold text-black">อัปเดตสต็อก</span>
+            </button>
+
+            <button
+              onClick={() => (window.location.href = "/stock-history")}
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors border border-blue-600"
+            >
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+              <span className="text-base sm:text-lg font-semibold text-blue-600">ประวัติ & แก้ไขสต็อก</span>
             </button>
 
             <button

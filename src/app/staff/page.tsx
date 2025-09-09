@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useProducts } from '@/hooks/useProducts'
 import { useStockLogs } from '@/hooks/useStockLogs'
-import { Coffee, Package, Save, LogOut, User, CheckCircle2, AlertCircle, Clock, Filter } from 'lucide-react'
+import { Coffee, Package, Save, LogOut, User, CheckCircle2, AlertCircle, Clock, Filter, History } from 'lucide-react'
 
 export default function StaffPage() {
   const { user, logout } = useAuth()
@@ -171,12 +171,21 @@ export default function StaffPage() {
                 <p className="text-sm text-black font-medium">{getCurrentDate()}</p>
               </div>
             </div>
-            <button 
-              onClick={logout}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-gray-300"
-            >
-              <LogOut className="w-5 h-5 text-black" />
-            </button>
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={() => router.push('/stock-history')}
+                className="p-2 hover:bg-blue-100 rounded-full transition-colors border border-blue-300 bg-blue-50"
+                title="ดูประวัติและแก้ไขสต็อก"
+              >
+                <History className="w-5 h-5 text-blue-600" />
+              </button>
+              <button 
+                onClick={logout}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-gray-300"
+              >
+                <LogOut className="w-5 h-5 text-black" />
+              </button>
+            </div>
           </div>
 
           {/* Category Filter */}
