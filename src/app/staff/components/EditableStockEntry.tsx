@@ -3,7 +3,7 @@ import { Edit3, Clock, AlertCircle, CheckCircle, X } from 'lucide-react'
 import { useStockEdit } from '@/hooks/useStockEdit'
 
 interface StockLogEntry {
-  id: string
+  id: number
   quantityRemaining: number
   createdAt: string
   notes?: string
