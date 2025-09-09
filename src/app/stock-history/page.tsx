@@ -46,7 +46,7 @@ export default function StockHistoryPage() {
       } else {
         setError(data.error || 'เกิดข้อผิดพลาดในการโหลดข้อมูล')
       }
-    } catch (err) {
+    } catch {
       setError('เกิดข้อผิดพลาดในการเชื่อมต่อ')
     } finally {
       setLoading(false)

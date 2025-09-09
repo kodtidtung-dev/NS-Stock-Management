@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
-import { Save, Edit3, Clock, AlertCircle, CheckCircle, X } from 'lucide-react'
+import { Edit3, Clock, AlertCircle, CheckCircle, X } from 'lucide-react'
 import { useStockEdit } from '@/hooks/useStockEdit'
+
+interface StockLogEntry {
+  id: string
+  quantityRemaining: number
+  createdAt: string
+  notes?: string
+  product: {
+    name: string
+    unit: string
+  }
+}
 
 const EditableStockEntry = ({ 
   stockLog, 
   onEditSuccess 
 }: { 
-  stockLog: any, 
+  stockLog: StockLogEntry, 
   onEditSuccess: () => void 
 }) => {
   const [isEditing, setIsEditing] = useState(false)

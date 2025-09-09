@@ -1,16 +1,6 @@
 'use client'
 import { useState } from 'react'
 
-interface EditStockData {
-  id: number
-  productId: number
-  date: string
-  quantityRemaining: number
-  notes?: string
-  canEdit: boolean
-  timeLeft?: number
-}
-
 export function useStockEdit() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -59,7 +49,7 @@ export function useStockEdit() {
         setError(result.message)
         return { success: false, error: result.message }
       }
-    } catch (err) {
+    } catch {
       const errorMessage = 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล'
       setError(errorMessage)
       return { success: false, error: errorMessage }
