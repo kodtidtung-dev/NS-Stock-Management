@@ -1,91 +1,172 @@
-'use client'
+// Custom hook for API data fetching with caching
+import { useState, useEffect, useCallback, useRef } from 'react'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
-
-interface CacheOptions {
-  ttl?: number // Time to live in milliseconds
-  staleWhileRevalidate?: number // Additional time to serve stale data while revalidating
+interface ApiCacheOptions {
+  cacheTime?: number // milliseconds
+  staleTime?: number // milliseconds
+  refetchOnWindowFocus?: boolean
+  retryAttempts?: number
 }
 
 interface CacheEntry<T> {
   data: T
   timestamp: number
-  loading: boolean
+  isStale: boolean
 }
 
-const cache = new Map<string, CacheEntry<unknown>>()
+const cache = new Map<string, CacheEntry<any>>()
 
 export function useApiCache<T>(
   key: string,
   fetcher: () => Promise<T>,
-  options: CacheOptions = {}
+  options: ApiCacheOptions = {}
 ) {
-  const { ttl = 60000, staleWhileRevalidate = 300000 } = options // Default 1 min TTL, 5 min stale
+  const {
+    cacheTime = 5 * 60 * 1000, // 5 minutes
+    staleTime = 60 * 1000, // 1 minute
+    refetchOnWindowFocus = true,
+    retryAttempts = 3
+  } = options
+
   const [data, setData] = useState<T | null>(null)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
-  const fetchingRef = useRef(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isValidating, setIsValidating] = useState(false)
+  const retryCount = useRef(0)
+  const abortController = useRef<AbortController | null>(null)
 
-  const fetchData = useCallback(async (forceRefresh = false) => {
-    if (fetchingRef.current) return
-    
-    const now = Date.now()
+  const fetchData = useCallback(async (force = false) => {
+    // Check cache first
     const cached = cache.get(key)
-
-    // Check if we have fresh data
-    if (!forceRefresh && cached && (now - cached.timestamp) < ttl) {
-      setData(cached.data as T)
-      setLoading(false)
-      return
-    }
-
-    // Check if we can serve stale data while revalidating
-    const canServeStale = cached && (now - cached.timestamp) < (ttl + staleWhileRevalidate)
+    const now = Date.now()
     
-    if (canServeStale && !forceRefresh) {
-      setData(cached.data as T)
-      setLoading(false)
+    if (!force && cached && (now - cached.timestamp) < cacheTime) {
+      setData(cached.data)
+      setIsLoading(false)
       
-      // Revalidate in background
-      setTimeout(() => {
-        fetchData(true)
-      }, 0)
-      return
+      // Check if data is stale but still usable
+      if ((now - cached.timestamp) < staleTime) {
+        return cached.data
+      }
+      
+      // Data is stale, fetch in background
+      setIsValidating(true)
+    } else {
+      setIsLoading(true)
     }
-
-    fetchingRef.current = true
-    setLoading(true)
-    setError(null)
 
     try {
+      // Cancel previous request
+      if (abortController.current) {
+        abortController.current.abort()
+      }
+      abortController.current = new AbortController()
+
       const result = await fetcher()
       
       // Update cache
       cache.set(key, {
         data: result,
         timestamp: now,
-        loading: false
+        isStale: false
       })
-
-      setData(result)
-    } catch (err) {
-      setError(err as Error)
       
-      // If we have stale data, use it
-      if (cached) {
-        setData(cached.data as T)
+      setData(result)
+      setError(null)
+      retryCount.current = 0
+      
+      return result
+    } catch (err) {
+      const error = err as Error
+      
+      // Don't set error if request was aborted
+      if (error.name !== 'AbortError') {
+        // Retry logic
+        if (retryCount.current < retryAttempts) {
+          retryCount.current++
+          setTimeout(() => fetchData(force), 1000 * retryCount.current)
+          return
+        }
+        
+        setError(error)
+        
+        // Return stale data if available
+        if (cached) {
+          setData(cached.data)
+        }
       }
     } finally {
-      setLoading(false)
-      fetchingRef.current = false
+      setIsLoading(false)
+      setIsValidating(false)
     }
-  }, [key, fetcher, ttl, staleWhileRevalidate])
+  }, [key, fetcher, cacheTime, staleTime, retryAttempts])
 
+  // Initial fetch
   useEffect(() => {
     fetchData()
+    
+    // Cleanup on unmount
+    return () => {
+      if (abortController.current) {
+        abortController.current.abort()
+      }
+    }
+  }, [fetchData])
+
+  // Refetch on window focus
+  useEffect(() => {
+    if (!refetchOnWindowFocus) return
+
+    const handleFocus = () => {
+      const cached = cache.get(key)
+      if (cached && (Date.now() - cached.timestamp) > staleTime) {
+        fetchData(true)
+      }
+    }
+
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [key, staleTime, refetchOnWindowFocus, fetchData])
+
+  const mutate = useCallback((newData?: T) => {
+    if (newData) {
+      cache.set(key, {
+        data: newData,
+        timestamp: Date.now(),
+        isStale: false
+      })
+      setData(newData)
+    } else {
+      fetchData(true)
+    }
   }, [key, fetchData])
 
-  const refresh = () => fetchData(true)
+  const invalidate = useCallback(() => {
+    cache.delete(key)
+    fetchData(true)
+  }, [key, fetchData])
 
-  return { data, loading, error, refresh }
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+    invalidate,
+    refetch: () => fetchData(true)
+  }
+}
+
+// Utility to clear all cache
+export const clearAllCache = () => {
+  cache.clear()
+}
+
+// Utility to clear specific cache pattern
+export const clearCachePattern = (pattern: string) => {
+  for (const key of cache.keys()) {
+    if (key.includes(pattern)) {
+      cache.delete(key)
+    }
+  }
 }

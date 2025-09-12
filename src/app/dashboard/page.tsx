@@ -14,8 +14,11 @@ import {
   Bell,
   BarChart3,
   ShoppingCart,
+  ShoppingBag,
 } from "lucide-react";
 import Image from "next/image";
+import ShoppingListModal from "../../components/ShoppingListModal";
+import ProductModal from "../../components/ProductModal";
 
 interface DashboardData {
   lastUpdateDate: string;
@@ -54,6 +57,10 @@ const OwnerDashboard = () => {
     null
   );
   const [loading, setLoading] = useState(true);
+  const [showShoppingList, setShowShoppingList] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [productModalFilter, setProductModalFilter] = useState<'all' | 'ok' | 'lowStock' | 'outOfStock'>('all');
+  const [productModalTitle, setProductModalTitle] = useState('');
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -127,6 +134,12 @@ const OwnerDashboard = () => {
       console.error("Logout error:", error);
       window.location.href = "/login";
     }
+  }, []);
+
+  const openProductModal = useCallback((filter: 'all' | 'ok' | 'lowStock' | 'outOfStock', title: string) => {
+    setProductModalFilter(filter);
+    setProductModalTitle(title);
+    setShowProductModal(true);
   }, []);
 
   const getStatusColor = useCallback((status: string) => {
@@ -215,16 +228,25 @@ const OwnerDashboard = () => {
                 <User className="w-3 h-3" />
                 <span>{user.name}</span>
               </div>
-              <button
-                onClick={handleRefresh}
-                disabled={refreshing}
-                className="flex items-center space-x-2 px-3 py-2 bg-white hover:bg-gray-100 text-white rounded-lg transition-colors disabled:opacity-50"
-              >
-                <RefreshCw
-                  className={`w-3 h-3 text-black ${refreshing ? "animate-spin" : ""}`}
-                />
-                <span className="text-sm font-semibold text-black">รีเฟรช</span>
-              </button>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setShowShoppingList(true)}
+                  className="flex items-center space-x-1 px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
+                >
+                  <ShoppingBag className="w-3 h-3" />
+                  <span className="text-sm font-semibold">ซื้อ</span>
+                </button>
+                <button
+                  onClick={handleRefresh}
+                  disabled={refreshing}
+                  className="flex items-center space-x-2 px-3 py-2 bg-white hover:bg-gray-100 text-white rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <RefreshCw
+                    className={`w-3 h-3 text-black ${refreshing ? "animate-spin" : ""}`}
+                  />
+                  <span className="text-sm font-semibold text-black">รีเฟรช</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -247,6 +269,14 @@ const OwnerDashboard = () => {
             </div>
 
             <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setShowShoppingList(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span className="font-semibold">รายการซื้อ</span>
+              </button>
+
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
@@ -277,61 +307,73 @@ const OwnerDashboard = () => {
       <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Status Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
+          <button
+            onClick={() => openProductModal('all', 'สินค้าทั้งหมด')}
+            className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+          >
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-sm sm:text-base text-gray-800 font-medium">สินค้าทั้งหมด</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {memoizedData?.summaryStats.total || 0}
                 </p>
               </div>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
+          <button
+            onClick={() => openProductModal('ok', 'สินค้าสถานะปกติ')}
+            className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+          >
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-600 rounded-lg flex items-center justify-center">
                 <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-sm sm:text-base text-gray-800 font-medium">สถานะปกติ</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {memoizedData?.summaryStats.ok || 0}
                 </p>
               </div>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
+          <button
+            onClick={() => openProductModal('lowStock', 'สินค้าใกล้หมด')}
+            className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+          >
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-400 rounded-lg flex items-center justify-center">
                 <AlertTriangle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-sm sm:text-base text-gray-800 font-medium">ใกล้หมด</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {memoizedData?.summaryStats.lowStock || 0}
                 </p>
               </div>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
+          <button
+            onClick={() => openProductModal('outOfStock', 'สินค้าหมดแล้ว')}
+            className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+          >
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-red-600 rounded-lg flex items-center justify-center">
                 <TrendingDown className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-sm sm:text-base text-gray-800 font-medium">หมดแล้ว</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {memoizedData?.summaryStats.outOfStock || 0}
                 </p>
               </div>
             </div>
-          </div>
+          </button>
         </div>
 
         {/* Last Update Info */}
@@ -587,6 +629,21 @@ const OwnerDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Shopping List Modal */}
+      <ShoppingListModal
+        isOpen={showShoppingList}
+        onClose={() => setShowShoppingList(false)}
+        onStockUpdated={fetchDashboardData}
+      />
+
+      {/* Product Modal */}
+      <ProductModal
+        isOpen={showProductModal}
+        onClose={() => setShowProductModal(false)}
+        filterType={productModalFilter}
+        title={productModalTitle}
+      />
     </div>
   );
 };
