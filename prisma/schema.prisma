@@ -43,7 +43,7 @@ model Category {
 
 model Product {
   id           Int      @id @default(autoincrement())
-  name         String
+  name         String   @unique
   categoryId   Int?     @map("category_id") // เพิ่ม relation กับ Category
   unit         String
   minimumStock Float    @map("minimum_stock")
