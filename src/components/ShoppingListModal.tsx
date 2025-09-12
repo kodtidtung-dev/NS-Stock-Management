@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { X, ShoppingBag, Package, AlertTriangle, TrendingDown, Plus, Minus, CheckCircle } from 'lucide-react'
+import { X, ShoppingBag, AlertTriangle, TrendingDown, Plus, Minus, CheckCircle } from 'lucide-react'
 
 interface ShoppingItem {
   id: number
@@ -40,9 +40,9 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
       if (response.ok) {
         const data = await response.json()
         // Filter for low stock and out of stock items
-        const needToBuy = data.products?.filter((product: any) => 
+        const needToBuy = data.products?.filter((product: { isLowStock: boolean; currentStock: number }) => 
           product.isLowStock || product.currentStock === 0
-        ).map((product: any) => ({
+        ).map((product: { id: number; name: string; currentStock: number; minimumStock: number; unit: string; isLowStock: boolean; category?: { name: string } }) => ({
           id: product.id,
           name: product.name,
           currentStock: product.currentStock,

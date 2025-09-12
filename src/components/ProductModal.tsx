@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { X, Search, Package, AlertTriangle, TrendingDown, CheckCircle, Filter } from 'lucide-react'
 
 interface Product {
@@ -40,30 +40,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, filterType
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchProducts()
-      fetchCategories()
-      setSearchTerm('')
-      setSelectedCategory('')
-    }
-  }, [isOpen, filterType])
-
-  useEffect(() => {
-    // Filter products based on search term and category
-    const filtered = products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-      
-      const matchesCategory = selectedCategory === '' || 
-                             product.category?.name === selectedCategory
-      
-      return matchesSearch && matchesCategory
-    })
-    setFilteredProducts(filtered)
-  }, [products, searchTerm, selectedCategory])
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true)
     try {
       const response = await fetch('/api/products')
@@ -93,7 +70,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, filterType
     } finally {
       setLoading(false)
     }
-  }
+  }, [filterType])
 
   const fetchCategories = async () => {
     try {
@@ -108,6 +85,29 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, filterType
       console.error('Error fetching categories:', error)
     }
   }
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchProducts()
+      fetchCategories()
+      setSearchTerm('')
+      setSelectedCategory('')
+    }
+  }, [isOpen, filterType, fetchProducts])
+
+  useEffect(() => {
+    // Filter products based on search term and category
+    const filtered = products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesCategory = selectedCategory === '' || 
+                             product.category?.name === selectedCategory
+      
+      return matchesSearch && matchesCategory
+    })
+    setFilteredProducts(filtered)
+  }, [products, searchTerm, selectedCategory])
 
   const getStatusIcon = (product: Product) => {
     // For 'all' filter, just show Package icon
