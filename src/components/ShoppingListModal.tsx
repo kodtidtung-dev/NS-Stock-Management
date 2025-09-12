@@ -251,15 +251,15 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
                             <span>หมวดหมู่: {String(item.category.name)}</span>
                           )}
                         </div>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 mt-2">
-                          <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2">
+                          <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium w-fit ${
                             item.currentStock === 0 
                               ? 'bg-red-600 text-white' 
                               : 'bg-yellow-300 text-black'
                           }`}>
                             {getStatusText(item)}
                           </span>
-                          <span className="text-xs text-gray-500 sm:ml-2">
+                          <span className="text-xs text-gray-500">
                             แนะนำซื้อ: {getSuggestedAmount(item)} {item.unit}
                           </span>
                         </div>
