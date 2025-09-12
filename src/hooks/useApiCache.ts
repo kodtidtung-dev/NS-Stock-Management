@@ -14,7 +14,7 @@ interface CacheEntry<T> {
   isStale: boolean
 }
 
-const cache = new Map<string, CacheEntry<any>>()
+const cache = new Map<string, CacheEntry<unknown>>()
 
 export function useApiCache<T>(
   key: string,
@@ -41,7 +41,7 @@ export function useApiCache<T>(
     const now = Date.now()
     
     if (!force && cached && (now - cached.timestamp) < cacheTime) {
-      setData(cached.data)
+      setData(cached.data as T)
       setIsLoading(false)
       
       // Check if data is stale but still usable
@@ -92,7 +92,7 @@ export function useApiCache<T>(
         
         // Return stale data if available
         if (cached) {
-          setData(cached.data)
+          setData(cached.data as T)
         }
       }
     } finally {

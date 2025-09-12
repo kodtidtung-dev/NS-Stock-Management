@@ -18,16 +18,6 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient({
   // Performance optimizations
   omit: {
     // Omit large fields by default to reduce payload size
-  },
-  
-  // Connection pool settings for better performance
-  __internal: {
-    engine: {
-      // Increase connection pool size for better concurrency
-      connection_limit: 10,
-      pool_timeout: 2,
-      schema_polling_interval: 1000,
-    }
   }
 })
 

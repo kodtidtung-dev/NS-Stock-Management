@@ -1,19 +1,21 @@
 // In-memory caching for API responses
-interface CacheEntry {
-  data: any
+interface CacheEntry<T = unknown> {
+  data: T
   timestamp: number
   expiresIn: number
 }
 
 class MemoryCache {
-  private cache = new Map<string, CacheEntry>()
+  private cache = new Map<string, CacheEntry<unknown>>()
   private maxSize = 100 // Prevent memory leaks
 
-  set(key: string, data: any, expiresInSeconds: number = 60): void {
+  set<T>(key: string, data: T, expiresInSeconds: number = 60): void {
     // Remove oldest entries if cache is full
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value
-      this.cache.delete(firstKey)
+      if (firstKey) {
+        this.cache.delete(firstKey)
+      }
     }
 
     this.cache.set(key, {
@@ -23,7 +25,7 @@ class MemoryCache {
     })
   }
 
-  get(key: string): any | null {
+  get<T>(key: string): T | null {
     const entry = this.cache.get(key)
     
     if (!entry) return null
@@ -34,7 +36,7 @@ class MemoryCache {
       return null
     }
     
-    return entry.data
+    return entry.data as T
   }
 
   invalidate(pattern?: string): void {
@@ -68,12 +70,12 @@ export const getCacheKey = {
 }
 
 // Middleware for caching API responses
-export function withCache(
-  handler: Function, 
-  cacheKeyFn: (...args: any[]) => string,
+export function withCache<T extends unknown[]>(
+  handler: (...args: T) => Promise<Response>, 
+  cacheKeyFn: (...args: T) => string,
   expiresInSeconds: number = 60
 ) {
-  return async (...args: any[]) => {
+  return async (...args: T): Promise<Response> => {
     const cacheKey = cacheKeyFn(...args)
     
     // Try to get from cache first
