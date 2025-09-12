@@ -14,7 +14,7 @@
     "postinstall": "prisma generate",
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
-    "vercel-build": "prisma generate && prisma db push && next build"
+    "vercel-build": "prisma generate && prisma db push --accept-data-loss && next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
