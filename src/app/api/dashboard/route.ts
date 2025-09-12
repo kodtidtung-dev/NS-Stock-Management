@@ -2,19 +2,50 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+// Cache the response for 60 seconds
+export const revalidate = 60;
+
 export async function GET() {
   try {
-    // Get all products with their latest stock logs
-    const products = await prisma.product.findMany({
-      where: { active: true },
-      include: {
-        stockLogs: {
-          orderBy: { date: 'desc' },
-          take: 1
+    // Use parallel queries for better performance
+    const [products, lastUpdate] = await Promise.all([
+      // Get all products with their latest stock logs
+      prisma.product.findMany({
+        where: { active: true },
+        select: {
+          id: true,
+          name: true,
+          minimumStock: true,
+          unit: true,
+          stockLogs: {
+            select: {
+              quantityRemaining: true,
+              date: true
+            },
+            orderBy: { date: 'desc' },
+            take: 1
+          },
+          category: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }),
+      // Get last update info
+      prisma.stockLog.findFirst({
+        select: {
+          date: true,
+          createdAt: true,
+          user: {
+            select: {
+              name: true
+            }
+          }
         },
-        category: true
-      }
-    })
+        orderBy: { createdAt: 'desc' }
+      })
+    ])
 
     // Calculate summary statistics
     const total = products.length
@@ -59,80 +90,42 @@ export async function GET() {
       }
     })
 
-    // Get today's usage (difference between yesterday and today)
+    // Get today's usage more efficiently
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     
     const yesterday = new Date(today)
     yesterday.setDate(yesterday.getDate() - 1)
 
-    const todayUsage: Array<{
-      name: string
-      used: string
-      unit: string
-    }> = []
-    
-    // Get all stock logs for yesterday and today for all products
-    const allStockLogs = await prisma.stockLog.findMany({
-      where: {
-        date: {
-          gte: yesterday
-        }
-      },
-      include: {
-        product: true
-      },
-      orderBy: [
-        { productId: 'asc' },
-        { date: 'desc' }
-      ]
-    })
+    // Use raw query for better performance on usage calculation
+    const todayUsageQuery = await prisma.$queryRaw`
+      SELECT 
+        p.name,
+        p.unit,
+        COALESCE(yesterday.quantity_remaining, 0) - COALESCE(today.quantity_remaining, 0) as used
+      FROM products p
+      LEFT JOIN (
+        SELECT product_id, quantity_remaining
+        FROM stock_logs
+        WHERE DATE(date) = DATE(${yesterday})
+      ) yesterday ON p.id = yesterday.product_id
+      LEFT JOIN (
+        SELECT product_id, quantity_remaining
+        FROM stock_logs
+        WHERE DATE(date) = DATE(${today})
+      ) today ON p.id = today.product_id
+      WHERE p.active = true
+        AND (yesterday.quantity_remaining IS NOT NULL OR today.quantity_remaining IS NOT NULL)
+        AND COALESCE(yesterday.quantity_remaining, 0) - COALESCE(today.quantity_remaining, 0) > 0
+      ORDER BY used DESC
+      LIMIT 10
+    ` as Array<{ name: string; unit: string; used: number }>
 
-    // Group by product and calculate usage
-    const productUsage = new Map()
-    
-    for (const log of allStockLogs) {
-      const productId = log.productId
-      const logDate = new Date(log.date)
-      logDate.setHours(0, 0, 0, 0)
-      
-      if (!productUsage.has(productId)) {
-        productUsage.set(productId, {
-          name: log.product.name,
-          unit: log.product.unit,
-          yesterday: null,
-          today: null
-        })
-      }
-      
-      const productData = productUsage.get(productId)
-      
-      if (logDate.getTime() === yesterday.getTime()) {
-        productData.yesterday = log.quantityRemaining
-      } else if (logDate.getTime() === today.getTime()) {
-        productData.today = log.quantityRemaining
-      }
-    }
-
-    // Calculate usage for products that have both yesterday and today data
-    for (const [, data] of productUsage) {
-      if (data.yesterday !== null && data.today !== null) {
-        const used = data.yesterday - data.today
-        if (used > 0) {
-          todayUsage.push({
-            name: data.name,
-            used: used.toFixed(2),
-            unit: data.unit
-          })
-        }
-      }
-    }
-
-    // Get last update info
-    const lastUpdate = await prisma.stockLog.findFirst({
-      orderBy: { createdAt: 'desc' },
-      include: { user: true }
-    })
+    const todayUsage = todayUsageQuery.map(item => ({
+      name: item.name,
+      used: item.used.toFixed(2),
+      unit: item.unit
+    }))
 
     const responseData = {
       lastUpdateDate: lastUpdate?.date.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
@@ -152,10 +145,17 @@ export async function GET() {
         if (a.status !== 'OUT_OF_STOCK' && b.status === 'OUT_OF_STOCK') return 1
         return 0
       }),
-      todayUsage: todayUsage.sort((a, b) => parseFloat(b.used) - parseFloat(a.used))
+      todayUsage // Already sorted by the query
     }
 
-    return NextResponse.json(responseData)
+    // Set cache headers for better performance
+    return new NextResponse(JSON.stringify(responseData), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+      },
+    })
   } catch (error) {
     console.error('Dashboard API error:', error)
     return NextResponse.json(

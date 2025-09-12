@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   AlertTriangle,
   CheckCircle,
@@ -55,13 +55,14 @@ const OwnerDashboard = () => {
   );
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
-      const response = await fetch("/api/dashboard");
+      const response = await fetch("/api/dashboard", {
+        // Add cache headers for better performance
+        headers: {
+          'Cache-Control': 'max-age=60'
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         setDashboardData(data);
@@ -105,16 +106,20 @@ const OwnerDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const handleRefresh = async () => {
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchDashboardData();
     await new Promise((resolve) => setTimeout(resolve, 500)); // Add slight delay for UX
     setRefreshing(false);
-  };
+  }, [fetchDashboardData]);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
       window.location.href = "/login";
@@ -122,9 +127,9 @@ const OwnerDashboard = () => {
       console.error("Logout error:", error);
       window.location.href = "/login";
     }
-  };
+  }, []);
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = useCallback((status: string) => {
     switch (status) {
       case "OUT_OF_STOCK":
         return "bg-red-600 border border-gray-600";
@@ -133,9 +138,9 @@ const OwnerDashboard = () => {
       default:
         return "bg-white";
     }
-  };
+  }, []);
 
-  const getStatusText = (status: string) => {
+  const getStatusText = useCallback((status: string) => {
     switch (status) {
       case "OUT_OF_STOCK":
         return "หมดแล้ว";
@@ -144,9 +149,9 @@ const OwnerDashboard = () => {
       default:
         return "ปกติ";
     }
-  };
+  }, []);
 
-  const getBadgeColor = (status: string) => {
+  const getBadgeColor = useCallback((status: string) => {
     switch (status) {
       case "OUT_OF_STOCK":
         return "bg-red-600 text-white border border-gray-600";
@@ -155,7 +160,19 @@ const OwnerDashboard = () => {
       default:
         return "bg-white text-white border border-gray-300";
     }
-  };
+  }, []);
+
+  // Memoize the expensive computed values
+  const memoizedData = useMemo(() => {
+    if (!dashboardData) return null;
+    
+    return {
+      formattedDate: new Date(dashboardData.lastUpdateDate).toLocaleDateString("th-TH"),
+      summaryStats: dashboardData.summary,
+      hasLowStockProducts: dashboardData.lowStockProducts && dashboardData.lowStockProducts.length > 0,
+      hasTodayUsage: dashboardData.todayUsage && dashboardData.todayUsage.length > 0,
+    };
+  }, [dashboardData]);
 
   if (loading) {
     return (
@@ -268,7 +285,7 @@ const OwnerDashboard = () => {
               <div>
                 <p className="text-sm sm:text-base text-gray-800 font-medium">สินค้าทั้งหมด</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
-                  {dashboardData?.summary.total || 0}
+                  {memoizedData?.summaryStats.total || 0}
                 </p>
               </div>
             </div>
@@ -282,7 +299,7 @@ const OwnerDashboard = () => {
               <div>
                 <p className="text-sm sm:text-base text-gray-800 font-medium">สถานะปกติ</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
-                  {dashboardData?.summary.ok || 0}
+                  {memoizedData?.summaryStats.ok || 0}
                 </p>
               </div>
             </div>
@@ -296,7 +313,7 @@ const OwnerDashboard = () => {
               <div>
                 <p className="text-sm sm:text-base text-gray-800 font-medium">ใกล้หมด</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
-                  {dashboardData?.summary.lowStock || 0}
+                  {memoizedData?.summaryStats.lowStock || 0}
                 </p>
               </div>
             </div>
@@ -310,7 +327,7 @@ const OwnerDashboard = () => {
               <div>
                 <p className="text-sm sm:text-base text-gray-800 font-medium">หมดแล้ว</p>
                 <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
-                  {dashboardData?.summary.outOfStock || 0}
+                  {memoizedData?.summaryStats.outOfStock || 0}
                 </p>
               </div>
             </div>
@@ -327,9 +344,7 @@ const OwnerDashboard = () => {
               <div>
                 <p className="text-sm sm:text-base text-gray-800 font-medium">อัปเดตล่าสุด</p>
                 <p className="text-base sm:text-lg font-bold text-gray-900 tracking-wide">
-                  {new Date(
-                    dashboardData?.lastUpdateDate || new Date()
-                  ).toLocaleDateString("th-TH")}{" "}
+                  {memoizedData?.formattedDate || new Date().toLocaleDateString("th-TH")}{" "}
                   เวลา {dashboardData?.lastUpdateTime || "--:--"} น.
                 </p>
                 <p className="text-sm sm:text-base text-gray-800 font-medium">

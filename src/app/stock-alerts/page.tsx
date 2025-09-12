@@ -130,16 +130,16 @@ const StockAlertsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-white">กำลังโหลด...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-black border-b border-white">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6">
           {/* Mobile Header */}
           <div className="block md:hidden">
@@ -147,9 +147,9 @@ const StockAlertsPage = () => {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => router.push('/dashboard')}
-                  className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                  className="p-2 hover:bg-gray-800 rounded-full transition-colors"
                 >
-                  <ArrowLeft className="w-5 h-5 text-gray-300" />
+                  <ArrowLeft className="w-5 h-5 text-white" />
                 </button>
                 
                 <Image 
@@ -167,9 +167,9 @@ const StockAlertsPage = () => {
               
               <button 
                 onClick={logout}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <LogOut className="w-5 h-5 text-gray-300" />
+                <LogOut className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
@@ -179,9 +179,9 @@ const StockAlertsPage = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-300" />
+                <ArrowLeft className="w-5 h-5 text-white" />
               </button>
               
               <Image 
@@ -194,7 +194,7 @@ const StockAlertsPage = () => {
               
               <div>
                 <h1 className="text-2xl font-bold text-white">แจ้งเตือนสต็อก</h1>
-                <p className="text-gray-300">รายการสินค้าที่ต้องเติมสต็อก</p>
+                <p className="text-white font-medium">รายการสินค้าที่ต้องเติมสต็อก</p>
               </div>
             </div>
             
@@ -202,81 +202,81 @@ const StockAlertsPage = () => {
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 px-4 py-2 bg-white hover:bg-gray-100 text-black rounded-lg transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-                <span className="text-sm font-medium">รีเฟรช</span>
+                <span className="text-sm font-semibold">รีเฟรช</span>
               </button>
               
-              <div className="flex items-center space-x-2 text-sm text-gray-300">
+              <div className="flex items-center space-x-2 text-sm text-white">
                 <User className="w-4 h-4" />
                 <span>{user?.name}</span>
               </div>
               
               <button 
                 onClick={logout}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
-                <LogOut className="w-5 h-5 text-gray-300" />
+                <LogOut className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Summary Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-sm">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mx-auto sm:mx-0">
-                <Package className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div className="text-center sm:text-left">
-                <p className="text-xs text-gray-400">สินค้าทั้งหมด</p>
-                <p className="text-lg sm:text-xl font-bold text-white">
+              <div>
+                <p className="text-sm sm:text-base text-gray-800 font-medium">สินค้าทั้งหมด</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {(dashboardData?.summary.total || 0).toLocaleString()}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-sm">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center mx-auto sm:mx-0">
-                <Package className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-600 rounded-lg flex items-center justify-center">
+                <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div className="text-center sm:text-left">
-                <p className="text-xs text-gray-400">สต็อกปกติ</p>
-                <p className="text-lg sm:text-xl font-bold text-white">
+              <div>
+                <p className="text-sm sm:text-base text-gray-800 font-medium">สถานะปกติ</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {(dashboardData?.summary.ok || 0).toLocaleString()}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-sm">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="w-8 h-8 bg-yellow-600 rounded-lg flex items-center justify-center mx-auto sm:mx-0">
-                <TrendingDown className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-400 rounded-lg flex items-center justify-center">
+                <TrendingDown className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div className="text-center sm:text-left">
-                <p className="text-xs text-gray-400">ใกล้หมด</p>
-                <p className="text-lg sm:text-xl font-bold text-white">
+              <div>
+                <p className="text-sm sm:text-base text-gray-800 font-medium">ใกล้หมด</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {(dashboardData?.summary.lowStock || 0).toLocaleString()}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-sm">
+          <div className="bg-white rounded-xl p-3 sm:p-6 border border-gray-300 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center mx-auto sm:mx-0">
-                <AlertTriangle className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-red-600 rounded-lg flex items-center justify-center">
+                <AlertTriangle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div className="text-center sm:text-left">
-                <p className="text-xs text-gray-400">หมดแล้ว</p>
-                <p className="text-lg sm:text-xl font-bold text-white">
+              <div>
+                <p className="text-sm sm:text-base text-gray-800 font-medium">หมดแล้ว</p>
+                <p className="text-xl sm:text-3xl font-extrabold tracking-tight text-black">
                   {(dashboardData?.summary.outOfStock || 0).toLocaleString()}
                 </p>
               </div>
@@ -285,25 +285,25 @@ const StockAlertsPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
+        <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-300 shadow-sm">
           <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
               <input
                 type="text"
                 placeholder="ค้นหาสินค้า..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none placeholder-gray-400"
+                className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none placeholder-gray-400"
               />
             </div>
 
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none"
               >
                 <option value="all">ทุกสถานะ</option>
                 <option value="LOW_STOCK">ใกล้หมด</option>
@@ -311,24 +311,24 @@ const StockAlertsPage = () => {
               </select>
             </div>
 
-            <div className="text-sm text-gray-400 flex items-center justify-center md:justify-start">
+            <div className="text-sm text-gray-800 font-medium flex items-center justify-center md:justify-start">
               พบ {filteredProducts.length.toLocaleString()} รายการ
             </div>
           </div>
         </div>
 
         {/* Products List */}
-        <div className="bg-gray-800 rounded-xl border border-gray-700 shadow-sm">
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-700">
+        <div className="bg-white rounded-xl border border-gray-300 shadow-sm">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-300 bg-black">
             <div className="flex items-center space-x-3">
               <Bell className="w-5 h-5 text-orange-500" />
-              <h2 className="text-base sm:text-lg font-bold text-white">รายการแจ้งเตือนสินค้า</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-white">รายการแจ้งเตือนสินค้า</h2>
             </div>
           </div>
 
           <div className="p-4 sm:p-6">
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-8 sm:py-12 text-gray-400">
+              <div className="text-center py-8 sm:py-12 text-gray-600">
                 <Bell className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-gray-500" />
                 <h3 className="text-base sm:text-lg font-semibold mb-2">ไม่มีสินค้าที่ต้องแจ้งเตือน</h3>
                 <p className="text-sm sm:text-base">ทุกสินค้ามีสต็อกเพียงพอแล้ว</p>
@@ -340,7 +340,7 @@ const StockAlertsPage = () => {
                   {filteredProducts.map((product) => (
                     <div
                       key={product.id}
-                      className="p-4 bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 transition-colors"
+                      className="p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition-colors"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -351,26 +351,30 @@ const StockAlertsPage = () => {
                           </div>
                           
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-white text-base truncate">{product.name}</h3>
+                            <h3 className="font-semibold text-black text-base truncate">{product.name}</h3>
                             {product.category && (
-                              <p className="text-sm text-gray-400">หมวดหมู่: {product.category}</p>
+                              <p className="text-sm text-gray-600">หมวดหมู่: {product.category}</p>
                             )}
                           </div>
                         </div>
                         
-                        <div className={`px-3 py-1 rounded-full text-xs font-medium border flex-shrink-0 ml-2 ${getBadgeColor(product.status)}`}>
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium border flex-shrink-0 ml-2 ${
+                          product.status === 'OUT_OF_STOCK' 
+                            ? 'bg-red-600 text-white border-gray-600'
+                            : 'bg-yellow-300 text-black border-gray-600'
+                        }`}>
                           {getStatusText(product.status)}
                         </div>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-3 text-sm">
-                        <div className="text-center p-2 bg-gray-600 rounded">
-                          <p className="text-gray-300 mb-1">คงเหลือ</p>
-                          <p className="font-bold text-white">{product.currentStock.toLocaleString()} {product.unit}</p>
+                        <div className="text-center p-2 bg-gray-200 rounded">
+                          <p className="text-gray-600 mb-1">คงเหลือ</p>
+                          <p className="font-bold text-black">{product.currentStock.toLocaleString()} {product.unit}</p>
                         </div>
-                        <div className="text-center p-2 bg-gray-600 rounded">
-                          <p className="text-gray-300 mb-1">ขั้นต่ำ</p>
-                          <p className="font-bold text-white">{product.minStock.toLocaleString()} {product.unit}</p>
+                        <div className="text-center p-2 bg-gray-200 rounded">
+                          <p className="text-gray-600 mb-1">ขั้นต่ำ</p>
+                          <p className="font-bold text-black">{product.minStock.toLocaleString()} {product.unit}</p>
                         </div>
                       </div>
                     </div>
@@ -382,7 +386,7 @@ const StockAlertsPage = () => {
                   {filteredProducts.map((product) => (
                     <div
                       key={product.id}
-                      className="flex items-center justify-between p-4 bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 transition-colors"
+                      className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition-colors"
                     >
                       <div className="flex items-center space-x-4">
                         <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
@@ -392,8 +396,8 @@ const StockAlertsPage = () => {
                         </div>
                         
                         <div>
-                          <h3 className="font-semibold text-white text-lg">{product.name}</h3>
-                          <div className="flex items-center space-x-4 text-sm text-gray-400 mt-1">
+                          <h3 className="font-semibold text-black text-lg">{product.name}</h3>
+                          <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
                             <span>คงเหลือ: {product.currentStock.toLocaleString()} {product.unit}</span>
                             <span>ขั้นต่ำ: {product.minStock.toLocaleString()} {product.unit}</span>
                             {product.category && (
@@ -404,15 +408,19 @@ const StockAlertsPage = () => {
                       </div>
 
                       <div className="flex items-center space-x-3">
-                        <div className={`px-4 py-2 rounded-full text-sm font-medium border ${getBadgeColor(product.status)}`}>
+                        <div className={`px-4 py-2 rounded-full text-sm font-medium border ${
+                          product.status === 'OUT_OF_STOCK'
+                            ? 'bg-red-600 text-white border-gray-600'
+                            : 'bg-yellow-300 text-black border-gray-600'
+                        }`}>
                           {getStatusText(product.status)}
                         </div>
                         
                         <div className="text-right">
-                          <p className="text-lg font-bold text-white">
+                          <p className="text-lg font-bold text-black">
                             {product.currentStock.toLocaleString()} {product.unit}
                           </p>
-                          <p className="text-xs text-gray-400">คงเหลือ</p>
+                          <p className="text-xs text-gray-600">คงเหลือ</p>
                         </div>
                       </div>
                     </div>

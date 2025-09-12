@@ -1,7 +1,7 @@
 // src/contexts/AuthContext.tsx
 'use client'
 
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 
 interface User {
   id: number
@@ -24,28 +24,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Check if user is already authenticated on mount
-  useEffect(() => {
-    checkAuth()
-  }, [])
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/me', {
-        credentials: 'include' // Include cookies for authentication
+        credentials: 'include', // Include cookies for authentication
+        headers: {
+          'Cache-Control': 'no-cache' // Don't cache auth checks
+        }
       })
       if (response.ok) {
         const data = await response.json()
         setUser(data.user)
+      } else {
+        setUser(null)
       }
     } catch (error) {
       console.error('Auth check failed:', error)
+      setUser(null)
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const login = async (username: string, password: string): Promise<boolean> => {
+  // Check if user is already authenticated on mount
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
+
+  const login = useCallback(async (username: string, password: string): Promise<boolean> => {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -69,9 +75,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Login error:', error)
       return false
     }
-  }
+  }, [])
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', {
         method: 'POST',
@@ -83,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null)
       window.location.href = '/login'
     }
-  }
+  }, [])
 
   const value: AuthContextType = {
     user,

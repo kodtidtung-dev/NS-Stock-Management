@@ -1,0 +1,51 @@
+// Centralized icon imports to reduce bundle size
+import { 
+  AlertTriangle,
+  ArrowLeft,
+  BarChart3,
+  Bell,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Edit,
+  Eye,
+  EyeOff,
+  Filter,
+  LogOut,
+  Package,
+  Plus,
+  RefreshCw,
+  Search,
+  ShoppingCart,
+  Tag,
+  Trash2,
+  TrendingDown,
+  User,
+  X
+} from 'lucide-react'
+
+// Re-export only the icons we use to enable better tree-shaking
+export {
+  AlertTriangle,
+  ArrowLeft,
+  BarChart3,
+  Bell,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Edit,
+  Eye,
+  EyeOff,
+  Filter,
+  LogOut,
+  Package,
+  Plus,
+  RefreshCw,
+  Search,
+  ShoppingCart,
+  Tag,
+  Trash2,
+  TrendingDown,
+  User,
+  X
+}
