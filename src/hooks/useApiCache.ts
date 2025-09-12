@@ -34,7 +34,7 @@ export function useApiCache<T>(
 
     // Check if we have fresh data
     if (!forceRefresh && cached && (now - cached.timestamp) < ttl) {
-      setData(cached.data)
+      setData(cached.data as T)
       setLoading(false)
       return
     }
@@ -43,7 +43,7 @@ export function useApiCache<T>(
     const canServeStale = cached && (now - cached.timestamp) < (ttl + staleWhileRevalidate)
     
     if (canServeStale && !forceRefresh) {
-      setData(cached.data)
+      setData(cached.data as T)
       setLoading(false)
       
       // Revalidate in background
@@ -73,7 +73,7 @@ export function useApiCache<T>(
       
       // If we have stale data, use it
       if (cached) {
-        setData(cached.data)
+        setData(cached.data as T)
       }
     } finally {
       setLoading(false)
