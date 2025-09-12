@@ -234,7 +234,7 @@ const OwnerDashboard = () => {
                   className="flex items-center space-x-1 px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
                 >
                   <ShoppingBag className="w-3 h-3" />
-                  <span className="text-sm font-semibold">ซื้อ</span>
+                  <span className="text-sm font-semibold">อัพเดท</span>
                 </button>
                 <button
                   onClick={handleRefresh}
@@ -274,7 +274,7 @@ const OwnerDashboard = () => {
                 className="flex items-center space-x-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
               >
                 <ShoppingBag className="w-4 h-4" />
-                <span className="font-semibold">รายการซื้อ</span>
+                <span className="font-semibold">รายการอัพเดท</span>
               </button>
 
               <button

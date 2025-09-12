@@ -203,7 +203,7 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
         <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-300">
           <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
             <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600 flex-shrink-0" />
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 truncate">รายการซื้อสินค้า</h2>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 truncate">รายการอัพเดทสินค้า</h2>
             <span className="bg-orange-100 text-orange-800 text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full font-bold flex-shrink-0">
               {shoppingItems.length} รายการ
             </span>
@@ -225,7 +225,7 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
           ) : shoppingItems.length === 0 ? (
             <div className="text-center py-8 sm:py-12 text-gray-600">
               <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-green-600" />
-              <h3 className="text-base sm:text-lg font-semibold mb-2 text-green-600">ไม่มีรายการที่ต้องซื้อ</h3>
+              <h3 className="text-base sm:text-lg font-semibold mb-2 text-green-600">ไม่มีรายการที่ต้องอัพเดท</h3>
               <p className="text-sm sm:text-base">สินค้าทั้งหมดมีสต็อกเพียงพอแล้ว</p>
             </div>
           ) : (
@@ -260,7 +260,7 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
                             {getStatusText(item)}
                           </span>
                           <span className="text-xs text-gray-500">
-                            แนะนำซื้อ: {getSuggestedAmount(item)} {item.unit}
+                            แนะนำอัพเดท: {getSuggestedAmount(item)} {item.unit}
                           </span>
                         </div>
                       </div>
@@ -270,7 +270,7 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
                   {/* Purchase Amount Input */}
                   <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
                     <div className="space-y-2 sm:space-y-0 sm:flex sm:items-center sm:space-x-3">
-                      <label className="block sm:inline text-xs sm:text-sm font-medium text-gray-700">จำนวนที่ซื้อ:</label>
+                      <label className="block sm:inline text-xs sm:text-sm font-medium text-gray-700">จำนวนที่อัพเดท:</label>
                       <div className="flex items-center justify-center space-x-2">
                         <button
                           onClick={() => decreasePurchaseAmount(item.id)}
@@ -325,7 +325,7 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
           <div className="p-3 sm:p-6 border-t border-gray-300 bg-gray-50">
             <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
               <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
-                รายการที่มีจำนวนซื้อ: {shoppingItems.filter(item => item.purchaseAmount > 0).length} รายการ
+                รายการที่มีจำนวนอัพเดท: {shoppingItems.filter(item => item.purchaseAmount > 0).length} รายการ
               </div>
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <button
