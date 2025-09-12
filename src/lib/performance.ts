@@ -1,5 +1,5 @@
 // Performance monitoring utilities
-export const measurePerformance = (name: string, fn: () => Promise<any> | any) => {
+export const measurePerformance = (name: string, fn: () => Promise<unknown> | unknown) => {
   const start = performance.now()
   
   const finish = () => {
@@ -34,7 +34,7 @@ export const measurePerformance = (name: string, fn: () => Promise<any> | any) =
 }
 
 // Web Vitals monitoring
-export const reportWebVitals = (metric: any) => {
+export const reportWebVitals = (metric: { name: string; value: number }) => {
   if (process.env.NODE_ENV === 'production') {
     // Log important metrics
     console.log(`📊 ${metric.name}: ${metric.value}`)

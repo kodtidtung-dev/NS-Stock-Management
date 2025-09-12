@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 interface CacheOptions {
   ttl?: number // Time to live in milliseconds
@@ -13,7 +13,7 @@ interface CacheEntry<T> {
   loading: boolean
 }
 
-const cache = new Map<string, CacheEntry<any>>()
+const cache = new Map<string, CacheEntry<unknown>>()
 
 export function useApiCache<T>(
   key: string,
@@ -26,7 +26,7 @@ export function useApiCache<T>(
   const [error, setError] = useState<Error | null>(null)
   const fetchingRef = useRef(false)
 
-  const fetchData = async (forceRefresh = false) => {
+  const fetchData = useCallback(async (forceRefresh = false) => {
     if (fetchingRef.current) return
     
     const now = Date.now()
@@ -79,11 +79,11 @@ export function useApiCache<T>(
       setLoading(false)
       fetchingRef.current = false
     }
-  }
+  }, [key, fetcher, ttl, staleWhileRevalidate])
 
   useEffect(() => {
     fetchData()
-  }, [key])
+  }, [key, fetchData])
 
   const refresh = () => fetchData(true)
 

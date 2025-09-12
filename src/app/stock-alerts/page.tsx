@@ -98,16 +98,6 @@ const StockAlertsPage = () => {
     }
   }
 
-  const getBadgeColor = (status: string) => {
-    switch (status) {
-      case 'OUT_OF_STOCK':
-        return 'bg-gray-800 text-white border-gray-700'
-      case 'LOW_STOCK':
-        return 'bg-gray-600 text-white border-gray-500'
-      default:
-        return 'bg-gray-400 text-black border-gray-300'
-    }
-  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
