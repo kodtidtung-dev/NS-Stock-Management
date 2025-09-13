@@ -118,7 +118,7 @@ export function useProducts(): UseProductsReturn {
         }
         return p
       })
-      mutateCached(updatedProducts)
+      mutateCached(updatedProducts as Product[])
     }
 
     // Background refresh
