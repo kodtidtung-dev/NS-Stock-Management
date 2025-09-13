@@ -60,9 +60,23 @@ export function useOptimisticMutation<TVariables, TData, TError = Error>(
       const error = err as TError
       setError(err as Error)
 
+      // Enhanced error handling with detailed logging
+      console.error('Mutation failed:', {
+        error: err,
+        variables,
+        rollbackData,
+        timestamp: new Date().toISOString()
+      })
+
       // Call error callback with rollback data
       onError?.(error, rollbackData)
       onSettled?.(undefined, error)
+
+      // Don't throw if we have rollback data - let the UI handle gracefully
+      if (rollbackData) {
+        console.log('Rolling back to previous state due to error')
+        return Promise.reject(err)
+      }
 
       throw err
     } finally {

@@ -2,6 +2,7 @@
 'use client'
 
 import { useApiCache } from './useApiCache'
+import { useEventBus, DASHBOARD_EVENTS } from '@/lib/eventBus'
 
 export interface DashboardSummary {
   totalProducts: number
@@ -102,6 +103,27 @@ export function useDashboard(): UseDashboardReturn {
       retryAttempts: 2
     }
   )
+
+  // Listen for data change events and auto-refresh
+  useEventBus(DASHBOARD_EVENTS.DATA_CHANGED, (eventData) => {
+    console.log('Dashboard data changed:', eventData)
+
+    // Smart refresh - immediate for critical changes, debounced for others
+    const isCriticalChange = eventData?.type === 'stock-update'
+
+    if (isCriticalChange) {
+      // Immediate refresh for stock updates
+      refetch()
+    } else {
+      // Debounced refresh for other changes
+      setTimeout(() => refetch(), 1000)
+    }
+  }, [refetch])
+
+  // Listen for manual refresh requests
+  useEventBus(DASHBOARD_EVENTS.REFRESH, () => {
+    refetch()
+  }, [refetch])
 
   const mutate = (newData?: DashboardData) => {
     if (newData) {
