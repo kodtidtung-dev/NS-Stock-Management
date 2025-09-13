@@ -1,9 +1,9 @@
 // src/hooks/useProducts.ts
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useApiCache } from './useApiCache'
 
-interface Product {
+export interface Product {
   id: number
   name: string
   unit: string
@@ -18,47 +18,68 @@ interface Product {
   }
 }
 
+interface ProductsResponse {
+  products: Product[]
+}
+
 interface UseProductsReturn {
   products: Product[]
   loading: boolean
-  error: string | null
+  error: Error | null
   refetch: () => Promise<void>
+  isValidating: boolean
+  mutate: (newData?: Product[]) => void
+}
+
+const fetchProducts = async (): Promise<Product[]> => {
+  const response = await fetch('/api/products', {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to fetch products' }))
+    throw new Error(errorData.error || `HTTP ${response.status}`)
+  }
+
+  const data: ProductsResponse = await response.json()
+  return data.products
 }
 
 export function useProducts(): UseProductsReturn {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const {
+    data: products,
+    error,
+    isLoading: loading,
+    isValidating,
+    refetch,
+    mutate: mutateCached
+  } = useApiCache<Product[]>(
+    'products',
+    fetchProducts,
+    {
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+      staleTime: 30 * 1000, // 30 seconds
+      refetchOnWindowFocus: true,
+      retryAttempts: 2
+    }
+  )
 
-  const fetchProducts = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      
-      const response = await fetch('/api/products')
-      const data = await response.json()
-
-      if (response.ok) {
-        setProducts(data.products)
-      } else {
-        setError(data.error || 'Failed to fetch products')
-      }
-    } catch (err) {
-      setError('Network error occurred')
-      console.error('Products fetch error:', err)
-    } finally {
-      setLoading(false)
+  const mutate = (newData?: Product[]) => {
+    if (newData) {
+      mutateCached(newData)
+    } else {
+      refetch()
     }
   }
 
-  useEffect(() => {
-    fetchProducts()
-  }, [])
-
   return {
-    products,
+    products: products || [],
     loading,
     error,
-    refetch: fetchProducts,
+    refetch,
+    isValidating,
+    mutate,
   }
 }

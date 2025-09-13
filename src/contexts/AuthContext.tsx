@@ -15,6 +15,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
   loading: boolean
+  logoutLoading: boolean
   isAuthenticated: boolean
 }
 
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [logoutLoading, setLogoutLoading] = useState(false)
 
   const checkAuth = useCallback(async () => {
     try {
@@ -78,24 +80,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const logout = useCallback(async () => {
+    if (logoutLoading) return // Prevent multiple logout attempts
+
     try {
-      await fetch('/api/auth/logout', {
+      setLogoutLoading(true)
+
+      const response = await fetch('/api/auth/logout', {
         method: 'POST',
-        credentials: 'include', // Include cookies for authentication
+        credentials: 'include',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
       })
+
+      // Only proceed with logout if API call was successful or if it failed due to network/server issues
+      // Don't block logout for auth-related failures (user should still be logged out on frontend)
+      if (response.ok || response.status >= 500) {
+        setUser(null)
+        window.location.href = '/login'
+      } else {
+        // For other errors (like 401, 403), still logout but log the error
+        console.warn('Logout API call failed, but proceeding with frontend logout:', response.status)
+        setUser(null)
+        window.location.href = '/login'
+      }
     } catch (error) {
       console.error('Logout error:', error)
-    } finally {
+      // Even if API fails, logout user from frontend
       setUser(null)
       window.location.href = '/login'
+    } finally {
+      setLogoutLoading(false)
     }
-  }, [])
+  }, [logoutLoading])
 
   const value: AuthContextType = {
     user,
     login,
     logout,
     loading,
+    logoutLoading,
     isAuthenticated: !!user,
   }
 

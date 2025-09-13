@@ -1,16 +1,16 @@
 // src/hooks/useDashboard.ts
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useApiCache } from './useApiCache'
 
-interface DashboardSummary {
+export interface DashboardSummary {
   totalProducts: number
   lowStockProducts: number
   outOfStockProducts: number
   totalValue: number
 }
 
-interface LowStockAlert {
+export interface LowStockAlert {
   id: number
   name: string
   currentStock: number
@@ -19,7 +19,7 @@ interface LowStockAlert {
   lastUpdated: string | null
 }
 
-interface RecentActivity {
+export interface RecentActivity {
   id: number
   productName: string
   quantity: number
@@ -29,12 +29,12 @@ interface RecentActivity {
   notes: string | null
 }
 
-interface StockTrend {
+export interface StockTrend {
   date: string
   entriesCount: number
 }
 
-interface DashboardData {
+export interface DashboardData {
   summary: DashboardSummary
   lowStockAlerts: LowStockAlert[]
   recentActivities: RecentActivity[]
@@ -44,44 +44,60 @@ interface DashboardData {
 interface UseDashboardReturn {
   data: DashboardData | null
   loading: boolean
-  error: string | null
+  error: Error | null
   refetch: () => Promise<void>
+  isValidating: boolean
+  mutate: (newData?: DashboardData) => void
+}
+
+const fetchDashboardData = async (): Promise<DashboardData> => {
+  const response = await fetch('/api/dashboard', {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to fetch dashboard data' }))
+    throw new Error(errorData.error || `HTTP ${response.status}`)
+  }
+
+  return response.json()
 }
 
 export function useDashboard(): UseDashboardReturn {
-  const [data, setData] = useState<DashboardData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const {
+    data,
+    error,
+    isLoading: loading,
+    isValidating,
+    refetch,
+    mutate: mutateCached
+  } = useApiCache<DashboardData>(
+    'dashboard',
+    fetchDashboardData,
+    {
+      cacheTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 15 * 1000, // 15 seconds (dashboard data should be fresh)
+      refetchOnWindowFocus: true,
+      retryAttempts: 2
+    }
+  )
 
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      
-      const response = await fetch('/api/dashboard')
-      const result = await response.json()
-
-      if (response.ok) {
-        setData(result)
-      } else {
-        setError(result.error || 'Failed to fetch dashboard data')
-      }
-    } catch (err) {
-      setError('Network error occurred')
-      console.error('Dashboard fetch error:', err)
-    } finally {
-      setLoading(false)
+  const mutate = (newData?: DashboardData) => {
+    if (newData) {
+      mutateCached(newData)
+    } else {
+      refetch()
     }
   }
-
-  useEffect(() => {
-    fetchDashboardData()
-  }, [])
 
   return {
     data,
     loading,
     error,
-    refetch: fetchDashboardData,
+    refetch,
+    isValidating,
+    mutate,
   }
 }

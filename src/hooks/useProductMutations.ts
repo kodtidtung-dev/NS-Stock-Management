@@ -1,0 +1,214 @@
+// src/hooks/useProductMutations.ts
+'use client'
+
+import { useOptimisticMutation } from './useOptimisticMutation'
+import { useProducts, Product } from './useProducts'
+import { toast } from 'sonner'
+
+interface UpdateProductStockParams {
+  id: number
+  currentStock: number
+  notes?: string
+}
+
+interface CreateProductParams {
+  name: string
+  unit: string
+  minimumStock: number
+  currentStock: number
+  categoryId?: number
+}
+
+interface UpdateProductParams {
+  id: number
+  name?: string
+  unit?: string
+  minimumStock?: number
+  categoryId?: number
+}
+
+export function useProductMutations() {
+  const { mutate: mutateProducts } = useProducts()
+
+  // Update product stock with optimistic update
+  const updateStockMutation = useOptimisticMutation(
+    async ({ id, currentStock, notes }: UpdateProductStockParams) => {
+      const response = await fetch(`/api/products/manage/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ currentStock, notes }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Failed to update stock' }))
+        throw new Error(error.error || 'Failed to update stock')
+      }
+
+      return response.json()
+    },
+    {
+      onSuccess: (data) => {
+        toast.success('อัปเดตสต็อกสำเร็จ')
+        // Refresh products list to get updated data
+        mutateProducts()
+      },
+      onError: (error, rollbackData) => {
+        toast.error(`เกิดข้อผิดพลาด: ${error.message}`)
+
+        // If we have rollback data, restore the optimistic state
+        if (rollbackData) {
+          mutateProducts(rollbackData as Product[])
+        }
+      },
+      invalidatePatterns: ['products', 'dashboard'] // Invalidate related caches
+    }
+  )
+
+  // Create new product
+  const createProductMutation = useOptimisticMutation(
+    async (params: CreateProductParams) => {
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      })
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Failed to create product' }))
+        throw new Error(error.error || 'Failed to create product')
+      }
+
+      return response.json()
+    },
+    {
+      onSuccess: () => {
+        toast.success('เพิ่มสินค้าสำเร็จ')
+        mutateProducts() // Refresh products list
+      },
+      onError: (error) => {
+        toast.error(`เกิดข้อผิดพลาด: ${error.message}`)
+      },
+      invalidatePatterns: ['products', 'dashboard']
+    }
+  )
+
+  // Update product details
+  const updateProductMutation = useOptimisticMutation(
+    async ({ id, ...params }: UpdateProductParams) => {
+      const response = await fetch(`/api/products/manage/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      })
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Failed to update product' }))
+        throw new Error(error.error || 'Failed to update product')
+      }
+
+      return response.json()
+    },
+    {
+      onSuccess: () => {
+        toast.success('อัปเดตข้อมูลสินค้าสำเร็จ')
+        mutateProducts() // Refresh products list
+      },
+      onError: (error) => {
+        toast.error(`เกิดข้อผิดพลาด: ${error.message}`)
+      },
+      invalidatePatterns: ['products', 'dashboard']
+    }
+  )
+
+  // Delete product
+  const deleteProductMutation = useOptimisticMutation(
+    async (id: number) => {
+      const response = await fetch(`/api/products/manage/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Failed to delete product' }))
+        throw new Error(error.error || 'Failed to delete product')
+      }
+
+      return response.json()
+    },
+    {
+      onSuccess: () => {
+        toast.success('ลบสินค้าสำเร็จ')
+        mutateProducts() // Refresh products list
+      },
+      onError: (error, rollbackData) => {
+        toast.error(`เกิดข้อผิดพลาด: ${error.message}`)
+
+        // Restore products list if we have rollback data
+        if (rollbackData) {
+          mutateProducts(rollbackData as Product[])
+        }
+      },
+      invalidatePatterns: ['products', 'dashboard']
+    }
+  )
+
+  // Optimistic stock update helper
+  const updateStockOptimistic = async (
+    id: number,
+    newStock: number,
+    notes?: string
+  ) => {
+    const { products } = useProducts()
+
+    // Create optimistic update
+    const optimisticProducts = products.map(product =>
+      product.id === id
+        ? {
+            ...product,
+            currentStock: newStock,
+            isLowStock: newStock <= product.minimumStock,
+            lastUpdated: new Date().toISOString()
+          }
+        : product
+    )
+
+    // Apply optimistic update immediately
+    mutateProducts(optimisticProducts)
+
+    // Execute the actual mutation with rollback data
+    return updateStockMutation.mutate(
+      { id, currentStock: newStock, notes },
+      products // Original data for rollback
+    )
+  }
+
+  return {
+    updateStock: updateStockOptimistic,
+    createProduct: createProductMutation.mutate,
+    updateProduct: updateProductMutation.mutate,
+    deleteProduct: deleteProductMutation.mutate,
+
+    // Loading states
+    isUpdatingStock: updateStockMutation.isLoading,
+    isCreatingProduct: createProductMutation.isLoading,
+    isUpdatingProduct: updateProductMutation.isLoading,
+    isDeletingProduct: deleteProductMutation.isLoading,
+
+    // Error states
+    updateStockError: updateStockMutation.error,
+    createProductError: createProductMutation.error,
+    updateProductError: updateProductMutation.error,
+    deleteProductError: deleteProductMutation.error,
+
+    // Reset functions
+    resetUpdateStock: updateStockMutation.reset,
+    resetCreateProduct: createProductMutation.reset,
+    resetUpdateProduct: updateProductMutation.reset,
+    resetDeleteProduct: deleteProductMutation.reset,
+  }
+}

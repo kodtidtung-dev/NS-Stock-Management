@@ -17,6 +17,9 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import Image from "next/image";
+import { useDashboard } from "@/hooks/useDashboard";
+import { useDashboardSync } from "@/hooks/useBackgroundSync";
+import { useAuth } from "@/contexts/AuthContext";
 import ShoppingListModal from "../../components/ShoppingListModal";
 import ProductModal from "../../components/ProductModal";
 
@@ -47,94 +50,20 @@ interface DashboardData {
 }
 
 const OwnerDashboard = () => {
-  const [user] = useState({
-    name: "เจ้าของร้าน",
-    role: "OWNER",
-  });
+  const { user, logout, logoutLoading } = useAuth();
+  const { data: dashboardData, loading, error, refetch, isValidating } = useDashboard();
 
-  const [refreshing, setRefreshing] = useState(false);
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-    null
-  );
-  const [loading, setLoading] = useState(true);
+  // Enable background sync for dashboard
+  useDashboardSync(true);
+
   const [showShoppingList, setShowShoppingList] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
   const [productModalFilter, setProductModalFilter] = useState<'all' | 'ok' | 'lowStock' | 'outOfStock'>('all');
   const [productModalTitle, setProductModalTitle] = useState('');
 
-  const fetchDashboardData = useCallback(async () => {
-    try {
-      const response = await fetch("/api/dashboard", {
-        // Add cache headers for better performance
-        headers: {
-          'Cache-Control': 'max-age=60'
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setDashboardData(data);
-      } else {
-        // Fallback data if API fails
-        setDashboardData({
-          lastUpdateDate: new Date().toISOString().split("T")[0],
-          lastUpdateTime: new Date().toLocaleTimeString("th-TH", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          updatedBy: "ระบบ",
-          summary: {
-            total: 0,
-            ok: 0,
-            lowStock: 0,
-            outOfStock: 0,
-          },
-          lowStockProducts: [],
-          todayUsage: [],
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-      setDashboardData({
-        lastUpdateDate: new Date().toISOString().split("T")[0],
-        lastUpdateTime: new Date().toLocaleTimeString("th-TH", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        updatedBy: "ระบบ",
-        summary: {
-          total: 0,
-          ok: 0,
-          lowStock: 0,
-          outOfStock: 0,
-        },
-        lowStockProducts: [],
-        todayUsage: [],
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchDashboardData();
-  }, [fetchDashboardData]);
-
   const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await fetchDashboardData();
-    await new Promise((resolve) => setTimeout(resolve, 500)); // Add slight delay for UX
-    setRefreshing(false);
-  }, [fetchDashboardData]);
-
-  const handleLogout = useCallback(async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      window.location.href = "/login";
-    } catch (error) {
-      console.error("Logout error:", error);
-      window.location.href = "/login";
-    }
-  }, []);
+    await refetch();
+  }, [refetch]);
 
   const openProductModal = useCallback((filter: 'all' | 'ok' | 'lowStock' | 'outOfStock', title: string) => {
     setProductModalFilter(filter);
@@ -178,7 +107,7 @@ const OwnerDashboard = () => {
   // Memoize the expensive computed values
   const memoizedData = useMemo(() => {
     if (!dashboardData) return null;
-    
+
     return {
       formattedDate: new Date(dashboardData.lastUpdateDate).toLocaleDateString("th-TH"),
       summaryStats: dashboardData.summary,
@@ -186,6 +115,23 @@ const OwnerDashboard = () => {
       hasTodayUsage: dashboardData.todayUsage && dashboardData.todayUsage.length > 0,
     };
   }, [dashboardData]);
+
+  // Handle error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center text-white space-y-4">
+          <p className="text-lg">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>
+          <button
+            onClick={handleRefresh}
+            className="px-4 py-2 bg-orange-600 hover:bg-orange-700 rounded-lg transition-colors"
+          >
+            ลองใหม่
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -217,16 +163,17 @@ const OwnerDashboard = () => {
                 </div>
               </div>
               <button
-                onClick={handleLogout}
-                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+                onClick={logout}
+                disabled={logoutLoading}
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50"
               >
-                <LogOut className="w-4 h-4 text-white" />
+                <LogOut className={`w-4 h-4 text-white ${logoutLoading ? 'animate-spin' : ''}`} />
               </button>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2 text-xs text-white">
                 <User className="w-3 h-3" />
-                <span>{user.name}</span>
+                <span>{user?.name || 'ผู้ใช้'}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <button
@@ -238,11 +185,11 @@ const OwnerDashboard = () => {
                 </button>
                 <button
                   onClick={handleRefresh}
-                  disabled={refreshing}
+                  disabled={isValidating}
                   className="flex items-center space-x-2 px-3 py-2 bg-white hover:bg-gray-100 text-white rounded-lg transition-colors disabled:opacity-50"
                 >
                   <RefreshCw
-                    className={`w-3 h-3 text-black ${refreshing ? "animate-spin" : ""}`}
+                    className={`w-3 h-3 text-black ${isValidating ? "animate-spin" : ""}`}
                   />
                   <span className="text-sm font-semibold text-black">รีเฟรช</span>
                 </button>
@@ -279,25 +226,26 @@ const OwnerDashboard = () => {
 
               <button
                 onClick={handleRefresh}
-                disabled={refreshing}
+                disabled={isValidating}
                 className="flex items-center space-x-2 px-4 py-2 bg-white hover:bg-gray-100 text-white rounded-lg transition-colors disabled:opacity-50"
               >
                 <RefreshCw
-                  className={`w-4 h-4 text-black ${refreshing ? "animate-spin" : ""}`}
+                  className={`w-4 h-4 text-black ${isValidating ? "animate-spin" : ""}`}
                 />
                 <span className="text-black font-semibold">รีเฟรช</span>
               </button>
 
               <div className="flex items-center space-x-2 text-sm text-white">
                 <User className="w-4 h-4" />
-                <span>{user.name}</span>
+                <span>{user?.name || 'ผู้ใช้'}</span>
               </div>
 
               <button
-                onClick={handleLogout}
-                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+                onClick={logout}
+                disabled={logoutLoading}
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50"
               >
-                <LogOut className="w-5 h-5 text-white" />
+                <LogOut className={`w-5 h-5 text-white ${logoutLoading ? 'animate-spin' : ''}`} />
               </button>
             </div>
           </div>
@@ -634,7 +582,7 @@ const OwnerDashboard = () => {
       <ShoppingListModal
         isOpen={showShoppingList}
         onClose={() => setShowShoppingList(false)}
-        onStockUpdated={fetchDashboardData}
+        onStockUpdated={refetch}
       />
 
       {/* Product Modal */}
