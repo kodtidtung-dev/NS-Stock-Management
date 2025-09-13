@@ -74,7 +74,7 @@ export function useProducts(): UseProductsReturn {
 
   // Listen for product events and update UI accordingly
   useEventBus(PRODUCT_EVENTS.CREATED, (eventData) => {
-    const data = eventData as { product?: any }
+    const data = eventData as { product?: { id: number; name: string; unit: string; minimumStock: number; active?: boolean; category?: string } }
     console.log('Product created:', data.product)
 
     // Add new product to the list optimistically
@@ -102,7 +102,7 @@ export function useProducts(): UseProductsReturn {
   }, [products, mutateCached, refetch])
 
   useEventBus(PRODUCT_EVENTS.UPDATED, (eventData) => {
-    const data = eventData as { product?: any }
+    const data = eventData as { product?: { id: number; name: string; unit: string; minimumStock: number; active?: boolean; category?: string } }
     console.log('Product updated:', data.product)
 
     // Update the product in the list
