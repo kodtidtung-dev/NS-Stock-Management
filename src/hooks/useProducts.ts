@@ -74,22 +74,23 @@ export function useProducts(): UseProductsReturn {
 
   // Listen for product events and update UI accordingly
   useEventBus(PRODUCT_EVENTS.CREATED, (eventData) => {
-    console.log('Product created:', eventData.product)
+    const data = eventData as { product?: any }
+    console.log('Product created:', data.product)
 
     // Add new product to the list optimistically
-    if (eventData.product && products) {
+    if (data.product && products) {
       // Convert API response format to internal format
       const newProduct = {
-        id: eventData.product.id,
-        name: eventData.product.name,
-        unit: eventData.product.unit,
-        minimumStock: eventData.product.minimumStock,
+        id: data.product.id,
+        name: data.product.name,
+        unit: data.product.unit,
+        minimumStock: data.product.minimumStock,
         currentStock: 0, // New products start with 0 stock
         isLowStock: true, // New products are low stock by default
         lastUpdated: new Date().toISOString(),
         lastUpdatedBy: null,
-        active: eventData.product.active || true,
-        category: eventData.product.category ? { name: eventData.product.category } : undefined
+        active: data.product.active || true,
+        category: data.product.category ? { name: data.product.category } : undefined
       }
 
       const newProducts = [newProduct, ...products]
@@ -101,12 +102,13 @@ export function useProducts(): UseProductsReturn {
   }, [products, mutateCached, refetch])
 
   useEventBus(PRODUCT_EVENTS.UPDATED, (eventData) => {
-    console.log('Product updated:', eventData.product)
+    const data = eventData as { product?: any }
+    console.log('Product updated:', data.product)
 
     // Update the product in the list
-    if (eventData.product && products) {
+    if (data.product && products) {
       const updatedProducts = products.map(p =>
-        p.id === eventData.product.id ? { ...p, ...eventData.product } : p
+        p.id === data.product.id ? { ...p, ...data.product } : p
       )
       mutateCached(updatedProducts)
     }
@@ -116,11 +118,12 @@ export function useProducts(): UseProductsReturn {
   }, [products, mutateCached, refetch])
 
   useEventBus(PRODUCT_EVENTS.DELETED, (eventData) => {
-    console.log('Product deleted:', eventData.productId)
+    const data = eventData as { productId?: number }
+    console.log('Product deleted:', data.productId)
 
     // Remove product from the list
-    if (eventData.productId && products) {
-      const filteredProducts = products.filter(p => p.id !== eventData.productId)
+    if (data.productId && products) {
+      const filteredProducts = products.filter(p => p.id !== data.productId)
       mutateCached(filteredProducts)
     }
 
@@ -129,15 +132,16 @@ export function useProducts(): UseProductsReturn {
   }, [products, mutateCached, refetch])
 
   useEventBus(PRODUCT_EVENTS.STOCK_UPDATED, (eventData) => {
-    console.log('Stock updated:', eventData)
+    const data = eventData as { productId?: number; newStock?: number }
+    console.log('Stock updated:', data)
 
     // Update stock in the list
-    if (eventData.productId && eventData.newStock !== undefined && products) {
+    if (data.productId && data.newStock !== undefined && products) {
       const updatedProducts = products.map(p =>
-        p.id === eventData.productId ? {
+        p.id === data.productId ? {
           ...p,
-          currentStock: eventData.newStock,
-          isLowStock: eventData.newStock <= p.minimumStock,
+          currentStock: data.newStock,
+          isLowStock: data.newStock <= p.minimumStock,
           lastUpdated: new Date().toISOString()
         } : p
       )
