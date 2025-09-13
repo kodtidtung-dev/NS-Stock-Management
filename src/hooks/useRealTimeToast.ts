@@ -59,7 +59,7 @@ export function useRealTimeToast() {
 }
 
 // Auto-initialize toast system
-export function RealTimeToastProvider({ children }: { children: React.ReactNode }): JSX.Element {
+export function RealTimeToastProvider({ children }: { children: React.ReactNode }): React.ReactElement {
   useRealTimeToast()
   return React.createElement(React.Fragment, null, children)
 }
