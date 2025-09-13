@@ -6,16 +6,18 @@ import { useEventBus, PRODUCT_EVENTS, DASHBOARD_EVENTS } from '@/lib/eventBus'
 export function useRealTimeToast() {
   // Product events notifications
   useEventBus(PRODUCT_EVENTS.CREATED, (eventData) => {
-    if (eventData.product) {
-      toast.success(`📦 เพิ่มสินค้า "${eventData.product.name}" สำเร็จ`, {
+    const data = eventData as { product?: { name: string } }
+    if (data.product) {
+      toast.success(`📦 เพิ่มสินค้า "${data.product.name}" สำเร็จ`, {
         duration: 3000,
       })
     }
   }, [])
 
   useEventBus(PRODUCT_EVENTS.UPDATED, (eventData) => {
-    if (eventData.product) {
-      toast.success(`✏️ อัปเดตข้อมูล "${eventData.product.name}" สำเร็จ`, {
+    const data = eventData as { product?: { name: string } }
+    if (data.product) {
+      toast.success(`✏️ อัปเดตข้อมูล "${data.product.name}" สำเร็จ`, {
         duration: 3000,
       })
     }
@@ -28,9 +30,10 @@ export function useRealTimeToast() {
   }, [])
 
   useEventBus(PRODUCT_EVENTS.STOCK_UPDATED, (eventData) => {
-    if (eventData.product) {
-      const stockStatus = eventData.newStock <= eventData.product.minimumStock ? '⚠️' : '✅'
-      toast.success(`${stockStatus} อัปเดตสต็อก "${eventData.product.name}" เป็น ${eventData.newStock} ${eventData.product.unit}`, {
+    const data = eventData as { product?: { name: string; unit: string; minimumStock: number }; newStock?: number }
+    if (data.product) {
+      const stockStatus = data.newStock && data.newStock <= data.product.minimumStock ? '⚠️' : '✅'
+      toast.success(`${stockStatus} อัปเดตสต็อก "${data.product.name}" เป็น ${data.newStock} ${data.product.unit}`, {
         duration: 4000,
       })
     }
@@ -45,7 +48,8 @@ export function useRealTimeToast() {
       'stock-update': '📊 ข้อมูลแดชบอร์ดอัปเดตแล้ว - อัปเดตสต็อก',
     }
 
-    const message = messages[eventData?.type as keyof typeof messages]
+    const data = eventData as { type?: string }
+    const message = messages[data?.type as keyof typeof messages]
     if (message) {
       toast.info(message, {
         duration: 2000,
