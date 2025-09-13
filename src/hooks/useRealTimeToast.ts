@@ -55,7 +55,7 @@ export function useRealTimeToast() {
 }
 
 // Auto-initialize toast system
-export function RealTimeToastProvider({ children }: { children: React.ReactNode }) {
+export function RealTimeToastProvider({ children }: { children: React.ReactNode }): React.ReactElement {
   useRealTimeToast()
   return <>{children}</>
 }
