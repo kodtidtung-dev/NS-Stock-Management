@@ -1,12 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Production Prisma schema file for PostgreSQL
+// This schema is used for production deployment
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,11 +19,11 @@ model User {
   name      String
   active    Boolean  @default(true)
   createdAt DateTime @default(now()) @map("created_at")
-  
+
   stockLogs           StockLog[]
   createdCategories   Category[] @relation("CategoryCreatedBy")
   createdProducts     Product[]  @relation("CreatedBy")
-  
+
   @@map("users")
 }
 

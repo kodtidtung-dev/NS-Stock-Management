@@ -1,39 +1,30 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
+import { useProducts, Product } from '@/hooks/useProducts'
+import { useProductMutations } from '@/hooks/useProductMutations'
+import { parseFraction, validateNumberInput, smartFormat, formatWithUnit } from '@/lib/fractions'
 import { toast } from 'sonner'
-import { 
-  Plus, 
-  Edit, 
-  Eye, 
-  EyeOff, 
-  Package, 
-  Tag, 
+import {
+  Plus,
+  Edit,
+  Eye,
+  EyeOff,
+  Package,
+  Tag,
   Search,
   X,
   Trash2
 } from 'lucide-react'
 
 // Type definitions
-interface Product {
-  id: number
-  name: string
-  category?: {
-    name: string
-  }
-  categoryId?: number
-  unit: string
-  minimumStock: number
-  currentStock?: number
-  description?: string
-  active: boolean
-  createdBy?: string
-  createdAt?: string
-  updatedAt?: string
-  lastUpdated?: string
-  lastUpdatedBy?: string
+// Using Product from useProducts hook
+
+// Extended Product type for editing (allows string minimumStock for fractions)
+interface EditableProduct extends Omit<Product, 'minimumStock'> {
+  minimumStock: number | string
 }
 
 interface Category {
@@ -63,14 +54,22 @@ const ProductManagement = () => {
   const { loading: authLoading, isAuthenticated } = useAuth()
   const router = useRouter()
   
-  const [products, setProducts] = useState<Product[]>([])
+  // Use hooks for products data
+  const { products, loading: productsLoading, error, refetch } = useProducts()
+  const {
+    createProduct,
+    deleteProduct: deleteProductMutation,
+    isCreatingProduct,
+    isDeletingProduct
+  } = useProductMutations()
+
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   
   const [showAddProduct, setShowAddProduct] = useState(false)
   const [showAddCategory, setShowAddCategory] = useState(false)
   const [showCategoryManagement, setShowCategoryManagement] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [editingProduct, setEditingProduct] = useState<EditableProduct | null>(null)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
@@ -84,6 +83,9 @@ const ProductManagement = () => {
     description: ''
   })
 
+  const [minimumStockError, setMinimumStockError] = useState<string | null>(null)
+  const [editMinimumStockError, setEditMinimumStockError] = useState<string | null>(null)
+
   const [newCategory, setNewCategory] = useState<NewCategory>({
     name: '',
     description: ''
@@ -96,27 +98,16 @@ const ProductManagement = () => {
       return
     }
     if (isAuthenticated) {
-      fetchProducts()
       fetchCategories()
     }
   }, [authLoading, isAuthenticated, router])
 
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('/api/products', {
-        credentials: 'include' // Include cookies for authentication
-      })
-      if (response.ok) {
-        const data = await response.json()
-        setProducts(data.products || [])
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error)
-      setProducts([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  // Update loading state based on products loading
+  useEffect(() => {
+    setLoading(productsLoading)
+  }, [productsLoading])
+
+  // Remove manual fetchProducts - now handled by useProducts hook
 
   const fetchCategories = async () => {
     try {
@@ -132,19 +123,34 @@ const ProductManagement = () => {
     }
   }
 
-  // Filter products
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || product.categoryId?.toString() === selectedCategory
-    const matchesActive = showInactive || product.active
-    
-    return matchesSearch && matchesCategory && matchesActive
-  })
-
-  const getStockStatus = (currentStock: number, minStock: number): 'ok' | 'low' | 'out' => {
+  // Memoized functions for performance
+  const getStockStatusMemoized = useCallback((currentStock: number, minStock: number | string): 'ok' | 'low' | 'out' => {
     if (currentStock === 0) return 'out'
-    if (currentStock <= minStock) return 'low'
+    const minStockValue = typeof minStock === 'string' ? parseFraction(minStock).value : minStock
+    if (currentStock <= minStockValue) return 'low'
+    return 'ok'
+  }, [])
+
+  const formatMinimumStock = useCallback((minStock: number | string, unit: string): string => {
+    const value = typeof minStock === 'string' ? parseFraction(minStock).value : minStock
+    return formatWithUnit(value, unit)
+  }, [])
+
+  // Memoized filtered products
+  const filteredProducts = useMemo(() =>
+    products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesCategory = selectedCategory === 'all' || product.categoryId?.toString() === selectedCategory
+      const matchesActive = showInactive || product.active
+
+      return matchesSearch && matchesCategory && matchesActive
+    }), [products, searchTerm, selectedCategory, showInactive])
+
+  const getStockStatus = (currentStock: number, minStock: number | string): 'ok' | 'low' | 'out' => {
+    if (currentStock === 0) return 'out'
+    const minStockValue = typeof minStock === 'string' ? parseFraction(minStock).value : minStock
+    if (currentStock <= minStockValue) return 'low'
     return 'ok'
   }
 
@@ -172,32 +178,29 @@ const ProductManagement = () => {
       return
     }
 
+    // Parse and validate minimum stock
+    const minimumStockResult = parseFraction(newProduct.minimumStock)
+    if (!minimumStockResult.isValid) {
+      toast.error(minimumStockResult.error || 'จำนวนขั้นต่ำไม่ถูกต้อง')
+      return
+    }
+
     try {
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // Include cookies for authentication
-        body: JSON.stringify({
-          name: newProduct.name,
-          categoryId: parseInt(newProduct.categoryId) || null,
-          unit: newProduct.unit,
-          minimumStock: parseFloat(newProduct.minimumStock),
-          description: newProduct.description,
-        }),
+      await createProduct({
+        name: newProduct.name,
+        categoryId: parseInt(newProduct.categoryId) || undefined,
+        unit: newProduct.unit,
+        minimumStock: minimumStockResult.value,
+        description: newProduct.description,
       })
 
-      if (response.ok) {
-        await fetchProducts()
-        setNewProduct({ name: '', categoryId: '', unit: '', minimumStock: '', description: '' })
-        setShowAddProduct(false)
-      } else {
-        toast.error('เกิดข้อผิดพลาดในการเพิ่มสินค้า')
-      }
+      // Reset form and close modal
+      setNewProduct({ name: '', categoryId: '', unit: '', minimumStock: '', description: '' })
+      setMinimumStockError(null)
+      setShowAddProduct(false)
     } catch (error) {
       console.error('Error adding product:', error)
-      toast.error('เกิดข้อผิดพลาดในการเพิ่มสินค้า')
+      // Error handling is done in the mutation hook
     }
   }
 
@@ -298,7 +301,7 @@ const ProductManagement = () => {
       const data = await response.json()
       if (response.ok && data.success) {
         await fetchCategories()
-        await fetchProducts() // รีเฟรชสินค้าด้วยเพราะอาจมีสินค้าถูกลบ
+        refetch() // รีเฟรชสินค้าด้วยเพราะอาจมีสินค้าถูกลบ
         toast.success(data.message)
       } else {
         toast.error(data.message || 'เกิดข้อผิดพลาดในการลบหมวดหมู่')
@@ -355,7 +358,7 @@ const ProductManagement = () => {
 
       const data = await response.json()
       if (response.ok && data.success) {
-        await fetchProducts()
+        refetch()
         toast.success(data.message)
       } else {
         toast.error(data.message || 'เกิดข้อผิดพลาดในการแก้ไขสถานะสินค้า')
@@ -373,24 +376,11 @@ const ProductManagement = () => {
         return
       }
 
-      const response = await fetch(`/api/products/manage/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      })
-
-      const data = await response.json()
-      if (response.ok && data.success) {
-        await fetchProducts()
-        toast.success(data.message)
-      } else {
-        toast.error(data.message || 'เกิดข้อผิดพลาดในการลบสินค้า')
-      }
+      // Use the optimistic delete mutation
+      await deleteProductMutation(id)
     } catch (error) {
       console.error('Error deleting product:', error)
-      toast.error('เกิดข้อผิดพลาดในการลบสินค้า')
+      // Error handling is done in the mutation hook
     }
   }
 
@@ -398,6 +388,17 @@ const ProductManagement = () => {
     if (!editingProduct || !editingProduct.name || !editingProduct.unit || editingProduct.minimumStock === undefined) {
       toast.error('กรุณากรอกข้อมูลให้ครบถ้วน')
       return
+    }
+
+    // Parse minimum stock if it's a string (fraction input)
+    let minimumStockValue = editingProduct.minimumStock
+    if (typeof minimumStockValue === 'string') {
+      const minimumStockResult = parseFraction(minimumStockValue)
+      if (!minimumStockResult.isValid) {
+        toast.error(minimumStockResult.error || 'จำนวนขั้นต่ำไม่ถูกต้อง')
+        return
+      }
+      minimumStockValue = minimumStockResult.value
     }
 
     try {
@@ -411,15 +412,16 @@ const ProductManagement = () => {
           name: editingProduct.name,
           categoryId: editingProduct.categoryId ? parseInt(editingProduct.categoryId.toString()) : null,
           unit: editingProduct.unit,
-          minimumStock: editingProduct.minimumStock,
+          minimumStock: minimumStockValue,
           description: editingProduct.description,
         }),
       })
 
       const data = await response.json()
       if (response.ok && data.success) {
-        await fetchProducts()
+        refetch()
         setEditingProduct(null)
+        setEditMinimumStockError(null)
         toast.success(data.message)
       } else {
         toast.error(data.message || 'เกิดข้อผิดพลาดในการแก้ไขสินค้า')
@@ -583,7 +585,7 @@ const ProductManagement = () => {
           ) : (
             <div className="divide-y divide-gray-200">
               {filteredProducts.map((product: Product) => {
-                const status = getStockStatus(product.currentStock || 0, product.minimumStock)
+                const status = getStockStatusMemoized(product.currentStock || 0, product.minimumStock)
                 return (
                   <div key={product.id} className={`p-4 sm:p-6 ${!product.active ? 'bg-gray-100 opacity-75' : ''}`}>
                     {/* Mobile Layout */}
@@ -611,7 +613,7 @@ const ProductManagement = () => {
                         <div className="flex flex-col items-end space-y-1 ml-3">
                           <div className="flex items-center space-x-1">
                             <button
-                              onClick={() => setEditingProduct(product)}
+                              onClick={() => setEditingProduct(product as EditableProduct)}
                               className="p-1.5 text-gray-600 hover:text-black hover:bg-gray-100 rounded transition-colors"
                               title="แก้ไขสินค้า"
                             >
@@ -620,10 +622,15 @@ const ProductManagement = () => {
                             
                             <button
                               onClick={() => deleteProduct(product.id)}
-                              className="p-1.5 text-gray-600 hover:text-red-400 hover:bg-gray-100 rounded transition-colors"
+                              disabled={isDeletingProduct}
+                              className="p-1.5 text-gray-600 hover:text-red-400 hover:bg-gray-100 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               title="ลบสินค้า"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              {isDeletingProduct ? (
+                                <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Trash2 className="w-4 h-4" />
+                              )}
                             </button>
                             
                             <button
@@ -648,12 +655,12 @@ const ProductManagement = () => {
                         </div>
                         <div className="text-center p-2 bg-gray-100 rounded">
                           <p className="text-gray-600 mb-1">ขั้นต่ำ</p>
-                          <p className="font-medium text-black">{product.minimumStock}</p>
+                          <p className="font-medium text-black">{formatMinimumStock(product.minimumStock, product.unit)}</p>
                         </div>
                         <div className="text-center p-2 bg-gray-100 rounded">
                           <p className="text-gray-600 mb-1">คงเหลือ</p>
                           <div className="flex flex-col items-center space-y-1">
-                            <span className="font-medium text-black">{product.currentStock || 0}</span>
+                            <span className="font-medium text-black">{formatWithUnit(product.currentStock || 0, product.unit)}</span>
                             <span className={`px-1.5 py-0.5 text-xs rounded ${getStatusColor(status)}`}>
                               {getStatusText(status)}
                             </span>
@@ -685,12 +692,12 @@ const ProductManagement = () => {
                           </div>
                           <div>
                             <p className="text-gray-600">ขั้นต่ำ</p>
-                            <p className="font-medium text-black">{product.minimumStock} {product.unit}</p>
+                            <p className="font-medium text-black">{formatMinimumStock(product.minimumStock, product.unit)}</p>
                           </div>
                           <div>
                             <p className="text-gray-600">คงเหลือ</p>
                             <div className="flex items-center space-x-2">
-                              <span className="font-medium text-black">{product.currentStock || 0} {product.unit}</span>
+                              <span className="font-medium text-black">{formatWithUnit(product.currentStock || 0, product.unit)}</span>
                               <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(status)}`}>
                                 {getStatusText(status)}
                               </span>
@@ -707,7 +714,7 @@ const ProductManagement = () => {
 
                       <div className="flex items-center space-x-2 ml-4">
                         <button
-                          onClick={() => setEditingProduct(product)}
+                          onClick={() => setEditingProduct(product as EditableProduct)}
                           className="p-2 text-gray-600 hover:text-black hover:bg-gray-100 rounded-lg transition-colors"
                           title="แก้ไขสินค้า"
                         >
@@ -716,10 +723,15 @@ const ProductManagement = () => {
                         
                         <button
                           onClick={() => deleteProduct(product.id)}
-                          className="p-2 text-gray-600 hover:text-red-400 hover:bg-gray-100 rounded-lg transition-colors"
+                          disabled={isDeletingProduct}
+                          className="p-2 text-gray-600 hover:text-red-400 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="ลบสินค้า"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          {isDeletingProduct ? (
+                            <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <Trash2 className="w-4 h-4" />
+                          )}
                         </button>
                         
                         <button
@@ -796,13 +808,32 @@ const ProductManagement = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">จำนวนขั้นต่ำ</label>
                   <input
-                    type="number"
-                    step="0.1"
+                    type="text"
                     value={newProduct.minimumStock}
-                    onChange={(e) => setNewProduct({...newProduct, minimumStock: e.target.value})}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none"
-                    placeholder="0"
+                    onChange={(e) => {
+                      const value = e.target.value
+                      setNewProduct({...newProduct, minimumStock: value})
+
+                      // Validate input
+                      if (value.trim() === '') {
+                        setMinimumStockError(null)
+                        return
+                      }
+
+                      const validation = validateNumberInput(value)
+                      setMinimumStockError(validation.isValid ? null : validation.error || null)
+                    }}
+                    className={`w-full px-3 py-2 bg-gray-100 border text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none ${
+                      minimumStockError ? 'border-red-400' : 'border-gray-300'
+                    }`}
+                    placeholder="เช่น 1/4, 0.25, 1 1/2"
                   />
+                  {minimumStockError && (
+                    <p className="mt-1 text-xs text-red-600">{minimumStockError}</p>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500">
+                    รองรับเศษส่วน: 1/4, 3/4, 1 1/2 หรือทศนิยม: 0.25, 1.5
+                  </p>
                 </div>
 
                 <div>
@@ -826,9 +857,17 @@ const ProductManagement = () => {
                 </button>
                 <button
                   onClick={handleAddProduct}
-                  className="flex-1 px-4 py-2 bg-white hover:bg-gray-100 text-black rounded-lg transition-colors border border-gray-300"
+                  disabled={isCreatingProduct}
+                  className="flex-1 px-4 py-2 bg-white hover:bg-gray-100 text-black rounded-lg transition-colors border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  เพิ่มสินค้า
+                  {isCreatingProduct ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                      <span>กำลังเพิ่ม...</span>
+                    </div>
+                  ) : (
+                    'เพิ่มสินค้า'
+                  )}
                 </button>
               </div>
             </div>
@@ -842,7 +881,10 @@ const ProductManagement = () => {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-black">แก้ไขสินค้า</h3>
                 <button
-                  onClick={() => setEditingProduct(null)}
+                  onClick={() => {
+                    setEditingProduct(null)
+                    setEditMinimumStockError(null)
+                  }}
                   className="text-gray-600 hover:text-black"
                 >
                   <X className="w-5 h-5" />
@@ -889,13 +931,35 @@ const ProductManagement = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">จำนวนขั้นต่ำ</label>
                   <input
-                    type="number"
-                    step="0.1"
-                    value={editingProduct?.minimumStock || ''}
-                    onChange={(e) => editingProduct && setEditingProduct({...editingProduct, minimumStock: parseFloat(e.target.value) || 0})}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none"
-                    placeholder="0"
+                    type="text"
+                    value={editingProduct?.minimumStock?.toString() || ''}
+                    onChange={(e) => {
+                      if (editingProduct) {
+                        const value = e.target.value
+                        setEditingProduct({...editingProduct, minimumStock: value})
+
+                        // Validate input
+                        if (value.trim() === '') {
+                          setEditMinimumStockError(null)
+                          return
+                        }
+
+                        const validation = validateNumberInput(value)
+                        setEditMinimumStockError(validation.isValid ? null : validation.error || null)
+                      }
+                    }}
+                    className={`w-full px-3 py-2 bg-gray-100 border text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none ${
+                      editMinimumStockError ? 'border-red-400' : 'border-gray-300'
+                    }`}
+                    placeholder="เช่น 1/4, 0.25, 1 1/2"
                   />
+                  {editMinimumStockError && (
+                    <p className="mt-1 text-xs text-red-600">{editMinimumStockError}</p>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500">
+                    รองรับเศษส่วน: 1/4, 3/4, 1 1/2 หรือทศนิยม: 0.25, 1.5
+                  </p>
+
                 </div>
 
                 <div>
@@ -912,7 +976,10 @@ const ProductManagement = () => {
 
               <div className="flex space-x-3 mt-6">
                 <button
-                  onClick={() => setEditingProduct(null)}
+                  onClick={() => {
+                    setEditingProduct(null)
+                    setEditMinimumStockError(null)
+                  }}
                   className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-black rounded-lg transition-colors"
                 >
                   ยกเลิก

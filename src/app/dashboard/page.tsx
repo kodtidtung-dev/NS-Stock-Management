@@ -20,8 +20,36 @@ import Image from "next/image";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useDashboardSync } from "@/hooks/useBackgroundSync";
 import { useAuth } from "@/contexts/AuthContext";
-import ShoppingListModal from "../../components/ShoppingListModal";
-import ProductModal from "../../components/ProductModal";
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for modals - loaded only when needed
+const ShoppingListModal = dynamic(() => import("../../components/ShoppingListModal"), {
+  ssr: false, // Don't render on server side
+  loading: () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6">
+        <div className="flex items-center space-x-3">
+          <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <span>กำลังโหลด...</span>
+        </div>
+      </div>
+    </div>
+  ),
+});
+
+const ProductModal = dynamic(() => import("../../components/ProductModal"), {
+  ssr: false,
+  loading: () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6">
+        <div className="flex items-center space-x-3">
+          <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <span>กำลังโหลด...</span>
+        </div>
+      </div>
+    </div>
+  ),
+});
 
 
 const OwnerDashboard = () => {

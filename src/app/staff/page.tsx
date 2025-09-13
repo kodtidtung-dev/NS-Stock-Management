@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useProducts } from '@/hooks/useProducts'
 import { useStockLogs } from '@/hooks/useStockLogs'
+import { parseFraction, validateNumberInput, formatWithUnit } from '@/lib/fractions'
 import { Coffee, Package, Save, LogOut, User, CheckCircle2, AlertCircle, Clock, Filter, History } from 'lucide-react'
 
 export default function StaffPage() {
@@ -14,6 +15,7 @@ export default function StaffPage() {
   const router = useRouter()
 
   const [stockData, setStockData] = useState<Record<number, string>>({})
+  const [stockErrors, setStockErrors] = useState<Record<number, string>>({})
   const [notes, setNotes] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string>('ทั้งหมด')
@@ -29,6 +31,22 @@ export default function StaffPage() {
     setStockData(prev => ({
       ...prev,
       [productId]: value
+    }))
+
+    // Validate input for fractions
+    if (value.trim() === '') {
+      setStockErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors[productId]
+        return newErrors
+      })
+      return
+    }
+
+    const validation = validateNumberInput(value)
+    setStockErrors(prev => ({
+      ...prev,
+      [productId]: validation.isValid ? '' : (validation.error || 'รูปแบบไม่ถูกต้อง')
     }))
   }
 
@@ -50,8 +68,12 @@ export default function StaffPage() {
   }
 
   const getStockStatus = (currentValue: string, minStock: number) => {
-    const value = parseFloat(currentValue)
-    if (isNaN(value) || currentValue === '') return 'empty'
+    if (currentValue === '') return 'empty'
+
+    const parseResult = parseFraction(currentValue)
+    if (!parseResult.isValid) return 'error'
+
+    const value = parseResult.value
     if (value === 0) return 'out'
     if (value <= minStock) return 'low'
     return 'ok'
@@ -71,6 +93,7 @@ export default function StaffPage() {
       case 'ok': return 'border-green-300 focus:border-green-500 focus:ring-green-500'
       case 'low': return 'border-yellow-300 focus:border-yellow-500 focus:ring-yellow-500'
       case 'out': return 'border-red-300 focus:border-red-500 focus:ring-red-500'
+      case 'error': return 'border-red-400 focus:border-red-500 focus:ring-red-500'
       default: return 'border-gray-300 focus:border-black focus:ring-black'
     }
   }
@@ -83,15 +106,29 @@ export default function StaffPage() {
       return
     }
 
+    // Validate all inputs before saving
+    const invalidItems = filledItems.filter(([productId, value]) => {
+      const parseResult = parseFraction(value)
+      return !parseResult.isValid
+    })
+
+    if (invalidItems.length > 0) {
+      alert('กรุณาแก้ไขข้อมูลที่ไม่ถูกต้องก่อนบันทึก')
+      return
+    }
+
     // Prepare data for API
     const today = new Date().toISOString().split('T')[0]
-    const stockDataArray = filledItems.map(([productId, value]) => ({
-      productId: parseInt(productId),
-      quantityRemaining: parseFloat(value)
-    }))
+    const stockDataArray = filledItems.map(([productId, value]) => {
+      const parseResult = parseFraction(value)
+      return {
+        productId: parseInt(productId),
+        quantityRemaining: parseResult.value
+      }
+    })
 
     const result = await submitStockData(today, stockDataArray, notes)
-    
+
     if (result.success) {
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 3000)
@@ -99,13 +136,19 @@ export default function StaffPage() {
       refetchProducts()
       // Reset form
       setStockData({})
+      setStockErrors({})
       setNotes('')
     } else {
       alert('เกิดข้อผิดพลาด: ' + (result.error || 'กรุณาลองใหม่'))
     }
   }
 
-  const completedCount = Object.values(stockData).filter(value => value !== '').length
+  // Count only valid entries
+  const completedCount = Object.entries(stockData).filter(([productId, value]) => {
+    if (value === '') return false
+    const parseResult = parseFraction(value)
+    return parseResult.isValid
+  }).length
   const totalCount = products.filter(p => p.active).length
 
   // Get all categories for filter dropdown
@@ -145,7 +188,9 @@ export default function StaffPage() {
   // Update completed count based on filtered products
   const filteredCompletedCount = Object.entries(stockData).filter(([productId, value]) => {
     const product = products.find(p => p.id === parseInt(productId))
-    return product && filteredProducts.includes(product) && value !== ''
+    if (!product || !filteredProducts.includes(product) || value === '') return false
+    const parseResult = parseFraction(value)
+    return parseResult.isValid
   }).length
   
   const filteredTotalCount = filteredProducts.length
@@ -270,25 +315,37 @@ export default function StaffPage() {
                       <div className="flex-1">
                         <h3 className="font-extrabold text-black mb-1 tracking-tight">{product.name}</h3>
                         <p className="text-sm text-black mb-3 font-medium">
-                          หน่วย: {product.unit} • ขั้นต่ำ: {product.minimumStock} {product.unit}
+                          หน่วย: {product.unit} • ขั้นต่ำ: {formatWithUnit(product.minimumStock, product.unit)}
                           {product.currentStock > 0 && (
-                            <span className="ml-2">• เหลือเดิม: {product.currentStock} {product.unit}</span>
+                            <span className="ml-2">• เหลือเดิม: {formatWithUnit(product.currentStock, product.unit)}</span>
                           )}
                         </p>
                         
                         <div className="relative">
                           <input
-                            type="number"
-                            step="0.1"
-                            min="0"
+                            type="text"
                             value={currentValue}
                             onChange={(e) => handleInputChange(product.id, e.target.value)}
                             className={`w-full px-4 py-3 border-2 rounded-xl text-lg font-extrabold text-center transition-all duration-200 outline-none bg-gray-100 text-black placeholder-gray-500 ${getInputBorderColor(status)}`}
-                            placeholder={`คงเหลือ (${product.unit})`}
+                            placeholder={`เช่น 3/4, 1.5, 2 1/2 (${product.unit})`}
                           />
-                          
+
+                          {/* Error message */}
+                          {stockErrors[product.id] && (
+                            <p className="mt-1 text-xs text-red-600 text-left">
+                              {stockErrors[product.id]}
+                            </p>
+                          )}
+
+                          {/* Help text */}
+                          {currentValue === '' && (
+                            <p className="mt-1 text-xs text-gray-500 text-center">
+                              รองรับเศษส่วน: 1/4, 3/4 หรือทศนิยม: 0.25, 1.5
+                            </p>
+                          )}
+
                           {/* Status indicator */}
-                          {currentValue !== '' && (
+                          {currentValue !== '' && !stockErrors[product.id] && (
                             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                               {status === 'low' && (
                                 <div className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-extrabold border border-yellow-300">
