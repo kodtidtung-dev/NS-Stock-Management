@@ -1,5 +1,5 @@
 // src/hooks/useRealTimeToast.ts
-import React, { useEffect } from 'react'
+import React from 'react'
 import { toast } from 'sonner'
 import { useEventBus, PRODUCT_EVENTS, DASHBOARD_EVENTS } from '@/lib/eventBus'
 
@@ -21,7 +21,7 @@ export function useRealTimeToast() {
     }
   }, [])
 
-  useEventBus(PRODUCT_EVENTS.DELETED, (eventData) => {
+  useEventBus(PRODUCT_EVENTS.DELETED, () => {
     toast.success(`🗑️ ลบสินค้าสำเร็จ`, {
       duration: 3000,
     })

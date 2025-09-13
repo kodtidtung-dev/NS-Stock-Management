@@ -109,7 +109,7 @@ export function useDashboard(): UseDashboardReturn {
     console.log('Dashboard data changed:', eventData)
 
     // Smart refresh - immediate for critical changes, debounced for others
-    const isCriticalChange = eventData?.type === 'stock-update'
+    const isCriticalChange = (eventData as any)?.type === 'stock-update'
 
     if (isCriticalChange) {
       // Immediate refresh for stock updates
