@@ -108,7 +108,7 @@ export function useProducts(): UseProductsReturn {
     // Update the product in the list
     if (data.product && products) {
       const updatedProducts = products.map(p =>
-        p.id === data.product.id ? { ...p, ...data.product } : p
+        p.id === data.product?.id ? { ...p, ...data.product } : p
       )
       mutateCached(updatedProducts)
     }
