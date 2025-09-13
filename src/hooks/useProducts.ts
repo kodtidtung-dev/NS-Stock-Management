@@ -107,9 +107,17 @@ export function useProducts(): UseProductsReturn {
 
     // Update the product in the list
     if (data.product && products) {
-      const updatedProducts = products.map(p =>
-        p.id === data.product?.id ? { ...p, ...data.product } : p
-      )
+      const updatedProducts = products.map(p => {
+        if (p.id === data.product?.id && data.product) {
+          const updated = { ...p, ...data.product }
+          // Fix category type mismatch
+          if (typeof data.product.category === 'string') {
+            updated.category = { name: data.product.category }
+          }
+          return updated
+        }
+        return p
+      })
       mutateCached(updatedProducts)
     }
 
