@@ -148,8 +148,8 @@ export function useProducts(): UseProductsReturn {
       const updatedProducts = products.map(p =>
         p.id === data.productId ? {
           ...p,
-          currentStock: data.newStock,
-          isLowStock: data.newStock <= p.minimumStock,
+          currentStock: data.newStock!,
+          isLowStock: data.newStock! <= p.minimumStock,
           lastUpdated: new Date().toISOString()
         } : p
       )
