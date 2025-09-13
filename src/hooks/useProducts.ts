@@ -26,7 +26,7 @@ interface UseProductsReturn {
   products: Product[]
   loading: boolean
   error: Error | null
-  refetch: () => Promise<void>
+  refetch: () => Promise<unknown>
   isValidating: boolean
   mutate: (newData?: Product[]) => void
 }

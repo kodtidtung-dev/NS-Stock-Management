@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   AlertTriangle,
   CheckCircle,
@@ -23,31 +23,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import ShoppingListModal from "../../components/ShoppingListModal";
 import ProductModal from "../../components/ProductModal";
 
-interface DashboardData {
-  lastUpdateDate: string;
-  lastUpdateTime: string;
-  updatedBy: string;
-  summary: {
-    total: number;
-    ok: number;
-    lowStock: number;
-    outOfStock: number;
-  };
-  lowStockProducts: Array<{
-    id: number;
-    name: string;
-    currentStock: number;
-    minStock: number;
-    unit: string;
-    status: string;
-    category?: string;
-  }>;
-  todayUsage: Array<{
-    name: string;
-    used: string;
-    unit: string;
-  }>;
-}
 
 const OwnerDashboard = () => {
   const { user, logout, logoutLoading } = useAuth();

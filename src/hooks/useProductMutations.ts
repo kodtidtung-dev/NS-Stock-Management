@@ -28,7 +28,7 @@ interface UpdateProductParams {
 }
 
 export function useProductMutations() {
-  const { mutate: mutateProducts } = useProducts()
+  const { products, mutate: mutateProducts } = useProducts()
 
   // Update product stock with optimistic update
   const updateStockMutation = useOptimisticMutation(
@@ -49,7 +49,7 @@ export function useProductMutations() {
       return response.json()
     },
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         toast.success('อัปเดตสต็อกสำเร็จ')
         // Refresh products list to get updated data
         mutateProducts()
@@ -163,8 +163,6 @@ export function useProductMutations() {
     newStock: number,
     notes?: string
   ) => {
-    const { products } = useProducts()
-
     // Create optimistic update
     const optimisticProducts = products.map(product =>
       product.id === id

@@ -24,7 +24,7 @@ export function useBackgroundSync(
     onError
   } = options
 
-  const intervalRef = useRef<NodeJS.Timeout>()
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const isVisibleRef = useRef(true)
   const lastSyncRef = useRef<number>(Date.now())
 
@@ -71,7 +71,7 @@ export function useBackgroundSync(
   const stopSync = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
-      intervalRef.current = undefined
+      intervalRef.current = null
     }
   }, [])
 
