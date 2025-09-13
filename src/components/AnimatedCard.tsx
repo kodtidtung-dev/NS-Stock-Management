@@ -90,12 +90,12 @@ export function ProductCard({
       }
     }
 
-    window.addEventListener('product:update-start' as any, handleUpdateStart)
-    window.addEventListener('product:updated' as any, handleUpdate)
+    window.addEventListener('product:update-start', handleUpdateStart as EventListener)
+    window.addEventListener('product:updated', handleUpdate as EventListener)
 
     return () => {
-      window.removeEventListener('product:update-start' as any, handleUpdateStart)
-      window.removeEventListener('product:updated' as any, handleUpdate)
+      window.removeEventListener('product:update-start', handleUpdateStart as EventListener)
+      window.removeEventListener('product:updated', handleUpdate as EventListener)
     }
   }, [productId])
 

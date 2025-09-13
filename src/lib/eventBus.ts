@@ -1,7 +1,7 @@
 // src/lib/eventBus.ts
 // Simple event bus for cross-component communication
 
-type EventCallback = (data?: any) => void
+type EventCallback = (data?: unknown) => void
 
 class EventBus {
   private events: Map<string, Set<EventCallback>> = new Map()
@@ -24,7 +24,7 @@ class EventBus {
   }
 
   // Emit an event
-  emit(event: string, data?: any): void {
+  emit(event: string, data?: unknown): void {
     const callbacks = this.events.get(event)
     if (callbacks) {
       callbacks.forEach(callback => {
@@ -77,9 +77,9 @@ export const DASHBOARD_EVENTS = {
 // Utility hook for easier event usage
 import { useEffect } from 'react'
 
-export function useEventBus(event: string, callback: EventCallback, deps: any[] = []) {
+export function useEventBus(event: string, callback: EventCallback, deps: React.DependencyList = []) {
   useEffect(() => {
     const unsubscribe = eventBus.on(event, callback)
     return unsubscribe
-  }, deps)
+  }, [event, callback, ...deps])
 }

@@ -1,5 +1,5 @@
 // src/hooks/useRealTimeToast.ts
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { toast } from 'sonner'
 import { useEventBus, PRODUCT_EVENTS, DASHBOARD_EVENTS } from '@/lib/eventBus'
 

@@ -107,7 +107,7 @@ export default function StaffPage() {
     }
 
     // Validate all inputs before saving
-    const invalidItems = filledItems.filter(([productId, value]) => {
+    const invalidItems = filledItems.filter(([, value]) => {
       const parseResult = parseFraction(value)
       return !parseResult.isValid
     })
@@ -144,7 +144,7 @@ export default function StaffPage() {
   }
 
   // Count only valid entries
-  const completedCount = Object.entries(stockData).filter(([productId, value]) => {
+  const completedCount = Object.entries(stockData).filter(([, value]) => {
     if (value === '') return false
     const parseResult = parseFraction(value)
     return parseResult.isValid

@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useProducts, Product } from '@/hooks/useProducts'
 import { useProductMutations } from '@/hooks/useProductMutations'
-import { parseFraction, validateNumberInput, smartFormat, formatWithUnit } from '@/lib/fractions'
+import { parseFraction, validateNumberInput, formatWithUnit } from '@/lib/fractions'
 import { toast } from 'sonner'
 import {
   Plus,
@@ -55,7 +55,7 @@ const ProductManagement = () => {
   const router = useRouter()
   
   // Use hooks for products data
-  const { products, loading: productsLoading, error, refetch } = useProducts()
+  const { products, loading: productsLoading, refetch } = useProducts()
   const {
     createProduct,
     deleteProduct: deleteProductMutation,
@@ -147,12 +147,6 @@ const ProductManagement = () => {
       return matchesSearch && matchesCategory && matchesActive
     }), [products, searchTerm, selectedCategory, showInactive])
 
-  const getStockStatus = (currentStock: number, minStock: number | string): 'ok' | 'low' | 'out' => {
-    if (currentStock === 0) return 'out'
-    const minStockValue = typeof minStock === 'string' ? parseFraction(minStock).value : minStock
-    if (currentStock <= minStockValue) return 'low'
-    return 'ok'
-  }
 
   const getStatusColor = (status: 'ok' | 'low' | 'out'): string => {
     switch (status) {
