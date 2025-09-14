@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
 
   // Public routes ที่ไม่ต้อง login
   const publicRoutes = ['/', '/login']
-  
+
   if (publicRoutes.includes(pathname)) {
     return NextResponse.next()
   }
@@ -21,16 +21,31 @@ export function middleware(request: NextRequest) {
 
   // ถ้าไม่มี token ให้ redirect ไป login
   if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    const response = NextResponse.redirect(new URL('/login', request.url))
+    // Clear any existing auth cookie
+    response.cookies.set('auth-token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      path: '/',
+      maxAge: 0,
+    })
+    return response
   }
 
   // ตรวจสอบ token
   const user = verifyToken(token)
-  
+
   if (!user) {
     // Token ไม่ถูกต้อง ลบ cookie และ redirect
     const response = NextResponse.redirect(new URL('/login', request.url))
-    response.cookies.delete('auth-token')
+    response.cookies.set('auth-token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      path: '/',
+      maxAge: 0,
+    })
     return response
   }
 

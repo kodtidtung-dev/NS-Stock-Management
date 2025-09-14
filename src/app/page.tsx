@@ -11,11 +11,12 @@ export default function HomePage() {
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.push('/login')
+        // Force replace to prevent back button issues
+        router.replace('/login')
       } else if (user.role === 'OWNER') {
-        router.push('/dashboard')
+        router.replace('/dashboard')
       } else {
-        router.push('/staff')
+        router.replace('/staff')
       }
     }
   }, [user, loading, router])

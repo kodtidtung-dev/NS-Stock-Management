@@ -8,11 +8,12 @@ export async function POST() {
     { status: HTTP_STATUS.OK }
   )
 
-  // Clear the token cookie
+  // Clear the token cookie with matching settings
   response.cookies.set('auth-token', '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    path: '/',
     maxAge: 0, // Expire immediately
   })
 
