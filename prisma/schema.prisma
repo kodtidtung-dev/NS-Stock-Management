@@ -71,7 +71,7 @@ model Product {
 model StockLog {
   id                Int      @id @default(autoincrement())
   productId         Int      @map("product_id")
-  date              DateTime
+  date              String
   quantityRemaining Float    @map("quantity_remaining")
   createdBy         Int      @map("created_by")
   notes             String?
