@@ -97,34 +97,34 @@ export async function GET() {
     const yesterday = new Date(today)
     yesterday.setDate(yesterday.getDate() - 1)
 
-    // Use raw query to get stock changes (both usage and restocking)
+    // Use raw query to get stock changes (only actual usage, not first-time entries)
     const todayUsageQuery = await prisma.$queryRaw`
       SELECT
         p.name,
         p.unit,
         COALESCE(c.name, 'ไม่มีหมวดหมู่') as category,
-        COALESCE(yesterday.quantity_remaining, 0) - COALESCE(today.quantity_remaining, 0) as used,
-        COALESCE(yesterday.quantity_remaining, 0) as yesterday_stock,
-        COALESCE(today.quantity_remaining, 0) as today_stock,
+        yesterday.quantity_remaining - today.quantity_remaining as used,
+        yesterday.quantity_remaining as yesterday_stock,
+        today.quantity_remaining as today_stock,
         today.notes as today_notes
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
-      LEFT JOIN (
+      INNER JOIN (
         SELECT product_id, quantity_remaining
         FROM stock_logs
         WHERE DATE(date) = DATE(${yesterday})
         ORDER BY created_at DESC
       ) yesterday ON p.id = yesterday.product_id
-      LEFT JOIN (
+      INNER JOIN (
         SELECT product_id, quantity_remaining, notes
         FROM stock_logs
         WHERE DATE(date) = DATE(${today})
         ORDER BY created_at DESC
       ) today ON p.id = today.product_id
       WHERE p.active = true
-        AND (yesterday.quantity_remaining IS NOT NULL OR today.quantity_remaining IS NOT NULL)
-        AND ABS(COALESCE(yesterday.quantity_remaining, 0) - COALESCE(today.quantity_remaining, 0)) > 0
-      ORDER BY ABS(COALESCE(yesterday.quantity_remaining, 0) - COALESCE(today.quantity_remaining, 0)) DESC
+        AND yesterday.quantity_remaining > today.quantity_remaining
+        AND (yesterday.quantity_remaining - today.quantity_remaining) > 0
+      ORDER BY (yesterday.quantity_remaining - today.quantity_remaining) DESC
       LIMIT 50
     ` as Array<{
       name: string;
@@ -137,24 +137,20 @@ export async function GET() {
     }>
 
     const todayUsage = todayUsageQuery.map(item => {
-      // Determine if it's usage (decrease) or restocking (increase)
-      const stockChange = item.used;
-      const isRestock = stockChange < 0;
-      const absChange = Math.abs(stockChange);
+      // Since we already filtered for actual usage in the query, just format the data
+      const usedAmount = item.used;
 
-      // For display purposes, show actual usage (positive values only)
-      // Skip restocking entries or show them separately
       return {
         name: item.name,
-        used: absChange % 1 === 0 ? absChange.toString() : absChange.toFixed(1),
+        used: usedAmount % 1 === 0 ? usedAmount.toString() : usedAmount.toFixed(1),
         unit: item.unit,
         category: item.category,
-        type: isRestock ? 'restock' : 'usage',
+        type: 'usage',
         yesterdayStock: item.yesterday_stock,
         todayStock: item.today_stock,
         notes: item.today_notes || ''
       }
-    }).filter(item => item.type === 'usage') // Only show actual usage, not restocking
+    })
 
     // Get unique categories for frontend
     const categories = Array.from(new Set(todayUsageQuery.map(item => item.category)))
