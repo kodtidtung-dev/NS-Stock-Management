@@ -327,7 +327,7 @@ export default function StaffPage() {
                             value={currentValue}
                             onChange={(e) => handleInputChange(product.id, e.target.value)}
                             className={`w-full px-4 py-3 border-2 rounded-xl text-lg font-extrabold text-center transition-all duration-200 outline-none bg-gray-100 text-black placeholder-gray-500 ${getInputBorderColor(status)}`}
-                            placeholder={`เช่น 3/4, 1.5, 2 1/2 (${product.unit})`}
+                            placeholder="กรุณาระบุจำนวน"
                           />
 
                           {/* Error message */}
@@ -337,12 +337,6 @@ export default function StaffPage() {
                             </p>
                           )}
 
-                          {/* Help text */}
-                          {currentValue === '' && (
-                            <p className="mt-1 text-xs text-gray-500 text-center">
-                              รองรับเศษส่วน: 1/4, 3/4 หรือทศนิยม: 0.25, 1.5
-                            </p>
-                          )}
 
                           {/* Status indicator */}
                           {currentValue !== '' && !stockErrors[product.id] && (

@@ -820,14 +820,11 @@ const ProductManagement = () => {
                     className={`w-full px-3 py-2 bg-gray-100 border text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none ${
                       minimumStockError ? 'border-red-400' : 'border-gray-300'
                     }`}
-                    placeholder="เช่น 1/4, 0.25, 1 1/2"
+                    placeholder="กรุณาระบุจำนวน"
                   />
                   {minimumStockError && (
                     <p className="mt-1 text-xs text-red-600">{minimumStockError}</p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500">
-                    รองรับเศษส่วน: 1/4, 3/4, 1 1/2 หรือทศนิยม: 0.25, 1.5
-                  </p>
                 </div>
 
                 <div>
@@ -945,14 +942,11 @@ const ProductManagement = () => {
                     className={`w-full px-3 py-2 bg-gray-100 border text-black rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none ${
                       editMinimumStockError ? 'border-red-400' : 'border-gray-300'
                     }`}
-                    placeholder="เช่น 1/4, 0.25, 1 1/2"
+                    placeholder="กรุณาระบุจำนวน"
                   />
                   {editMinimumStockError && (
                     <p className="mt-1 text-xs text-red-600">{editMinimumStockError}</p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500">
-                    รองรับเศษส่วน: 1/4, 3/4, 1 1/2 หรือทศนิยม: 0.25, 1.5
-                  </p>
 
                 </div>
 

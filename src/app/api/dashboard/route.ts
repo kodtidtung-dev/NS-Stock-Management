@@ -99,11 +99,13 @@ export async function GET() {
 
     // Use raw query for better performance on usage calculation
     const todayUsageQuery = await prisma.$queryRaw`
-      SELECT 
+      SELECT
         p.name,
         p.unit,
+        COALESCE(c.name, 'ไม่มีหมวดหมู่') as category,
         COALESCE(yesterday.quantity_remaining, 0) - COALESCE(today.quantity_remaining, 0) as used
       FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
       LEFT JOIN (
         SELECT product_id, quantity_remaining
         FROM stock_logs
@@ -118,14 +120,23 @@ export async function GET() {
         AND (yesterday.quantity_remaining IS NOT NULL OR today.quantity_remaining IS NOT NULL)
         AND COALESCE(yesterday.quantity_remaining, 0) - COALESCE(today.quantity_remaining, 0) > 0
       ORDER BY used DESC
-      LIMIT 10
-    ` as Array<{ name: string; unit: string; used: number }>
+      LIMIT 50
+    ` as Array<{ name: string; unit: string; category: string; used: number }>
 
     const todayUsage = todayUsageQuery.map(item => ({
       name: item.name,
-      used: item.used.toFixed(2),
-      unit: item.unit
+      used: item.used % 1 === 0 ? item.used.toString() : item.used.toFixed(1),
+      unit: item.unit,
+      category: item.category
     }))
+
+    // Get unique categories for frontend
+    const categories = Array.from(new Set(todayUsageQuery.map(item => item.category)))
+      .sort((a, b) => {
+        if (a === 'ไม่มีหมวดหมู่') return 1
+        if (b === 'ไม่มีหมวดหมู่') return -1
+        return a.localeCompare(b, 'th')
+      })
 
     const responseData = {
       lastUpdateDate: lastUpdate?.date.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
@@ -145,7 +156,8 @@ export async function GET() {
         if (a.status !== 'OUT_OF_STOCK' && b.status === 'OUT_OF_STOCK') return 1
         return 0
       }),
-      todayUsage // Already sorted by the query
+      todayUsage, // Already sorted by the query
+      categories // Available categories for filtering
     }
 
     // Set cache headers for better performance
