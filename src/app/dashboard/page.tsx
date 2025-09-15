@@ -20,6 +20,7 @@ import Image from "next/image";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useDashboardSync } from "@/hooks/useBackgroundSync";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLogout } from "@/hooks/useLogout";
 import dynamic from 'next/dynamic';
 
 // Dynamic imports for modals - loaded only when needed
@@ -53,7 +54,8 @@ const ProductModal = dynamic(() => import("../../components/ProductModal"), {
 
 
 const OwnerDashboard = () => {
-  const { user, logout, logoutLoading } = useAuth();
+  const { user } = useAuth();
+  const { handleLogout, isLoggingOut } = useLogout();
   const { data: dashboardData, loading, error, refetch, isValidating } = useDashboard();
 
   // Enable background sync for dashboard
@@ -166,11 +168,12 @@ const OwnerDashboard = () => {
                 </div>
               </div>
               <button
-                onClick={logout}
-                disabled={logoutLoading}
+                onClick={handleLogout}
+                disabled={isLoggingOut}
                 className="p-2 hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50"
+                title="ออกจากระบบ"
               >
-                <LogOut className={`w-4 h-4 text-white ${logoutLoading ? 'animate-spin' : ''}`} />
+                <LogOut className={`w-4 h-4 text-white ${isLoggingOut ? 'animate-spin' : ''}`} />
               </button>
             </div>
             <div className="flex items-center justify-between">
@@ -244,11 +247,12 @@ const OwnerDashboard = () => {
               </div>
 
               <button
-                onClick={logout}
-                disabled={logoutLoading}
+                onClick={handleLogout}
+                disabled={isLoggingOut}
                 className="p-2 hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50"
+                title="ออกจากระบบ"
               >
-                <LogOut className={`w-5 h-5 text-white ${logoutLoading ? 'animate-spin' : ''}`} />
+                <LogOut className={`w-5 h-5 text-white ${isLoggingOut ? 'animate-spin' : ''}`} />
               </button>
             </div>
           </div>

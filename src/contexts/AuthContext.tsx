@@ -1,7 +1,8 @@
 // src/contexts/AuthContext.tsx
 'use client'
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface User {
   id: number
@@ -26,26 +27,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [logoutLoading, setLogoutLoading] = useState(false)
+  const router = useRouter()
+  const logoutInProgress = useRef(false)
 
   const checkAuth = useCallback(async () => {
+    // Don't check auth if logout is in progress
+    if (logoutInProgress.current) {
+      return
+    }
+
     try {
       const response = await fetch('/api/auth/me', {
-        credentials: 'include', // Include cookies for authentication
+        credentials: 'include',
         headers: {
-          'Cache-Control': 'no-cache' // Don't cache auth checks
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         }
       })
+
       if (response.ok) {
         const data = await response.json()
         setUser(data.user)
       } else {
-        setUser(null)
+        if (!logoutInProgress.current) {
+          setUser(null)
+        }
       }
     } catch (error) {
       console.error('Auth check failed:', error)
-      setUser(null)
+      if (!logoutInProgress.current) {
+        setUser(null)
+      }
     } finally {
-      setLoading(false)
+      if (!logoutInProgress.current) {
+        setLoading(false)
+      }
     }
   }, [])
 
@@ -81,66 +98,92 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const logout = useCallback(async () => {
-    if (logoutLoading) return // Prevent multiple logout attempts
+    // Prevent multiple logout attempts using ref
+    if (logoutInProgress.current || logoutLoading) {
+      return
+    }
 
     try {
+      // Set both ref and state to prevent race conditions
+      logoutInProgress.current = true
       setLogoutLoading(true)
 
-      await fetch('/api/auth/logout', {
+      // Call logout API (but don't wait for it to finish)
+      fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
         }
+      }).catch(error => {
+        console.error('Logout API error:', error)
       })
 
-      // Always proceed with frontend logout regardless of API response
+      // Immediately clear frontend state
       setUser(null)
 
-      // Force clear all auth-related storage
+      // Clear all storage and cookies properly
       try {
         localStorage.clear()
         sessionStorage.clear()
-        // Force clear cookie client-side as backup
-        document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure=' + (process.env.NODE_ENV === 'production')
+
+        // Fix cookie clearing for production - use proper boolean values
+        const isProduction = process.env.NODE_ENV === 'production'
+
+        // Clear auth-token cookie with correct syntax
+        document.cookie = `auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; ${isProduction ? 'secure; ' : ''}sameSite=lax`
+
+        // Also try clearing with different path variations
+        document.cookie = `auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}; ${isProduction ? 'secure; ' : ''}sameSite=lax`
+
       } catch (error) {
         console.error('Error clearing storage:', error)
       }
 
-      // Add small delay to ensure cookie is cleared before redirect
-      setTimeout(() => {
-        // Force clear browser cache for auth-related pages
+      // Clear cache and redirect using Next.js router
+      try {
         if ('caches' in window) {
           caches.keys().then(names => {
             names.forEach(name => caches.delete(name))
           })
         }
-        window.location.replace('/login')
-      }, 150)
+      } catch (error) {
+        console.error('Error clearing cache:', error)
+      }
+
+      // Use Next.js router for better handling
+      router.replace('/login')
+
+      // Fallback: force redirect if router fails
+      setTimeout(() => {
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login'
+        }
+      }, 500)
+
     } catch (error) {
       console.error('Logout error:', error)
-      // Even if API fails, logout user from frontend
+
+      // Even if everything fails, force clear and redirect
       setUser(null)
       try {
         localStorage.clear()
         sessionStorage.clear()
-        document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure=' + (process.env.NODE_ENV === 'production')
+        const isProduction = process.env.NODE_ENV === 'production'
+        document.cookie = `auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; ${isProduction ? 'secure; ' : ''}sameSite=lax`
       } catch (clearError) {
         console.error('Error clearing storage:', clearError)
       }
-      setTimeout(() => {
-        // Force clear browser cache for auth-related pages
-        if ('caches' in window) {
-          caches.keys().then(names => {
-            names.forEach(name => caches.delete(name))
-          })
-        }
-        window.location.replace('/login')
-      }, 150)
+
+      window.location.href = '/login'
     } finally {
-      setLogoutLoading(false)
+      // Reset logout state after a delay
+      setTimeout(() => {
+        setLogoutLoading(false)
+        logoutInProgress.current = false
+      }, 1000)
     }
-  }, [logoutLoading])
+  }, [logoutLoading, router])
 
   const value: AuthContextType = {
     user,
