@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 import { API_MESSAGES, HTTP_STATUS } from '@/lib/constants'
 import { logger } from '@/lib/logger'
+import { getCurrentDateThailand, toThailandDateString } from '@/lib/timezone'
 
 export async function GET(request: NextRequest) {
   try {
@@ -85,8 +86,7 @@ export async function POST(request: NextRequest) {
     // Handle bulk stock data submission (from staff page)
     if (body.stockLogs && Array.isArray(body.stockLogs)) {
       const { stockLogs } = body
-      const today = new Date().toISOString().split('T')[0]
-      const stockDate = today // Keep as string for SQLite schema
+      const stockDate = getCurrentDateThailand() // Use Thailand timezone
       
       if (stockLogs.length === 0) {
         console.error('POST /api/stock-logs: No stock data provided')
@@ -245,8 +245,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Convert to string format for SQLite schema
-    const stockDateString = stockDate.toISOString().split('T')[0]
+    // Convert to Thailand timezone string format
+    const stockDateString = toThailandDateString(stockDate)
 
     // Check if product exists
     const product = await prisma.product.findUnique({
