@@ -49,10 +49,17 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: productsWithStock
     })
+
+    // Add no-cache headers to ensure fresh data
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
 
   } catch (error) {
     console.error('Products manage GET error:', error)
@@ -122,7 +129,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: 'เพิ่มสินค้าสำเร็จ',
       data: {
@@ -138,6 +145,13 @@ export async function POST(request: NextRequest) {
         createdAt: product.createdAt
       }
     })
+
+    // Add no-cache headers for immediate visibility
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
 
   } catch (error) {
     console.error('Products manage POST error:', error)
@@ -233,7 +247,7 @@ export async function PUT(
       }
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: 'แก้ไขสินค้าสำเร็จ',
       data: {
@@ -250,6 +264,13 @@ export async function PUT(
         updatedAt: updatedProduct.updatedAt
       }
     })
+
+    // Add no-cache headers for immediate visibility
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
 
   } catch (error) {
     console.error('Products manage PUT error:', error)
@@ -312,11 +333,18 @@ export async function DELETE(
       }
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: 'ลบสินค้าสำเร็จ',
       data: deletedProduct
     })
+
+    // Add no-cache headers for immediate visibility
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
 
   } catch (error) {
     console.error('Products manage DELETE error:', error)
@@ -379,11 +407,18 @@ export async function PATCH(
       }
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: active ? 'เปิดใช้งานสินค้าสำเร็จ' : 'ปิดใช้งานสินค้าสำเร็จ',
       data: updatedProduct
     })
+
+    // Add no-cache headers for immediate visibility
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
 
   } catch (error) {
     console.error('Products manage PATCH error:', error)

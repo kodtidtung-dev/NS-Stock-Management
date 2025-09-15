@@ -16,15 +16,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get products with latest stock information (including inactive ones for management)
+    // Get products with optimized query - split into separate queries for better performance
     const products = await prisma.product.findMany({
       include: {
         category: {
           select: { name: true }
-        },
-        stockLogs: {
-          orderBy: { date: 'desc' },
-          take: 1, // Get latest stock log only
         },
       },
       orderBy: [
@@ -33,9 +29,22 @@ export async function GET(request: NextRequest) {
       ]
     })
 
+    // Get latest stock for each product in a separate query
+    const productIds = products.map(p => p.id)
+    const stockLogs = await prisma.stockLog.findMany({
+      where: {
+        productId: { in: productIds }
+      },
+      orderBy: { date: 'desc' },
+      distinct: ['productId'],
+    })
+
+    // Create a map for faster lookup
+    const stockMap = new Map(stockLogs.map(stock => [stock.productId, stock]))
+
     // Transform data to include current stock and alert status
     const productsWithStock = products.map(product => {
-      const latestStock = product.stockLogs[0]
+      const latestStock = stockMap.get(product.id)
       const currentStock = latestStock?.quantityRemaining || 0
       const isLowStock = currentStock <= product.minimumStock
 
@@ -54,10 +63,17 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       { products: productsWithStock },
       { status: HTTP_STATUS.OK }
     )
+
+    // Add no-cache headers to ensure fresh data
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
   } catch (error) {
     console.error('Get products error:', error)
     return NextResponse.json(
@@ -126,13 +142,20 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         message: API_MESSAGES.PRODUCTS.CREATED_SUCCESS,
         product,
       },
       { status: HTTP_STATUS.CREATED }
     )
+
+    // Add no-cache headers for immediate visibility
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
   } catch (error) {
     console.error('Create product error:', error)
     return NextResponse.json(
