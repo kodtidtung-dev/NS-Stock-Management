@@ -97,8 +97,8 @@ export function useDashboard(): UseDashboardReturn {
     'dashboard',
     fetchDashboardData,
     {
-      cacheTime: 5 * 60 * 1000, // 5 minutes
-      staleTime: 15 * 1000, // 15 seconds (dashboard data should be fresh)
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+      staleTime: 30 * 1000, // 30 seconds (reduce API calls)
       refetchOnWindowFocus: true,
       retryAttempts: 2
     }

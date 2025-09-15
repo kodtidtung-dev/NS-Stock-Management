@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { withAuth, AuthenticatedRequest } from '@/lib/apiAuth'
 
-// Cache the response for 60 seconds
-export const revalidate = 60;
+// Cache the response for 30 seconds (faster updates)
+export const revalidate = 30;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const GET = withAuth(async (_request: AuthenticatedRequest) => {
@@ -189,7 +189,7 @@ export const GET = withAuth(async (_request: AuthenticatedRequest) => {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+        'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=120',
       },
     })
   } catch (error) {

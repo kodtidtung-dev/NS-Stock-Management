@@ -5,6 +5,7 @@ import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 import { API_MESSAGES, HTTP_STATUS } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { getCurrentDateThailand, toThailandDateString } from '@/lib/timezone'
+import { eventBus, DASHBOARD_EVENTS } from '@/lib/eventBus'
 
 export async function GET(request: NextRequest) {
   try {
@@ -190,6 +191,14 @@ export async function POST(request: NextRequest) {
           }
         }
 
+        // Trigger dashboard refresh for real-time updates
+        if (createdLogs.length > 0) {
+          eventBus.emit(DASHBOARD_EVENTS.DATA_CHANGED, {
+            type: 'stock-update',
+            count: createdLogs.length
+          })
+        }
+
         const response = NextResponse.json(
           {
             message: `Successfully processed ${createdLogs.length} stock logs`,
@@ -283,6 +292,12 @@ export async function POST(request: NextRequest) {
             },
           },
         },
+      })
+
+      // Trigger dashboard refresh for real-time updates
+      eventBus.emit(DASHBOARD_EVENTS.DATA_CHANGED, {
+        type: 'stock-update',
+        productId: parseInt(productId)
       })
 
       const response = NextResponse.json(

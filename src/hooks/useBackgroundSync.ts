@@ -148,7 +148,7 @@ export function useDashboardSync(enabled = true) {
       }).catch(console.error)
     },
     {
-      interval: 15000, // 15 seconds for dashboard
+      interval: 30000, // 30 seconds for dashboard (reduce frequency)
       enabled,
       patterns: ['dashboard']
     }
