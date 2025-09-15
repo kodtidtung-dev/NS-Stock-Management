@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 import { API_MESSAGES, HTTP_STATUS } from '@/lib/constants'
+import { logger } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
   try {
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    console.log('POST /api/stock-logs: Request body:', JSON.stringify(body, null, 2))
+    logger.debug('POST /api/stock-logs: Request body:', JSON.stringify(body, null, 2))
     
     // Handle bulk stock data submission (from staff page)
     if (body.stockLogs && Array.isArray(body.stockLogs)) {
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
         // Validate all items first
         for (const item of stockLogs) {
           const { productId, quantityRemaining } = item
-          console.log('Validating item:', { productId, quantityRemaining })
+          logger.debug('Validating item:', { productId, quantityRemaining })
 
           if (!productId || quantityRemaining === undefined) {
             const error = `Missing productId or quantityRemaining in item: ${JSON.stringify(item)}`

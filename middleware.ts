@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { verifyToken } from '@/lib/auth'
+import { logger } from '@/lib/logger'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -23,7 +24,7 @@ export function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.includes(pathname)
 
   // Debug logging (remove in production)
-  console.log('Middleware Debug:', {
+  logger.debug('Middleware Debug:', {
     path: pathname,
     isLoggedIn,
     isProtectedRoute,

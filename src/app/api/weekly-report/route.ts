@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { withAuth, AuthenticatedRequest } from '@/lib/apiAuth'
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: AuthenticatedRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const weekOffset = parseInt(searchParams.get('week') || '0')
@@ -203,4 +204,4 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     )
   }
-}
+})

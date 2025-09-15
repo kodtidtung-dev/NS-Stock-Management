@@ -1,11 +1,12 @@
 // src/app/api/dashboard/route.ts
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { withAuth, AuthenticatedRequest } from '@/lib/apiAuth'
 
 // Cache the response for 60 seconds
 export const revalidate = 60;
 
-export async function GET() {
+export const GET = withAuth(async (request: AuthenticatedRequest) => {
   try {
     // Use parallel queries for better performance
     const [products, lastUpdate] = await Promise.all([
@@ -197,4 +198,4 @@ export async function GET() {
       { status: 500 }
     )
   }
-}
+})

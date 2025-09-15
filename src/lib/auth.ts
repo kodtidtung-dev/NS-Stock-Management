@@ -2,6 +2,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { NextRequest } from 'next/server'
+import { logger } from './logger'
 
 export interface JWTPayload {
   userId: number
@@ -16,13 +17,13 @@ export function createToken(payload: JWTPayload): string {
 
 export function verifyToken(token: string): JWTPayload | null {
   try {
-    console.log('🔐 Verifying JWT token...')
-    console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET)
+    logger.debug('🔐 Verifying JWT token...')
+    logger.debug('JWT_SECRET exists:', !!process.env.JWT_SECRET)
     const result = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload
-    console.log('✅ Token verified successfully')
+    logger.debug('✅ Token verified successfully')
     return result
   } catch (error) {
-    console.log('❌ Token verification failed:', error instanceof Error ? error.message : 'Unknown error')
+    logger.debug('❌ Token verification failed:', error instanceof Error ? error.message : 'Unknown error')
     return null
   }
 }
