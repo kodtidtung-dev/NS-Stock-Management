@@ -48,7 +48,12 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
         ? `/api/stock-logs?productId=${productId}` 
         : '/api/stock-logs'
       
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Cache-Control': 'no-cache'
+        },
+        cache: 'no-store'
+      })
       const data = await response.json()
 
       if (response.ok) {
@@ -75,7 +80,9 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
         },
+        cache: 'no-store',
         body: JSON.stringify(data),
       })
 
@@ -110,12 +117,13 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
         },
+        cache: 'no-store',
         body: JSON.stringify({
           stockLogs: stockData.map(item => ({
             productId: item.productId,
             quantity: item.quantityRemaining,
-            type: 'UPDATE',
             notes: notes || undefined
           }))
         }),
@@ -125,9 +133,23 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
 
       if (response.ok) {
         await fetchStockLogs()
+        // Check if there were partial errors
+        if (result.errors && result.errors.length > 0) {
+          return {
+            success: true,
+            error: `บันทึกสำเร็จ ${result.processed}/${result.total} รายการ. เกิดข้อผิดพลาด: ${result.errors.join(', ')}`
+          }
+        }
         return { success: true }
       } else {
-        return { success: false, error: result.error || 'Failed to submit stock data' }
+        // Handle detailed error response
+        let errorMessage = result.error || 'Failed to submit stock data'
+        if (result.details && Array.isArray(result.details)) {
+          errorMessage += `: ${result.details.join(', ')}`
+        } else if (result.details) {
+          errorMessage += `: ${result.details}`
+        }
+        return { success: false, error: errorMessage }
       }
     } catch (err) {
       console.error('Submit stock data error:', err)

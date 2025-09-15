@@ -132,6 +132,12 @@ export default function StaffPage() {
     if (result.success) {
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 3000)
+
+      // Show warning if there were partial errors
+      if (result.error) {
+        alert('⚠️ ' + result.error)
+      }
+
       // Refresh products to get updated stock levels
       refetchProducts()
       // Reset form
@@ -139,7 +145,10 @@ export default function StaffPage() {
       setStockErrors({})
       setNotes('')
     } else {
-      alert('เกิดข้อผิดพลาด: ' + (result.error || 'กรุณาลองใหม่'))
+      // Show detailed error message
+      const errorMessage = result.error || 'กรุณาลองใหม่'
+      alert('❌ เกิดข้อผิดพลาด: ' + errorMessage)
+      console.error('Stock submission error:', result)
     }
   }
 
