@@ -16,7 +16,8 @@ import {
   Tag,
   Search,
   X,
-  Trash2
+  Trash2,
+  ArrowLeft
 } from 'lucide-react'
 
 // Type definitions
@@ -451,6 +452,13 @@ const ProductManagement = () => {
           {/* Mobile Header */}
           <div className="block md:hidden mb-4">
             <div className="flex items-center space-x-3 mb-4">
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                title="กลับไปหน้า Dashboard"
+              >
+                <ArrowLeft className="w-5 h-5 text-black" />
+              </button>
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-gray-300">
                 <Package className="w-5 h-5 text-black" />
               </div>
@@ -492,6 +500,13 @@ const ProductManagement = () => {
           {/* Desktop Header */}
           <div className="hidden md:flex items-center justify-between mb-6">
             <div className="flex items-center space-x-3">
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                title="กลับไปหน้า Dashboard"
+              >
+                <ArrowLeft className="w-5 h-5 text-black" />
+              </button>
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-gray-300">
                 <Package className="w-5 h-5 text-black" />
               </div>
