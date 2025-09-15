@@ -30,8 +30,8 @@ export async function GET(request: NextRequest) {
         stockLogs: {
           where: {
             date: {
-              gte: prevWeekStart,
-              lte: currentWeekEnd
+              gte: prevWeekStart.toISOString().split('T')[0],
+              lte: currentWeekEnd.toISOString().split('T')[0]
             }
           },
           orderBy: { date: 'asc' }

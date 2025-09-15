@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     if (body.stockLogs && Array.isArray(body.stockLogs)) {
       const { stockLogs } = body
       const today = new Date().toISOString().split('T')[0]
-      const stockDate = new Date(today)
+      const stockDate = today // Keep as string for SQLite schema
       
       if (stockLogs.length === 0) {
         return NextResponse.json(
@@ -192,6 +192,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Convert to string format for SQLite schema
+    const stockDateString = stockDate.toISOString().split('T')[0]
+
     // Check if product exists
     const product = await prisma.product.findUnique({
       where: { id: parseInt(productId), active: true },
@@ -209,7 +212,7 @@ export async function POST(request: NextRequest) {
       const stockLog = await prisma.stockLog.create({
         data: {
           productId: parseInt(productId),
-          date: stockDate,
+          date: stockDateString,
           quantityRemaining: parseFloat(quantityRemaining),
           createdBy: payload.userId,
           notes: notes || null,
