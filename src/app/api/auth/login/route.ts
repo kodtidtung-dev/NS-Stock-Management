@@ -6,7 +6,7 @@ import { API_MESSAGES, HTTP_STATUS } from '../../../../lib/constants'
 import { withRateLimit } from '../../../../lib/apiAuth'
 import { logger } from '../../../../lib/logger'
 
-export const POST = withRateLimit(5, 15 * 60 * 1000)(async (request: NextRequest) => {
+export const POST = withRateLimit(20, 5 * 60 * 1000)(async (request: NextRequest) => {
   try {
     const { username, password } = await request.json()
 
