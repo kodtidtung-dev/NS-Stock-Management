@@ -1,0 +1,2283 @@
+{
+  "timestamp": "2025-09-15T18:29:30.356Z",
+  "users": [
+    {
+      "id": 1,
+      "username": "owner",
+      "password": "$2b$10$/Et6KT99NnzbQsMTm36Xy.lVM4.zZYJc/EzcWTVHjveHP2onQg61q",
+      "role": "OWNER",
+      "name": "เจ้าของร้าน",
+      "active": true,
+      "createdAt": "2025-09-06T07:14:18.127Z"
+    },
+    {
+      "id": 4,
+      "username": "Admin",
+      "password": "$2b$10$/gHQZBYaVe5jmMy7kb05Oe3XRI8Esaw6loND23I.AA6M6McrRkGRm",
+      "role": "OWNER",
+      "name": "Admin",
+      "active": true,
+      "createdAt": "2025-09-06T07:41:29.894Z"
+    },
+    {
+      "id": 2,
+      "username": "staff1",
+      "password": "$2b$10$/Et6KT99NnzbQsMTm36Xy.lVM4.zZYJc/EzcWTVHjveHP2onQg61q",
+      "role": "STAFF",
+      "name": "ฝ้าย",
+      "active": true,
+      "createdAt": "2025-09-06T07:14:18.207Z"
+    },
+    {
+      "id": 3,
+      "username": "staff2",
+      "password": "$2b$10$/Et6KT99NnzbQsMTm36Xy.lVM4.zZYJc/EzcWTVHjveHP2onQg61q",
+      "role": "STAFF",
+      "name": "ไอ้เบส",
+      "active": true,
+      "createdAt": "2025-09-06T07:14:18.242Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": 3,
+      "name": "ขนม",
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T07:42:54.052Z"
+    },
+    {
+      "id": 4,
+      "name": "Spacial Coffee",
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:54:49.736Z"
+    },
+    {
+      "id": 5,
+      "name": "ของใช้ทั่วไป",
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:08:30.039Z"
+    },
+    {
+      "id": 6,
+      "name": "ของทำความสะอาด",
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:35:07.568Z"
+    },
+    {
+      "id": 7,
+      "name": "ส่วนผสม",
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:42:56.936Z"
+    }
+  ],
+  "products": [
+    {
+      "id": 14,
+      "name": "แซนวิชแฮมชีส",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T07:53:25.198Z"
+    },
+    {
+      "id": 12,
+      "name": "ชิโอปัง",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T07:43:55.076Z"
+    },
+    {
+      "id": 15,
+      "name": "คุกกี้ อัลมอนด์",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 4,
+      "createdAt": "2025-09-06T10:11:27.051Z"
+    },
+    {
+      "id": 16,
+      "name": "คุกกี้ ช็อคชิพ",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:47:22.567Z"
+    },
+    {
+      "id": 17,
+      "name": "คุกกี้ ลาวา",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:48:01.825Z"
+    },
+    {
+      "id": 18,
+      "name": "คุกกี้ แครนเบอร์รี่",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:48:45.893Z"
+    },
+    {
+      "id": 20,
+      "name": "ครัวซองค์ อัลมอนด์",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 5,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:50:22.980Z"
+    },
+    {
+      "id": 21,
+      "name": "ครัวซองค์ ช็อกโกแลต",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:51:04.026Z"
+    },
+    {
+      "id": 22,
+      "name": "ชิโอปัง ทรัฟเฟิล",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:52:06.402Z"
+    },
+    {
+      "id": 23,
+      "name": "ทิมเบอร์ริงค์",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:52:57.827Z"
+    },
+    {
+      "id": 60,
+      "name": "น้ำยาถูพื้น",
+      "categoryId": 6,
+      "unit": "แกลลอน",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:36:23.904Z"
+    },
+    {
+      "id": 61,
+      "name": "Magicclean เช็ดบาร์",
+      "categoryId": 6,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:37:34.161Z"
+    },
+    {
+      "id": 62,
+      "name": "น้ำยาซักผ้า",
+      "categoryId": 6,
+      "unit": "ถุง",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:38:02.568Z"
+    },
+    {
+      "id": 63,
+      "name": "น้ำยาเช็ดกระจก",
+      "categoryId": 6,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:39:05.222Z"
+    },
+    {
+      "id": 64,
+      "name": "น้ำยาล้างห้องน้ำ",
+      "categoryId": 6,
+      "unit": "แกลลอน",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:39:54.941Z"
+    },
+    {
+      "id": 65,
+      "name": "Glade ใส่ห้องน้ำ",
+      "categoryId": 6,
+      "unit": "ชิ้น",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:40:33.596Z"
+    },
+    {
+      "id": 67,
+      "name": "ผงล้างเครื่อง",
+      "categoryId": 6,
+      "unit": "กระปุก",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:42:14.907Z"
+    },
+    {
+      "id": 68,
+      "name": "นมอโรม่า",
+      "categoryId": 7,
+      "unit": "กล่อง",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:45:04.559Z"
+    },
+    {
+      "id": 69,
+      "name": "นมโอ๊ต",
+      "categoryId": 7,
+      "unit": "กล่อง",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:45:36.616Z"
+    },
+    {
+      "id": 70,
+      "name": "โซดา",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 5,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:46:18.257Z"
+    },
+    {
+      "id": 71,
+      "name": "นมข้นหวาน",
+      "categoryId": 7,
+      "unit": "ถุง",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:00:58.913Z"
+    },
+    {
+      "id": 72,
+      "name": "น้ำเชื่อม",
+      "categoryId": 7,
+      "unit": "ถุง",
+      "minimumStock": 3,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:01:56.670Z"
+    },
+    {
+      "id": 74,
+      "name": "ผงโกโก้",
+      "categoryId": 7,
+      "unit": "ถุง",
+      "minimumStock": 5,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:03:12.230Z"
+    },
+    {
+      "id": 73,
+      "name": "ผงมัทฉะ",
+      "categoryId": 7,
+      "unit": "ถุง",
+      "minimumStock": 5,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:02:30.600Z"
+    },
+    {
+      "id": 75,
+      "name": "ชาพีช",
+      "categoryId": 7,
+      "unit": "กล่อง",
+      "minimumStock": 3,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:04:14.387Z"
+    },
+    {
+      "id": 76,
+      "name": "น้ำผึ้ง",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:04:41.229Z"
+    },
+    {
+      "id": 77,
+      "name": "คาราเมลซอส",
+      "categoryId": 7,
+      "unit": "ขวด ",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:05:37.356Z"
+    },
+    {
+      "id": 33,
+      "name": "Typica ruk pa",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:06:55.346Z"
+    },
+    {
+      "id": 31,
+      "name": "FYH Washed",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:06:07.780Z"
+    },
+    {
+      "id": 25,
+      "name": "Pink Bourbon",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:56:29.690Z"
+    },
+    {
+      "id": 32,
+      "name": "Ma nat",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:06:26.885Z"
+    },
+    {
+      "id": 27,
+      "name": "Volcan",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:57:50.674Z"
+    },
+    {
+      "id": 47,
+      "name": "กระดาษ Filter",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:19:51.698Z"
+    },
+    {
+      "id": 28,
+      "name": "Soyi wash",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:58:27.437Z"
+    },
+    {
+      "id": 66,
+      "name": "สก็อตซ์ไบรต์",
+      "categoryId": 6,
+      "unit": "ชิ้น",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:41:38.791Z"
+    },
+    {
+      "id": 24,
+      "name": "แซนวิช อโวคาโด",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:53:37.363Z"
+    },
+    {
+      "id": 26,
+      "name": "Passion Fruit",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:57:14.309Z"
+    },
+    {
+      "id": 58,
+      "name": "ถุงขยะ 24 x 28",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:33:22.596Z"
+    },
+    {
+      "id": 57,
+      "name": "ถุงขยะห้องน้ำ (S)",
+      "categoryId": 5,
+      "unit": "ม้วน",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:32:42.387Z"
+    },
+    {
+      "id": 54,
+      "name": "กระดาษปิดฝาแก้ว",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:29:57.697Z"
+    },
+    {
+      "id": 55,
+      "name": "ถุงซิปล็อค",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:30:39.639Z"
+    },
+    {
+      "id": 50,
+      "name": "ถ้วยซอส",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:23:48.673Z"
+    },
+    {
+      "id": 59,
+      "name": "ถุงเคาะกาก กาแฟ",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:34:07.047Z"
+    },
+    {
+      "id": 48,
+      "name": "ถุงใส่ขนม",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:20:34.838Z"
+    },
+    {
+      "id": 46,
+      "name": "กระดาษบิลใหญ่",
+      "categoryId": 5,
+      "unit": "ม้วน",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:19:18.445Z"
+    },
+    {
+      "id": 51,
+      "name": "ถุง 6 x 14",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:24:18.940Z"
+    },
+    {
+      "id": 49,
+      "name": "กล่อง Tiramisu",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:21:40.463Z"
+    },
+    {
+      "id": 52,
+      "name": "ถุง 8 x 16",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:25:02.958Z"
+    },
+    {
+      "id": 45,
+      "name": "กระดาษบิลเล็ก",
+      "categoryId": 5,
+      "unit": "ม้วน",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:18:39.160Z"
+    },
+    {
+      "id": 37,
+      "name": "แก้วเดอตี้",
+      "categoryId": 5,
+      "unit": "แถว",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:12:54.721Z"
+    },
+    {
+      "id": 36,
+      "name": "แก้วร้อน",
+      "categoryId": 5,
+      "unit": "แถว",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:12:27.317Z"
+    },
+    {
+      "id": 53,
+      "name": "ถุง 9 x 18",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:26:55.865Z"
+    },
+    {
+      "id": 43,
+      "name": "ทิชชู่ห้องน้ำ",
+      "categoryId": 5,
+      "unit": "ม้วน",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:16:29.508Z"
+    },
+    {
+      "id": 34,
+      "name": "แก้ว 14 ออนซ์",
+      "categoryId": 5,
+      "unit": "แถว",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:11:14.422Z"
+    },
+    {
+      "id": 39,
+      "name": "ฝาเดอตี้",
+      "categoryId": 5,
+      "unit": "แถว",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:14:20.068Z"
+    },
+    {
+      "id": 35,
+      "name": "แก้ว 16 ออนซ์",
+      "categoryId": 5,
+      "unit": "แถว",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:12:04.943Z"
+    },
+    {
+      "id": 40,
+      "name": "ฝายกดื่ม",
+      "categoryId": 5,
+      "unit": "แถว",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:14:45.113Z"
+    },
+    {
+      "id": 41,
+      "name": "หลอด",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:15:13.180Z"
+    },
+    {
+      "id": 42,
+      "name": "ทิชชู่ม้วนใหญ่",
+      "categoryId": 5,
+      "unit": "ม้วน",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:15:48.069Z"
+    },
+    {
+      "id": 44,
+      "name": "ทิชชู่เช็ดปาก",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:17:37.636Z"
+    },
+    {
+      "id": 38,
+      "name": "ฝาร้อน",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:13:35.597Z"
+    },
+    {
+      "id": 78,
+      "name": "ซอสช็อคโกแลต",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:06:56.157Z"
+    },
+    {
+      "id": 79,
+      "name": "ไซรัปเนื้อ ลิ้นจี่",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:07:48.337Z"
+    },
+    {
+      "id": 80,
+      "name": "ไซรัปเนื้อ ยูสุ",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:08:39.310Z"
+    },
+    {
+      "id": 81,
+      "name": "ไซรัปเนื้อ บ๊วย",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:10:37.837Z"
+    },
+    {
+      "id": 82,
+      "name": "ไซรัป บ๊วย",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:11:31.588Z"
+    },
+    {
+      "id": 83,
+      "name": "ไซรัป ยูสุ",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:12:17.454Z"
+    },
+    {
+      "id": 84,
+      "name": "ไซรัป ลิ้นจี่",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:13:02.725Z"
+    },
+    {
+      "id": 85,
+      "name": "ไซรัป พีช",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:14:06.223Z"
+    },
+    {
+      "id": 87,
+      "name": "ไซรัป คาราเมล",
+      "categoryId": 7,
+      "unit": "ขวด",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:15:56.218Z"
+    },
+    {
+      "id": 88,
+      "name": "บ๊วยแต่งแก้ว",
+      "categoryId": 7,
+      "unit": "ถุง",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:17:01.031Z"
+    },
+    {
+      "id": 89,
+      "name": "Lady finger",
+      "categoryId": 7,
+      "unit": "แพ็ค ",
+      "minimumStock": 5,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T13:17:32.248Z"
+    },
+    {
+      "id": 19,
+      "name": "ครัวซองค์ ธรรมดา",
+      "categoryId": 3,
+      "unit": "ชิ้น",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:49:37.915Z"
+    },
+    {
+      "id": 92,
+      "name": "Moo Chcolate Dark",
+      "categoryId": 4,
+      "unit": "ถัง",
+      "minimumStock": 1,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-13T08:37:23.326Z"
+    },
+    {
+      "id": 93,
+      "name": "Balanced V.2",
+      "categoryId": 4,
+      "unit": "ถัง",
+      "minimumStock": 0.25,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-13T08:38:29.559Z"
+    },
+    {
+      "id": 90,
+      "name": "Ma Honey",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-12T08:33:42.262Z"
+    },
+    {
+      "id": 29,
+      "name": "Soyi nat",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T11:58:58.870Z"
+    },
+    {
+      "id": 30,
+      "name": "FYH Honey Cascara",
+      "categoryId": 4,
+      "unit": "กรัม",
+      "minimumStock": 40,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:00:29.326Z"
+    },
+    {
+      "id": 56,
+      "name": "ถุงขยะใหญ่ 30 x 40",
+      "categoryId": 5,
+      "unit": "แพ็ค",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-06T12:31:30.897Z"
+    },
+    {
+      "id": 98,
+      "name": "Test",
+      "categoryId": 4,
+      "unit": "TEST",
+      "minimumStock": 2,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-15T10:43:59.866Z"
+    },
+    {
+      "id": 99,
+      "name": "Test2",
+      "categoryId": 4,
+      "unit": "test",
+      "minimumStock": 4,
+      "description": null,
+      "active": true,
+      "createdBy": 1,
+      "createdAt": "2025-09-15T16:05:21.207Z"
+    }
+  ],
+  "stockLogs": [
+    {
+      "id": 24,
+      "productId": 21,
+      "date": "2025-09-09T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-09T13:59:55.877Z"
+    },
+    {
+      "id": 25,
+      "productId": 12,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 11,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:30.173Z"
+    },
+    {
+      "id": 26,
+      "productId": 14,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:30.919Z"
+    },
+    {
+      "id": 27,
+      "productId": 15,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:31.414Z"
+    },
+    {
+      "id": 28,
+      "productId": 16,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 7,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:31.910Z"
+    },
+    {
+      "id": 29,
+      "productId": 17,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:32.405Z"
+    },
+    {
+      "id": 30,
+      "productId": 18,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 5,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:32.900Z"
+    },
+    {
+      "id": 31,
+      "productId": 19,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 7,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:33.396Z"
+    },
+    {
+      "id": 33,
+      "productId": 20,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:33.891Z"
+    },
+    {
+      "id": 36,
+      "productId": 22,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:34.882Z"
+    },
+    {
+      "id": 373,
+      "productId": 46,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:30:22.192Z"
+    },
+    {
+      "id": 38,
+      "productId": 23,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:35.378Z"
+    },
+    {
+      "id": 39,
+      "productId": 24,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:35.873Z"
+    },
+    {
+      "id": 508,
+      "productId": 25,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 249,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:55:58.753Z"
+    },
+    {
+      "id": 34,
+      "productId": 21,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 2,
+      "notes": null,
+      "createdAt": "2025-09-12T08:26:34.387Z"
+    },
+    {
+      "id": 50,
+      "productId": 77,
+      "date": "2025-09-12T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-12T20:06:12.957Z"
+    },
+    {
+      "id": 509,
+      "productId": 26,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 46,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:55:59.498Z"
+    },
+    {
+      "id": 510,
+      "productId": 27,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 104,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:55:59.993Z"
+    },
+    {
+      "id": 511,
+      "productId": 28,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 143,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:00.488Z"
+    },
+    {
+      "id": 512,
+      "productId": 29,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 25,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:00.995Z"
+    },
+    {
+      "id": 91,
+      "productId": 73,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:30.691Z"
+    },
+    {
+      "id": 72,
+      "productId": 56,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:22.246Z"
+    },
+    {
+      "id": 513,
+      "productId": 30,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 65,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:01.490Z"
+    },
+    {
+      "id": 514,
+      "productId": 31,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 118,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:01.988Z"
+    },
+    {
+      "id": 94,
+      "productId": 75,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:31.657Z"
+    },
+    {
+      "id": 515,
+      "productId": 32,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:02.483Z"
+    },
+    {
+      "id": 516,
+      "productId": 33,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 17,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:02.980Z"
+    },
+    {
+      "id": 517,
+      "productId": 90,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:03.476Z"
+    },
+    {
+      "id": 114,
+      "productId": 87,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:37.448Z"
+    },
+    {
+      "id": 73,
+      "productId": 57,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:22.729Z"
+    },
+    {
+      "id": 518,
+      "productId": 92,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 0.75,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:03.971Z"
+    },
+    {
+      "id": 60,
+      "productId": 43,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:16.446Z"
+    },
+    {
+      "id": 519,
+      "productId": 93,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 0.25,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:56:04.466Z"
+    },
+    {
+      "id": 116,
+      "productId": 88,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:37.931Z"
+    },
+    {
+      "id": 118,
+      "productId": 89,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 15,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:38.413Z"
+    },
+    {
+      "id": 74,
+      "productId": 58,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:23.211Z"
+    },
+    {
+      "id": 64,
+      "productId": 48,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:18.384Z"
+    },
+    {
+      "id": 76,
+      "productId": 60,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:24.176Z"
+    },
+    {
+      "id": 101,
+      "productId": 79,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:33.588Z"
+    },
+    {
+      "id": 56,
+      "productId": 39,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:14.517Z"
+    },
+    {
+      "id": 75,
+      "productId": 59,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:23.694Z"
+    },
+    {
+      "id": 51,
+      "productId": 34,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 29,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:11.858Z"
+    },
+    {
+      "id": 96,
+      "productId": 76,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:32.140Z"
+    },
+    {
+      "id": 77,
+      "productId": 61,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:24.658Z"
+    },
+    {
+      "id": 52,
+      "productId": 35,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:12.585Z"
+    },
+    {
+      "id": 80,
+      "productId": 64,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:26.107Z"
+    },
+    {
+      "id": 98,
+      "productId": 77,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:32.623Z"
+    },
+    {
+      "id": 68,
+      "productId": 52,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:20.316Z"
+    },
+    {
+      "id": 53,
+      "productId": 36,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 36,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:13.067Z"
+    },
+    {
+      "id": 78,
+      "productId": 62,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:25.139Z"
+    },
+    {
+      "id": 108,
+      "productId": 83,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:35.517Z"
+    },
+    {
+      "id": 99,
+      "productId": 78,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:33.106Z"
+    },
+    {
+      "id": 54,
+      "productId": 37,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:13.551Z"
+    },
+    {
+      "id": 79,
+      "productId": 63,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:25.624Z"
+    },
+    {
+      "id": 103,
+      "productId": 80,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:34.071Z"
+    },
+    {
+      "id": 55,
+      "productId": 38,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:14.034Z"
+    },
+    {
+      "id": 57,
+      "productId": 40,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 58,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:14.999Z"
+    },
+    {
+      "id": 81,
+      "productId": 65,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:26.590Z"
+    },
+    {
+      "id": 84,
+      "productId": 68,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:28.279Z"
+    },
+    {
+      "id": 104,
+      "productId": 81,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:34.553Z"
+    },
+    {
+      "id": 58,
+      "productId": 41,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 20,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:15.481Z"
+    },
+    {
+      "id": 61,
+      "productId": 44,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 5,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:16.935Z"
+    },
+    {
+      "id": 82,
+      "productId": 66,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 12,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:27.313Z"
+    },
+    {
+      "id": 59,
+      "productId": 42,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 5,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:15.964Z"
+    },
+    {
+      "id": 106,
+      "productId": 82,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:35.035Z"
+    },
+    {
+      "id": 83,
+      "productId": 67,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:27.795Z"
+    },
+    {
+      "id": 109,
+      "productId": 84,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:35.999Z"
+    },
+    {
+      "id": 62,
+      "productId": 45,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 100,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:17.419Z"
+    },
+    {
+      "id": 85,
+      "productId": 69,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:28.761Z"
+    },
+    {
+      "id": 89,
+      "productId": 72,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:30.208Z"
+    },
+    {
+      "id": 93,
+      "productId": 74,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 11,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:31.174Z"
+    },
+    {
+      "id": 111,
+      "productId": 85,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:36.482Z"
+    },
+    {
+      "id": 63,
+      "productId": 47,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:17.901Z"
+    },
+    {
+      "id": 65,
+      "productId": 49,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:18.870Z"
+    },
+    {
+      "id": 86,
+      "productId": 70,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 41,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:29.243Z"
+    },
+    {
+      "id": 66,
+      "productId": 50,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:19.352Z"
+    },
+    {
+      "id": 88,
+      "productId": 71,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:29.726Z"
+    },
+    {
+      "id": 67,
+      "productId": 51,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:19.834Z"
+    },
+    {
+      "id": 69,
+      "productId": 53,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:20.798Z"
+    },
+    {
+      "id": 70,
+      "productId": 54,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 5,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:21.281Z"
+    },
+    {
+      "id": 279,
+      "productId": 15,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 2,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:10.210Z"
+    },
+    {
+      "id": 71,
+      "productId": 55,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 7,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:19:21.763Z"
+    },
+    {
+      "id": 278,
+      "productId": 14,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:09.699Z"
+    },
+    {
+      "id": 277,
+      "productId": 12,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 11,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:08.932Z"
+    },
+    {
+      "id": 280,
+      "productId": 16,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:10.719Z"
+    },
+    {
+      "id": 281,
+      "productId": 17,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:11.230Z"
+    },
+    {
+      "id": 282,
+      "productId": 18,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:11.741Z"
+    },
+    {
+      "id": 283,
+      "productId": 19,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 7,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:12.251Z"
+    },
+    {
+      "id": 284,
+      "productId": 20,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:12.759Z"
+    },
+    {
+      "id": 285,
+      "productId": 21,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:13.268Z"
+    },
+    {
+      "id": 431,
+      "productId": 20,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T07:56:41.655Z"
+    },
+    {
+      "id": 433,
+      "productId": 21,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T07:56:42.150Z"
+    },
+    {
+      "id": 435,
+      "productId": 22,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T07:56:42.646Z"
+    },
+    {
+      "id": 436,
+      "productId": 23,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T07:56:43.142Z"
+    },
+    {
+      "id": 374,
+      "productId": 33,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 149,
+      "createdBy": 3,
+      "notes": null,
+      "createdAt": "2025-09-13T08:37:41.879Z"
+    },
+    {
+      "id": 375,
+      "productId": 90,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 3,
+      "notes": null,
+      "createdAt": "2025-09-13T08:37:42.624Z"
+    },
+    {
+      "id": 421,
+      "productId": 12,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T07:56:36.416Z"
+    },
+    {
+      "id": 445,
+      "productId": 25,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 269,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:45.308Z"
+    },
+    {
+      "id": 446,
+      "productId": 26,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 86,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:46.055Z"
+    },
+    {
+      "id": 430,
+      "productId": 19,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T07:56:41.159Z"
+    },
+    {
+      "id": 447,
+      "productId": 27,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 104,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:46.552Z"
+    },
+    {
+      "id": 448,
+      "productId": 28,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 143,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:47.049Z"
+    },
+    {
+      "id": 449,
+      "productId": 29,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 25,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:47.546Z"
+    },
+    {
+      "id": 450,
+      "productId": 30,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 65,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:48.043Z"
+    },
+    {
+      "id": 451,
+      "productId": 31,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 118,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:48.541Z"
+    },
+    {
+      "id": 452,
+      "productId": 32,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:49.038Z"
+    },
+    {
+      "id": 453,
+      "productId": 33,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 91,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:49.538Z"
+    },
+    {
+      "id": 454,
+      "productId": 90,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:50.035Z"
+    },
+    {
+      "id": 455,
+      "productId": 92,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 0.75,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:50.531Z"
+    },
+    {
+      "id": 456,
+      "productId": 93,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 0.25,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T08:01:51.032Z"
+    },
+    {
+      "id": 520,
+      "productId": 98,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T11:01:44.603Z"
+    },
+    {
+      "id": 472,
+      "productId": 56,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 4,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T04:30:00.179Z"
+    },
+    {
+      "id": 473,
+      "productId": 57,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T04:30:00.933Z"
+    },
+    {
+      "id": 484,
+      "productId": 12,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:04.513Z"
+    },
+    {
+      "id": 485,
+      "productId": 14,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:05.258Z"
+    },
+    {
+      "id": 486,
+      "productId": 15,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:05.754Z"
+    },
+    {
+      "id": 487,
+      "productId": 16,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:06.249Z"
+    },
+    {
+      "id": 488,
+      "productId": 17,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:06.744Z"
+    },
+    {
+      "id": 489,
+      "productId": 18,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:07.239Z"
+    },
+    {
+      "id": 490,
+      "productId": 19,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 5,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:07.734Z"
+    },
+    {
+      "id": 491,
+      "productId": 20,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:08.230Z"
+    },
+    {
+      "id": 492,
+      "productId": 21,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:08.725Z"
+    },
+    {
+      "id": 493,
+      "productId": 22,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:09.220Z"
+    },
+    {
+      "id": 494,
+      "productId": 23,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:09.714Z"
+    },
+    {
+      "id": 495,
+      "productId": 24,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T07:53:10.209Z"
+    },
+    {
+      "id": 376,
+      "productId": 25,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 269,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:12.522Z"
+    },
+    {
+      "id": 377,
+      "productId": 26,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 86,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:13.282Z"
+    },
+    {
+      "id": 378,
+      "productId": 27,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 144,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:13.786Z"
+    },
+    {
+      "id": 379,
+      "productId": 28,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 143,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:14.298Z"
+    },
+    {
+      "id": 380,
+      "productId": 29,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 25,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:14.803Z"
+    },
+    {
+      "id": 381,
+      "productId": 30,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 141,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:15.306Z"
+    },
+    {
+      "id": 382,
+      "productId": 31,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 118,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:15.811Z"
+    },
+    {
+      "id": 383,
+      "productId": 32,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 0,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:45:16.314Z"
+    },
+    {
+      "id": 411,
+      "productId": 24,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T00:36:38.913Z"
+    },
+    {
+      "id": 287,
+      "productId": 22,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:13.777Z"
+    },
+    {
+      "id": 388,
+      "productId": 92,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 3,
+      "createdBy": 3,
+      "notes": null,
+      "createdAt": "2025-09-13T08:49:13.040Z"
+    },
+    {
+      "id": 389,
+      "productId": 93,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 1,
+      "createdBy": 3,
+      "notes": null,
+      "createdAt": "2025-09-13T08:49:13.524Z"
+    },
+    {
+      "id": 291,
+      "productId": 23,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 6,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:14.350Z"
+    },
+    {
+      "id": 403,
+      "productId": 14,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T00:36:36.263Z"
+    },
+    {
+      "id": 405,
+      "productId": 15,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 10,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T00:36:36.989Z"
+    },
+    {
+      "id": 406,
+      "productId": 16,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T00:36:37.470Z"
+    },
+    {
+      "id": 408,
+      "productId": 17,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 9,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T00:36:37.951Z"
+    },
+    {
+      "id": 409,
+      "productId": 18,
+      "date": "2025-09-14T00:00:00.000Z",
+      "quantityRemaining": 7,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-14T00:36:38.432Z"
+    },
+    {
+      "id": 482,
+      "productId": 71,
+      "date": "2025-09-15T00:00:00.000Z",
+      "quantityRemaining": 8,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-15T04:35:44.441Z"
+    },
+    {
+      "id": 295,
+      "productId": 24,
+      "date": "2025-09-13T00:00:00.000Z",
+      "quantityRemaining": 7,
+      "createdBy": 1,
+      "notes": null,
+      "createdAt": "2025-09-13T08:26:15.366Z"
+    }
+  ]
+}

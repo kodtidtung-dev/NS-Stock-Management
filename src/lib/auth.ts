@@ -16,8 +16,13 @@ export function createToken(payload: JWTPayload): string {
 
 export function verifyToken(token: string): JWTPayload | null {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload
-  } catch {
+    console.log('🔐 Verifying JWT token...')
+    console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET)
+    const result = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload
+    console.log('✅ Token verified successfully')
+    return result
+  } catch (error) {
+    console.log('❌ Token verification failed:', error instanceof Error ? error.message : 'Unknown error')
     return null
   }
 }
