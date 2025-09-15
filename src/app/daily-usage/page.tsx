@@ -126,16 +126,16 @@ const DailyUsagePage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-white">กำลังโหลด...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-black border-b border-white">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6">
           {/* Mobile Header */}
           <div className="block md:hidden">
@@ -143,9 +143,9 @@ const DailyUsagePage = () => {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => router.push('/dashboard')}
-                  className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                  className="p-2 hover:bg-black rounded-full transition-colors"
                 >
-                  <ArrowLeft className="w-5 h-5 text-gray-300" />
+                  <ArrowLeft className="w-5 h-5 text-white" />
                 </button>
                 
                 <Image 
@@ -157,15 +157,16 @@ const DailyUsagePage = () => {
                 />
                 
                 <div>
-                  <h1 className="text-lg font-bold text-white">การใช้งานวันนี้</h1>
+                  <h1 className="text-lg font-bold text-white">การใช้งาน/การขายวันนี้</h1>
+                  <p className="text-white">รายการใช้งาน/ขาย วันนี้</p>
                 </div>
               </div>
               
               <button 
                 onClick={logout}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-black rounded-full transition-colors"
               >
-                <LogOut className="w-5 h-5 text-gray-300" />
+                <LogOut className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
@@ -175,9 +176,9 @@ const DailyUsagePage = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-black rounded-full transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-300" />
+                <ArrowLeft className="w-5 h-5 text-white" />
               </button>
               
               <Image 
@@ -190,7 +191,7 @@ const DailyUsagePage = () => {
               
               <div>
                 <h1 className="text-2xl font-bold text-white">การใช้งานวันนี้</h1>
-                <p className="text-gray-300">รายการสินค้าที่ใช้ไปในวันนี้</p>
+                <p className="text-white">รายการสินค้าที่ใช้ไปในวันนี้</p>
               </div>
             </div>
             
@@ -198,22 +199,22 @@ const DailyUsagePage = () => {
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 px-4 py-2 bg-black hover:bg-gray-800 text-black rounded-lg transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                 <span className="text-sm font-medium">รีเฟรช</span>
               </button>
               
-              <div className="flex items-center space-x-2 text-sm text-gray-300">
+              <div className="flex items-center space-x-2 text-sm text-white">
                 <User className="w-4 h-4" />
                 <span>{user?.name}</span>
               </div>
               
               <button 
                 onClick={logout}
-                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 hover:bg-black rounded-full transition-colors"
               >
-                <LogOut className="w-5 h-5 text-gray-300" />
+                <LogOut className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
@@ -222,14 +223,14 @@ const DailyUsagePage = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Category Filter */}
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
+        <div className="bg-black rounded-xl p-4 border border-white shadow-sm">
           {/* Mobile Category Filter */}
           <div className="md:hidden mb-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">เลือกหมวดหมู่</label>
+            <label className="block text-sm font-medium text-white mb-2">เลือกหมวดหมู่</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-4 py-2 bg-black border border-white text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
             >
               <option value="all">📊 ดูทั้งหมด</option>
               {dashboardData?.categories?.map((category) => (
@@ -247,8 +248,8 @@ const DailyUsagePage = () => {
                 onClick={() => setSelectedCategory('all')}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedCategory === 'all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-black text-white hover:bg-gray-800'
                 }`}
               >
                 📊 ทั้งหมด
@@ -259,8 +260,8 @@ const DailyUsagePage = () => {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      ? 'bg-orange-600 text-white'
+                      : 'bg-black text-white hover:bg-gray-800'
                   }`}
                 >
                   {getCategoryEmoji(category)} {category}
@@ -272,16 +273,16 @@ const DailyUsagePage = () => {
           {/* View Mode Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Activity className="w-4 h-4 text-blue-500" />
-              <span className="text-sm font-medium text-gray-300">
+              <Activity className="w-4 h-4 text-orange-500" />
+              <span className="text-sm font-medium text-white">
                 {selectedCategory === 'all' ? 'การใช้งานทั้งหมด' : `การใช้งาน${selectedCategory}`}
               </span>
             </div>
-            <div className="flex bg-gray-700 rounded-lg p-1">
+            <div className="flex bg-black rounded-lg p-1">
               <button
                 onClick={() => setViewMode('list')}
                 className={`px-3 py-1 text-xs rounded transition-colors ${
-                  viewMode === 'list' ? 'bg-gray-600 text-white' : 'text-gray-400'
+                  viewMode === 'list' ? 'bg-gray-800 text-white' : 'text-white'
                 }`}
               >
                 รายการ
@@ -289,7 +290,7 @@ const DailyUsagePage = () => {
               <button
                 onClick={() => setViewMode('chart')}
                 className={`px-3 py-1 text-xs rounded transition-colors ${
-                  viewMode === 'chart' ? 'bg-gray-600 text-white' : 'text-gray-400'
+                  viewMode === 'chart' ? 'bg-gray-800 text-white' : 'text-white'
                 }`}
               >
                 กราฟ
@@ -300,24 +301,24 @@ const DailyUsagePage = () => {
 
         {/* Smart Insight */}
         {getCategoryInsight() && (
-          <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-xl p-4 border border-blue-700/50 shadow-sm">
+          <div className="bg-gradient-to-r from-orange-900/50 to-red-900/50 rounded-xl p-4 border border-orange-700/50 shadow-sm">
             <div className="flex items-start space-x-3">
               <Lightbulb className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
-              <p className="text-blue-100 text-sm">{getCategoryInsight()}</p>
+              <p className="text-white text-sm">{getCategoryInsight()}</p>
             </div>
           </div>
         )}
 
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
+          <div className="bg-black rounded-xl p-4 border border-white shadow-sm">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <Package className="w-4 h-4 text-white" />
               </div>
               <div>
-                <p className="text-xs text-gray-400">
-                  {selectedCategory === 'all' ? 'รายการที่ใช้' : `รายการ${selectedCategory}`}
+                <p className="text-xs text-white">
+                  {selectedCategory === 'all' ? 'รายการขาย/ใช้' : `รายการ${selectedCategory}`}
                 </p>
                 <p className="text-lg font-bold text-white">
                   {filteredUsageItems.length}
@@ -326,13 +327,13 @@ const DailyUsagePage = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
+          <div className="bg-black rounded-xl p-4 border border-white shadow-sm">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
                 <TrendingUp className="w-4 h-4 text-white" />
               </div>
               <div>
-                <p className="text-xs text-gray-400">การใช้งานรวม</p>
+                <p className="text-xs text-white">การใช้งานรวม</p>
                 <p className="text-lg font-bold text-white">
                   {totalUsage % 1 === 0 ? totalUsage.toString() : totalUsage.toFixed(1)}
                 </p>
@@ -340,13 +341,13 @@ const DailyUsagePage = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
+          <div className="bg-black rounded-xl p-4 border border-white shadow-sm">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
                 <Calendar className="w-4 h-4 text-white" />
               </div>
               <div>
-                <p className="text-xs text-gray-400">วันที่</p>
+                <p className="text-xs text-white">วันที่</p>
                 <p className="text-lg font-bold text-white">
                   {dashboardData?.lastUpdateDate ?
                     new Date(dashboardData.lastUpdateDate).toLocaleDateString('th-TH', {
@@ -362,28 +363,28 @@ const DailyUsagePage = () => {
         </div>
 
         {/* Search */}
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
+        <div className="bg-black rounded-xl p-4 border border-white shadow-sm">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white" />
             <input
               type="text"
               placeholder="ค้นหาสินค้า..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none placeholder-gray-400"
+              className="w-full pl-10 pr-4 py-2 bg-black border border-white text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none placeholder-white"
             />
           </div>
-          <div className="mt-2 text-sm text-gray-400">
+          <div className="mt-2 text-sm text-white">
             พบ {filteredUsageItems.length} รายการ
           </div>
         </div>
 
         {/* Chart/List Content */}
-        <div className="bg-gray-800 rounded-xl border border-gray-700 shadow-sm">
-          <div className="px-6 py-4 border-b border-gray-700">
+        <div className="bg-black rounded-xl border border-white shadow-sm">
+          <div className="px-6 py-4 border-b border-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <Activity className="w-5 h-5 text-indigo-500" />
+                <Activity className="w-5 h-5 text-orange-500" />
                 <h2 className="text-lg font-bold text-white">
                   {selectedCategory === 'all'
                     ? 'รายการการใช้งานทั้งหมด'
@@ -391,7 +392,7 @@ const DailyUsagePage = () => {
                   }
                 </h2>
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-white">
                 {viewMode === 'chart' ? 'Top 10' : `${filteredUsageItems.length} รายการ`}
               </div>
             </div>
@@ -399,8 +400,8 @@ const DailyUsagePage = () => {
 
           <div className="p-6">
             {filteredUsageItems.length === 0 ? (
-              <div className="text-center py-12 text-gray-400">
-                <BarChart3 className="w-16 h-16 mx-auto mb-4 text-gray-500" />
+              <div className="text-center py-12 text-white">
+                <BarChart3 className="w-16 h-16 mx-auto mb-4 text-white" />
                 <h3 className="text-lg font-semibold mb-2">
                   {selectedCategory === 'all'
                     ? 'ไม่มีการใช้งานวันนี้'
@@ -424,25 +425,25 @@ const DailyUsagePage = () => {
                         data={chartData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
                       >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" />
                         <XAxis
                           dataKey="name"
-                          stroke="#9CA3AF"
+                          stroke="#ffffff"
                           fontSize={12}
                           angle={-45}
                           textAnchor="end"
                           height={80}
                         />
                         <YAxis
-                          stroke="#9CA3AF"
+                          stroke="#ffffff"
                           fontSize={12}
                         />
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: '#1F2937',
-                            border: '1px solid #374151',
+                            backgroundColor: '#000000',
+                            border: '1px solid #ffffff',
                             borderRadius: '8px',
-                            color: '#F9FAFB'
+                            color: '#ffffff'
                           }}
                           formatter={(value, name, props) => [
                             `${value} ${props.payload.unit}`,
@@ -455,7 +456,7 @@ const DailyUsagePage = () => {
                         />
                         <Bar
                           dataKey="used"
-                          fill="#3B82F6"
+                          fill="#ea580c"
                           radius={[4, 4, 0, 0]}
                         />
                       </BarChart>
@@ -469,10 +470,10 @@ const DailyUsagePage = () => {
                     {filteredUsageItems.map((item, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-4 bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 transition-colors"
+                        className="flex items-center justify-between p-4 bg-black rounded-lg border border-white hover:bg-gray-800 transition-colors"
                       >
                         <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                          <div className="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center">
                             <span className="text-lg">
                               {getCategoryEmoji(item.category)}
                             </span>
@@ -480,7 +481,7 @@ const DailyUsagePage = () => {
 
                           <div>
                             <h3 className="font-semibold text-white text-lg">{item.name}</h3>
-                            <div className="flex items-center space-x-2 text-sm text-gray-400">
+                            <div className="flex items-center space-x-2 text-sm text-white">
                               <span>{item.category}</span>
                               <span>•</span>
                               <span>การใช้งานวันนี้</span>
@@ -494,9 +495,9 @@ const DailyUsagePage = () => {
                               <p className="text-2xl font-bold text-white">
                                 {item.used}
                               </p>
-                              <p className="text-sm text-gray-400">{item.unit}</p>
+                              <p className="text-sm text-white">{item.unit}</p>
                             </div>
-                            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                            <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
                               <TrendingUp className="w-4 h-4 text-white" />
                             </div>
                           </div>
@@ -512,8 +513,8 @@ const DailyUsagePage = () => {
 
         {/* Last Update Info */}
         {dashboardData?.lastUpdateTime && (
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
+          <div className="bg-black rounded-xl p-4 border border-white shadow-sm">
+            <div className="flex items-center justify-center space-x-2 text-sm text-white">
               <Calendar className="w-4 h-4" />
               <span>
                 อัปเดตล่าสุด: {new Date(dashboardData.lastUpdateDate || new Date()).toLocaleDateString('th-TH')} 
