@@ -124,7 +124,7 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
           stockLogs: stockData.map(item => ({
             productId: item.productId,
             quantityRemaining: item.quantityRemaining,
-            notes: notes || undefined
+            notes: notes || null
           }))
         }),
       })
