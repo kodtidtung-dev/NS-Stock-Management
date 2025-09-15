@@ -165,9 +165,14 @@ export const GET = withAuth(async (_request: AuthenticatedRequest) => {
     const responseData = {
       lastUpdateDate: lastUpdate?.date || new Date().toISOString().split('T')[0],
       lastUpdateTime: lastUpdate?.createdAt.toLocaleTimeString('th-TH', {
+        timeZone: 'Asia/Bangkok',
         hour: '2-digit',
         minute: '2-digit'
-      }) || new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
+      }) || new Date().toLocaleTimeString('th-TH', {
+        timeZone: 'Asia/Bangkok',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
       updatedBy: lastUpdate?.user?.name || 'ระบบ',
       summary: {
         total,
