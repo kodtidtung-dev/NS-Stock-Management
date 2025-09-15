@@ -2,7 +2,8 @@
 'use client'
 
 import { useApiCache } from './useApiCache'
-import { useEventBus, DASHBOARD_EVENTS } from '@/lib/eventBus'
+import { DASHBOARD_EVENTS } from '@/lib/eventBus'
+import { useEventBus } from './useEventBus'
 
 export interface DashboardSummary {
   totalProducts: number

@@ -74,13 +74,3 @@ export const DASHBOARD_EVENTS = {
   DATA_CHANGED: 'dashboard:data-changed',
 } as const
 
-// Utility hook for easier event usage
-import { useEffect } from 'react'
-
-export function useEventBus(event: string, callback: EventCallback, deps: React.DependencyList = []) {
-  useEffect(() => {
-    const unsubscribe = eventBus.on(event, callback)
-    return unsubscribe
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [event, callback, ...deps])
-}

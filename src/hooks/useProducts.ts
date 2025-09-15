@@ -2,7 +2,8 @@
 'use client'
 
 import { useApiCache } from './useApiCache'
-import { useEventBus, PRODUCT_EVENTS } from '@/lib/eventBus'
+import { PRODUCT_EVENTS } from '@/lib/eventBus'
+import { useEventBus } from './useEventBus'
 
 export interface Product {
   id: number

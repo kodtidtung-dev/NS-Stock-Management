@@ -1,7 +1,8 @@
 // src/hooks/useRealTimeToast.ts
 import React from 'react'
 import { toast } from 'sonner'
-import { useEventBus, PRODUCT_EVENTS, DASHBOARD_EVENTS } from '@/lib/eventBus'
+import { PRODUCT_EVENTS, DASHBOARD_EVENTS } from '@/lib/eventBus'
+import { useEventBus } from './useEventBus'
 
 export function useRealTimeToast() {
   // Product events notifications
