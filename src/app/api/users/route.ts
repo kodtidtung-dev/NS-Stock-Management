@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { withRoleAuth, AuthenticatedRequest } from '@/lib/apiAuth'
 
-export const GET = withRoleAuth(['OWNER'])(async (request: AuthenticatedRequest) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const GET = withRoleAuth(['OWNER'])(async (_request: AuthenticatedRequest) => {
   try {
     const users = await prisma.user.findMany({
       select: {

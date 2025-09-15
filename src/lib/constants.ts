@@ -5,6 +5,7 @@ export const API_MESSAGES = {
     INVALID_CREDENTIALS: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
     TOKEN_EXPIRED: 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่',
     UNAUTHORIZED: 'ไม่มีสิทธิ์เข้าถึง',
+    FORBIDDEN: 'ไม่มีสิทธิ์เข้าถึงฟังก์ชันนี้',
     LOGIN_SUCCESS: 'เข้าสู่ระบบสำเร็จ',
     LOGOUT_SUCCESS: 'ออกจากระบบสำเร็จ',
   },

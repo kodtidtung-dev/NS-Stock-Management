@@ -6,7 +6,8 @@ import { withAuth, AuthenticatedRequest } from '@/lib/apiAuth'
 // Cache the response for 60 seconds
 export const revalidate = 60;
 
-export const GET = withAuth(async (request: AuthenticatedRequest) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const GET = withAuth(async (_request: AuthenticatedRequest) => {
   try {
     // Use parallel queries for better performance
     const [products, lastUpdate] = await Promise.all([

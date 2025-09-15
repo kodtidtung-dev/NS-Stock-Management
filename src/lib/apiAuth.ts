@@ -7,7 +7,7 @@ export interface AuthenticatedRequest extends NextRequest {
   user: JWTPayload
 }
 
-export function withAuth<T extends any[]>(
+export function withAuth<T extends unknown[]>(
   handler: (request: AuthenticatedRequest, ...args: T) => Promise<NextResponse>
 ) {
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
@@ -49,7 +49,7 @@ export function withAuth<T extends any[]>(
 }
 
 export function withRoleAuth(allowedRoles: Array<'OWNER' | 'STAFF'>) {
-  return function <T extends any[]>(
+  return function <T extends unknown[]>(
     handler: (request: AuthenticatedRequest, ...args: T) => Promise<NextResponse>
   ) {
     return withAuth(async (request: AuthenticatedRequest, ...args: T) => {
@@ -70,7 +70,7 @@ export function withRoleAuth(allowedRoles: Array<'OWNER' | 'STAFF'>) {
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
 export function withRateLimit(maxRequests: number, windowMs: number) {
-  return function <T extends any[]>(
+  return function <T extends unknown[]>(
     handler: (request: NextRequest, ...args: T) => Promise<NextResponse>
   ) {
     return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
