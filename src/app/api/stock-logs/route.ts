@@ -45,10 +45,17 @@ export async function GET(request: NextRequest) {
       take: limit,
     })
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       { stockLogs },
       { status: HTTP_STATUS.OK }
     )
+
+    // Add no-cache headers to ensure fresh data
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+
+    return response
   } catch (error) {
     console.error('Get stock logs error:', error)
     return NextResponse.json(
@@ -87,81 +94,117 @@ export async function POST(request: NextRequest) {
 
       try {
         const createdLogs = []
-        
+        const errors = []
+
+        // Validate all items first
         for (const item of stockLogs) {
-          const { productId, quantity, notes } = item
-          
+          const { productId, quantity } = item
+
           if (!productId || quantity === undefined) {
-            continue // Skip invalid items
+            errors.push(`Missing productId or quantity in item`)
+            continue
           }
 
           if (quantity < 0) {
-            return NextResponse.json(
-              { error: `Invalid quantity for product ${productId}` },
-              { status: HTTP_STATUS.BAD_REQUEST }
-            )
-          }
-
-          // Check if product exists
-          const product = await prisma.product.findUnique({
-            where: { id: parseInt(productId), active: true },
-          })
-
-          if (!product) {
-            return NextResponse.json(
-              { error: `Product with ID ${productId} not found` },
-              { status: HTTP_STATUS.NOT_FOUND }
-            )
-          }
-
-          try {
-            // Create stock log (will fail if duplicate productId + date)
-            const stockLog = await prisma.stockLog.create({
-              data: {
-                productId: parseInt(productId),
-                date: stockDate,
-                quantityRemaining: parseFloat(quantity),
-                createdBy: payload.userId,
-                notes: notes || null,
-              },
-            })
-            
-            createdLogs.push(stockLog)
-          } catch (error: unknown) {
-            // Handle unique constraint violation - update existing log instead
-            const prismaError = error as { code?: string }
-            if (prismaError.code === 'P2002') {
-              const updatedLog = await prisma.stockLog.update({
-                where: {
-                  productId_date: {
-                    productId: parseInt(productId),
-                    date: stockDate
-                  }
-                },
-                data: {
-                  quantityRemaining: parseFloat(quantity),
-                  notes: notes || null,
-                }
-              })
-              
-              createdLogs.push(updatedLog)
-            } else {
-              throw error
-            }
+            errors.push(`Invalid quantity ${quantity} for product ${productId}`)
+            continue
           }
         }
 
-        return NextResponse.json(
+        if (errors.length > 0) {
+          return NextResponse.json(
+            {
+              error: 'Validation failed',
+              details: errors,
+              validatedItems: stockLogs.length - errors.length,
+              totalItems: stockLogs.length
+            },
+            { status: HTTP_STATUS.BAD_REQUEST }
+          )
+        }
+
+        // Process each item
+        for (const item of stockLogs) {
+          const { productId, quantity, notes } = item
+
+          try {
+            // Check if product exists
+            const product = await prisma.product.findUnique({
+              where: { id: parseInt(productId), active: true },
+            })
+
+            if (!product) {
+              errors.push(`Product with ID ${productId} not found`)
+              continue
+            }
+
+            // Try to create stock log
+            let stockLog
+            try {
+              stockLog = await prisma.stockLog.create({
+                data: {
+                  productId: parseInt(productId),
+                  date: stockDate,
+                  quantityRemaining: parseFloat(quantity),
+                  createdBy: payload.userId,
+                  notes: notes || null,
+                },
+              })
+            } catch (createError: unknown) {
+              // Handle unique constraint violation - update existing log instead
+              const prismaError = createError as { code?: string }
+              if (prismaError.code === 'P2002') {
+                stockLog = await prisma.stockLog.update({
+                  where: {
+                    productId_date: {
+                      productId: parseInt(productId),
+                      date: stockDate
+                    }
+                  },
+                  data: {
+                    quantityRemaining: parseFloat(quantity),
+                    notes: notes || null,
+                  }
+                })
+              } else {
+                throw createError
+              }
+            }
+
+            if (stockLog) {
+              createdLogs.push(stockLog)
+            }
+          } catch (itemError) {
+            console.error(`Error processing item ${productId}:`, itemError)
+            errors.push(`Failed to process product ${productId}: ${itemError instanceof Error ? itemError.message : 'Unknown error'}`)
+          }
+        }
+
+        const response = NextResponse.json(
           {
             message: `Successfully processed ${createdLogs.length} stock logs`,
             stockLogs: createdLogs,
+            processed: createdLogs.length,
+            total: stockLogs.length,
+            errors: errors.length > 0 ? errors : undefined
           },
-          { status: HTTP_STATUS.CREATED }
+          { status: createdLogs.length > 0 ? HTTP_STATUS.CREATED : HTTP_STATUS.BAD_REQUEST }
         )
+
+        // Add no-cache headers for immediate visibility
+        response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+        response.headers.set('Pragma', 'no-cache')
+        response.headers.set('Expires', '0')
+
+        return response
       } catch (error) {
         console.error('Bulk stock log error:', error)
         return NextResponse.json(
-          { error: 'Failed to process bulk stock data' },
+          {
+            error: 'Failed to process bulk stock data',
+            details: error instanceof Error ? error.message : 'Unknown error',
+            timestamp: new Date().toISOString()
+          },
           { status: HTTP_STATUS.INTERNAL_ERROR }
         )
       }
@@ -232,13 +275,20 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      return NextResponse.json(
+      const response = NextResponse.json(
         {
           message: API_MESSAGES.STOCK.LOG_CREATED,
           stockLog,
         },
         { status: HTTP_STATUS.CREATED }
       )
+
+      // Add no-cache headers for immediate visibility
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+
+      return response
     } catch (error: unknown) {
       // Handle unique constraint violation
       const prismaError = error as { code?: string }
