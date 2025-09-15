@@ -123,7 +123,7 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
         body: JSON.stringify({
           stockLogs: stockData.map(item => ({
             productId: item.productId,
-            quantity: item.quantityRemaining,
+            quantityRemaining: item.quantityRemaining,
             notes: notes || undefined
           }))
         }),
