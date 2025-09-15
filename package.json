@@ -11,11 +11,11 @@
     "db:studio": "npx prisma studio",
     "db:reset": "npx prisma db push --force-reset && npm run db:seed",
     "db:clear-except-users": "tsx scripts/clear-except-users.ts",
-    "postinstall": "if [ \"$VERCEL\" = \"1\" ]; then cp prisma/schema.production.prisma prisma/schema.prisma; fi && prisma generate",
+    "postinstall": "prisma generate",
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
-    "deploy:production": "cp prisma/schema.production.prisma prisma/schema.prisma && vercel --prod",
-    "vercel-build": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma generate && next build"
+    "deploy:production": "vercel --prod",
+    "vercel-build": "prisma generate && next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
