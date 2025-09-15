@@ -108,8 +108,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Add small delay to ensure cookie is cleared before redirect
       setTimeout(() => {
+        // Force clear browser cache for auth-related pages
+        if ('caches' in window) {
+          caches.keys().then(names => {
+            names.forEach(name => caches.delete(name))
+          })
+        }
         window.location.replace('/login')
-      }, 100)
+      }, 150)
     } catch (error) {
       console.error('Logout error:', error)
       // Even if API fails, logout user from frontend
@@ -122,8 +128,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.error('Error clearing storage:', clearError)
       }
       setTimeout(() => {
+        // Force clear browser cache for auth-related pages
+        if ('caches' in window) {
+          caches.keys().then(names => {
+            names.forEach(name => caches.delete(name))
+          })
+        }
         window.location.replace('/login')
-      }, 100)
+      }, 150)
     } finally {
       setLogoutLoading(false)
     }

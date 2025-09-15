@@ -46,8 +46,20 @@ export function middleware(request: NextRequest) {
     // Verify token before redirecting
     const user = verifyToken(authToken.value)
     if (user) {
+      // Don't redirect if cookie is about to expire or invalid
       const redirectUrl = user.role === 'OWNER' ? '/dashboard' : '/staff'
       return NextResponse.redirect(new URL(redirectUrl, request.url))
+    } else {
+      // Token is invalid, clear cookie and allow access to login page
+      const response = NextResponse.next()
+      response.cookies.set('auth-token', '', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/',
+        maxAge: 0,
+      })
+      return response
     }
   }
 
