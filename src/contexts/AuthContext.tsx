@@ -93,22 +93,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       })
 
-      // Only proceed with logout if API call was successful or if it failed due to network/server issues
-      // Don't block logout for auth-related failures (user should still be logged out on frontend)
-      if (response.ok || response.status >= 500) {
-        setUser(null)
-        window.location.href = '/login'
-      } else {
-        // For other errors (like 401, 403), still logout but log the error
-        console.warn('Logout API call failed, but proceeding with frontend logout:', response.status)
-        setUser(null)
-        window.location.href = '/login'
+      // Always proceed with frontend logout regardless of API response
+      setUser(null)
+
+      // Force clear all auth-related storage
+      try {
+        localStorage.clear()
+        sessionStorage.clear()
+        // Force clear cookie client-side as backup
+        document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure=' + (process.env.NODE_ENV === 'production')
+      } catch (error) {
+        console.error('Error clearing storage:', error)
       }
+
+      // Add small delay to ensure cookie is cleared before redirect
+      setTimeout(() => {
+        window.location.replace('/login')
+      }, 100)
     } catch (error) {
       console.error('Logout error:', error)
       // Even if API fails, logout user from frontend
       setUser(null)
-      window.location.href = '/login'
+      try {
+        localStorage.clear()
+        sessionStorage.clear()
+        document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure=' + (process.env.NODE_ENV === 'production')
+      } catch (clearError) {
+        console.error('Error clearing storage:', clearError)
+      }
+      setTimeout(() => {
+        window.location.replace('/login')
+      }, 100)
     } finally {
       setLogoutLoading(false)
     }
