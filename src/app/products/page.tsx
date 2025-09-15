@@ -51,7 +51,7 @@ interface NewCategory {
 }
 
 const ProductManagement = () => {
-  const { loading: authLoading, isAuthenticated } = useAuth()
+  const { loading: authLoading, isAuthenticated, isLoggingOut } = useAuth()
   const router = useRouter()
   
   // Use hooks for products data
@@ -93,14 +93,15 @@ const ProductManagement = () => {
 
   // Check authentication and redirect if needed
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
+    if (!authLoading && !isAuthenticated && !isLoggingOut) {
+      // Only redirect if not during logout process
       router.push('/login')
       return
     }
-    if (isAuthenticated) {
+    if (isAuthenticated && !isLoggingOut) {
       fetchCategories()
     }
-  }, [authLoading, isAuthenticated, router])
+  }, [authLoading, isAuthenticated, isLoggingOut, router])
 
   // Update loading state based on products loading
   useEffect(() => {

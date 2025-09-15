@@ -17,6 +17,7 @@ interface AuthContextType {
   loading: boolean
   logoutLoading: boolean
   isAuthenticated: boolean
+  isLoggingOut: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -148,6 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     logoutLoading,
     isAuthenticated: !!user,
+    isLoggingOut: logoutLoading,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
