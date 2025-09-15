@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
     const payload = token ? verifyToken(token) : null
 
     if (!payload) {
+      console.error('POST /api/stock-logs: No valid token')
       return NextResponse.json(
         { error: API_MESSAGES.AUTH.UNAUTHORIZED },
         { status: HTTP_STATUS.UNAUTHORIZED }
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    console.log('POST /api/stock-logs: Request body:', JSON.stringify(body, null, 2))
     
     // Handle bulk stock data submission (from staff page)
     if (body.stockLogs && Array.isArray(body.stockLogs)) {
@@ -86,6 +88,7 @@ export async function POST(request: NextRequest) {
       const stockDate = today // Keep as string for SQLite schema
       
       if (stockLogs.length === 0) {
+        console.error('POST /api/stock-logs: No stock data provided')
         return NextResponse.json(
           { error: 'No stock data provided' },
           { status: HTTP_STATUS.BAD_REQUEST }
@@ -98,20 +101,26 @@ export async function POST(request: NextRequest) {
 
         // Validate all items first
         for (const item of stockLogs) {
-          const { productId, quantity } = item
+          const { productId, quantityRemaining } = item
+          console.log('Validating item:', { productId, quantityRemaining })
 
-          if (!productId || quantity === undefined) {
-            errors.push(`Missing productId or quantity in item`)
+          if (!productId || quantityRemaining === undefined) {
+            const error = `Missing productId or quantityRemaining in item: ${JSON.stringify(item)}`
+            console.error(error)
+            errors.push(error)
             continue
           }
 
-          if (quantity < 0) {
-            errors.push(`Invalid quantity ${quantity} for product ${productId}`)
+          if (quantityRemaining < 0) {
+            const error = `Invalid quantityRemaining ${quantityRemaining} for product ${productId}`
+            console.error(error)
+            errors.push(error)
             continue
           }
         }
 
         if (errors.length > 0) {
+          console.error('POST /api/stock-logs: Validation failed:', errors)
           return NextResponse.json(
             {
               error: 'Validation failed',
@@ -125,7 +134,7 @@ export async function POST(request: NextRequest) {
 
         // Process each item
         for (const item of stockLogs) {
-          const { productId, quantity, notes } = item
+          const { productId, quantityRemaining, notes } = item
 
           try {
             // Check if product exists
@@ -145,7 +154,7 @@ export async function POST(request: NextRequest) {
                 data: {
                   productId: parseInt(productId),
                   date: stockDate,
-                  quantityRemaining: parseFloat(quantity),
+                  quantityRemaining: parseFloat(quantityRemaining),
                   createdBy: payload.userId,
                   notes: notes || null,
                 },
@@ -162,7 +171,7 @@ export async function POST(request: NextRequest) {
                     }
                   },
                   data: {
-                    quantityRemaining: parseFloat(quantity),
+                    quantityRemaining: parseFloat(quantityRemaining),
                     notes: notes || null,
                   }
                 })

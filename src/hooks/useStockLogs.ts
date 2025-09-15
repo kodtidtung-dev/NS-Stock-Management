@@ -153,7 +153,8 @@ export function useStockLogs(productId?: number): UseStockLogsReturn {
       }
     } catch (err) {
       console.error('Submit stock data error:', err)
-      return { success: false, error: 'Network error occurred' }
+      const errorMessage = err instanceof Error ? err.message : 'Network error occurred'
+      return { success: false, error: errorMessage }
     }
   }
 
