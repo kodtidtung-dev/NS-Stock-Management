@@ -16,15 +16,17 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get products with optimized query - split into separate queries for better performance
+    // Get products with optimized query - use compound index for better performance
     const products = await prisma.product.findMany({
+      where: {
+        active: true, // Filter for active products first (uses compound index)
+      },
       include: {
         category: {
           select: { name: true }
         },
       },
       orderBy: [
-        { active: 'desc' }, // Active products first
         { name: 'asc' }
       ]
     })
@@ -68,10 +70,10 @@ export async function GET(request: NextRequest) {
       { status: HTTP_STATUS.OK }
     )
 
-    // Add no-cache headers to ensure fresh data
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
-    response.headers.set('Pragma', 'no-cache')
-    response.headers.set('Expires', '0')
+    // Add cache headers for better performance (allow client-side caching for 2 minutes)
+    response.headers.set('Cache-Control', 'public, max-age=120, s-maxage=60')
+    response.headers.set('ETag', `"products-${Date.now()}"`)
+    response.headers.set('Last-Modified', new Date().toUTCString())
 
     return response
   } catch (error) {

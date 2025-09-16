@@ -67,7 +67,7 @@ export function useProducts(): UseProductsReturn {
     fetchProducts,
     {
       cacheTime: 10 * 60 * 1000, // 10 minutes
-      staleTime: 30 * 1000, // 30 seconds
+      staleTime: 3 * 60 * 1000, // 3 minutes
       refetchOnWindowFocus: true,
       retryAttempts: 2
     }
