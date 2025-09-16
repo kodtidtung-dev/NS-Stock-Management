@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useProducts } from '@/hooks/useProducts'
 import { useStockLogs } from '@/hooks/useStockLogs'
 import { parseFraction, validateNumberInput, formatWithUnit } from '@/lib/fractions'
-import { Coffee, Package, Save, LogOut, User, CheckCircle2, AlertCircle, Clock, Filter, History } from 'lucide-react'
+import { Coffee, Package, Save, LogOut, User, CheckCircle2, AlertCircle, Clock, Filter, History, ArrowLeft } from 'lucide-react'
 
 export default function StaffPage() {
   const { user, logout } = useAuth()
@@ -226,14 +226,25 @@ export default function StaffPage() {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <button 
+              {/* Back to Dashboard button - Only for OWNER */}
+              {user.role === 'OWNER' && (
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="p-2 hover:bg-green-100 rounded-full transition-colors border border-green-300 bg-green-50"
+                  title="กลับไปหน้า Dashboard"
+                >
+                  <ArrowLeft className="w-5 h-5 text-green-600" />
+                </button>
+              )}
+
+              <button
                 onClick={() => router.push('/stock-history')}
                 className="p-2 hover:bg-blue-100 rounded-full transition-colors border border-blue-300 bg-blue-50"
                 title="ดูประวัติและแก้ไขสต็อก"
               >
                 <History className="w-5 h-5 text-blue-600" />
               </button>
-              <button 
+              <button
                 onClick={logout}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-gray-300"
               >
