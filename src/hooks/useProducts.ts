@@ -66,8 +66,8 @@ export function useProducts(): UseProductsReturn {
     'products',
     fetchProducts,
     {
-      cacheTime: 10 * 60 * 1000, // 10 minutes
-      staleTime: 3 * 60 * 1000, // 3 minutes
+      cacheTime: 5 * 60 * 1000, // 5 minutes (reduced from 10)
+      staleTime: 30 * 1000, // 30 seconds (reduced from 3 minutes)
       refetchOnWindowFocus: true,
       retryAttempts: 2
     }
@@ -103,7 +103,7 @@ export function useProducts(): UseProductsReturn {
   }, [products, mutateCached, refetch])
 
   useEventBus(PRODUCT_EVENTS.UPDATED, (eventData) => {
-    const data = eventData as { product?: { id: number; name: string; unit: string; minimumStock: number; active?: boolean; category?: string } }
+    const data = eventData as { product?: { id: number; name: string; unit: string; minimumStock: number; active?: boolean; category?: string }; skipRefetch?: boolean }
     console.log('Product updated:', data.product)
 
     // Update the product in the list
@@ -122,8 +122,10 @@ export function useProducts(): UseProductsReturn {
       mutateCached(updatedProducts as Product[])
     }
 
-    // Background refresh
-    setTimeout(() => refetch(), 500)
+    // Only do background refresh if not explicitly skipped
+    if (!data.skipRefetch) {
+      setTimeout(() => refetch(), 500)
+    }
   }, [products, mutateCached, refetch])
 
   useEventBus(PRODUCT_EVENTS.DELETED, (eventData) => {

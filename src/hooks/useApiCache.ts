@@ -23,7 +23,7 @@ export function useApiCache<T>(
 ) {
   const {
     cacheTime = 5 * 60 * 1000, // 5 minutes
-    staleTime = 60 * 1000, // 1 minute
+    staleTime = 30 * 1000, // 30 seconds (reduced for more responsive updates)
     refetchOnWindowFocus = true,
     retryAttempts = 3
   } = options
@@ -136,6 +136,7 @@ export function useApiCache<T>(
         isStale: false
       })
       setData(newData)
+      setError(null) // Clear any existing errors when updating with new data
     } else {
       fetchData(true)
     }

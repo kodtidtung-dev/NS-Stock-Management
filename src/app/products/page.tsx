@@ -56,7 +56,7 @@ const ProductManagement = () => {
   const router = useRouter()
   
   // Use hooks for products data
-  const { products, loading: productsLoading, refetch } = useProducts()
+  const { products, loading: productsLoading, refetch, mutate } = useProducts()
   const {
     createProduct,
     deleteProduct: deleteProductMutation,
@@ -340,7 +340,14 @@ const ProductManagement = () => {
     try {
       const product = products.find(p => p.id === id)
       if (!product) return
-      
+
+      // Optimistic update
+      const originalProducts = products
+      const optimisticProducts = products.map(p =>
+        p.id === id ? { ...p, active: !p.active } : p
+      )
+      mutate(optimisticProducts)
+
       const response = await fetch(`/api/products/manage/${id}`, {
         method: 'PATCH',
         headers: {
@@ -354,13 +361,16 @@ const ProductManagement = () => {
 
       const data = await response.json()
       if (response.ok && data.success) {
-        refetch()
         toast.success(data.message)
       } else {
+        // Revert on error
+        mutate(originalProducts)
         toast.error(data.message || 'เกิดข้อผิดพลาดในการแก้ไขสถานะสินค้า')
       }
     } catch (error) {
       console.error('Error toggling product status:', error)
+      // Revert on error
+      mutate(products)
       toast.error('เกิดข้อผิดพลาดในการแก้ไขสถานะสินค้า')
     }
   }
@@ -397,6 +407,25 @@ const ProductManagement = () => {
       minimumStockValue = minimumStockResult.value
     }
 
+    // Optimistic update - update UI immediately
+    const originalProducts = products
+    const optimisticProducts = products.map(p =>
+      p.id === editingProduct.id ? {
+        ...p,
+        name: editingProduct.name,
+        categoryId: editingProduct.categoryId ? parseInt(editingProduct.categoryId.toString()) : undefined,
+        unit: editingProduct.unit,
+        minimumStock: minimumStockValue as number,
+        description: editingProduct.description,
+        updatedAt: new Date().toISOString()
+      } as Product : p
+    )
+
+    // Apply optimistic update immediately via mutation
+    mutate(optimisticProducts)
+    setEditingProduct(null)
+    setEditMinimumStockError(null)
+
     try {
       const response = await fetch(`/api/products/manage/${editingProduct.id}`, {
         method: 'PUT',
@@ -415,16 +444,17 @@ const ProductManagement = () => {
 
       const data = await response.json()
       if (response.ok && data.success) {
-        refetch()
-        setEditingProduct(null)
-        setEditMinimumStockError(null)
+        // Success - the optimistic update was correct
         toast.success(data.message)
       } else {
+        // Revert optimistic update on error
         toast.error(data.message || 'เกิดข้อผิดพลาดในการแก้ไขสินค้า')
+        mutate(originalProducts) // Revert to original state
       }
     } catch (error) {
       console.error('Error editing product:', error)
       toast.error('เกิดข้อผิดพลาดในการแก้ไขสินค้า')
+      mutate(originalProducts) // Revert to original state
     }
   }
 

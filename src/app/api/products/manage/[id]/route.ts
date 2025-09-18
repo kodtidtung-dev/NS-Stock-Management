@@ -241,7 +241,16 @@ export async function PUT(
         active: active !== undefined ? active : existingProduct.active,
         updatedAt: new Date()
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        categoryId: true,
+        unit: true,
+        minimumStock: true,
+        description: true,
+        active: true,
+        createdAt: true,
+        updatedAt: true,
         category: { select: { name: true } },
         creator: { select: { name: true } }
       }
@@ -403,7 +412,8 @@ export async function PATCH(
       select: {
         id: true,
         name: true,
-        active: true
+        active: true,
+        updatedAt: true
       }
     })
 

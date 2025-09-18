@@ -16,10 +16,23 @@ export async function GET(request: NextRequest) {
     }
 
     const products = await prisma.product.findMany({
-      include: {
+      select: {
+        id: true,
+        name: true,
+        categoryId: true,
+        unit: true,
+        minimumStock: true,
+        description: true,
+        active: true,
+        createdAt: true,
+        updatedAt: true,
         category: { select: { name: true } },
         creator: { select: { name: true } },
         stockLogs: {
+          select: {
+            quantityRemaining: true,
+            date: true
+          },
           orderBy: { date: 'desc' },
           take: 1
         }
@@ -116,7 +129,15 @@ export async function POST(request: NextRequest) {
         description: description?.trim() || null,
         createdBy: user.userId
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        categoryId: true,
+        unit: true,
+        minimumStock: true,
+        description: true,
+        active: true,
+        createdAt: true,
         category: { select: { name: true } },
         creator: { select: { name: true } }
       }
