@@ -3,6 +3,28 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { Role } from '@prisma/client'
 
+// Helper function to check user dependencies
+async function checkUserDependencies(userId: number) {
+  const [stockLogsCount, productsCount, categoriesCount] = await Promise.all([
+    prisma.stockLog.count({
+      where: { createdBy: userId }
+    }),
+    prisma.product.count({
+      where: { createdBy: userId }
+    }),
+    prisma.category.count({
+      where: { createdBy: userId }
+    })
+  ])
+
+  return {
+    stockLogs: stockLogsCount,
+    products: productsCount,
+    categories: categoriesCount,
+    hasAnyData: stockLogsCount > 0 || productsCount > 0 || categoriesCount > 0
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -168,29 +190,44 @@ export async function DELETE(
       )
     }
 
-    // Check if user has any stock logs (to prevent data integrity issues)
-    const stockLogsCount = await prisma.stockLog.count({
-      where: { createdBy: userId }
-    })
+    // Check if user has any related data (to prevent data integrity issues)
+    const dependencies = await checkUserDependencies(userId)
 
-    if (stockLogsCount > 0) {
-      // Instead of deleting, deactivate the user
+    if (dependencies.hasAnyData) {
+      // Instead of deleting, deactivate the user to preserve data integrity
       await prisma.user.update({
         where: { id: userId },
         data: { active: false }
       })
 
+      // Provide detailed information about why user cannot be deleted
+      const relatedDataInfo = []
+      if (dependencies.stockLogs > 0) relatedDataInfo.push(`ประวัติสต็อก ${dependencies.stockLogs} รายการ`)
+      if (dependencies.products > 0) relatedDataInfo.push(`สินค้า ${dependencies.products} รายการ`)
+      if (dependencies.categories > 0) relatedDataInfo.push(`หมวดหมู่ ${dependencies.categories} รายการ`)
+
       return NextResponse.json({
-        message: 'ผู้ใช้มีประวัติการทำงาน จึงทำการปิดใช้งานแทนการลบ'
+        success: true,
+        message: `ผู้ใช้มีข้อมูลที่เกี่ยวข้อง (${relatedDataInfo.join(', ')}) จึงทำการปิดใช้งานแทนการลบ`,
+        data: {
+          userId,
+          action: 'deactivated',
+          relatedData: dependencies
+        }
       })
     } else {
-      // Safe to delete if no stock logs
+      // Safe to delete if no related data
       await prisma.user.delete({
         where: { id: userId }
       })
 
       return NextResponse.json({
-        message: 'ลบผู้ใช้เรียบร้อยแล้ว'
+        success: true,
+        message: 'ลบผู้ใช้เรียบร้อยแล้ว',
+        data: {
+          userId,
+          action: 'deleted'
+        }
       })
     }
   } catch (error) {
