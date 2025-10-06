@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { X, ShoppingBag, AlertTriangle, TrendingDown, Plus, Minus, CheckCircle } from 'lucide-react'
+import { X, ShoppingBag, AlertTriangle, TrendingDown, CheckCircle } from 'lucide-react'
 
 interface ShoppingItem {
   id: number
@@ -63,65 +63,23 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
   }
 
   const updatePurchaseAmount = (itemId: number, amount: number) => {
-    setShoppingItems(items => 
-      items.map(item => 
-        item.id === itemId 
+    setShoppingItems(items =>
+      items.map(item =>
+        item.id === itemId
           ? { ...item, purchaseAmount: Math.max(0, amount) }
           : item
       )
     )
   }
 
-  const increasePurchaseAmount = (itemId: number) => {
-    setShoppingItems(items => 
-      items.map(item => 
-        item.id === itemId 
-          ? { ...item, purchaseAmount: item.purchaseAmount + 1 }
+  const addToPurchaseAmount = (itemId: number, amount: number) => {
+    setShoppingItems(items =>
+      items.map(item =>
+        item.id === itemId
+          ? { ...item, purchaseAmount: item.purchaseAmount + amount }
           : item
       )
     )
-  }
-
-  const decreasePurchaseAmount = (itemId: number) => {
-    setShoppingItems(items => 
-      items.map(item => 
-        item.id === itemId 
-          ? { ...item, purchaseAmount: Math.max(0, item.purchaseAmount - 1) }
-          : item
-      )
-    )
-  }
-
-  const updateIndividualStock = async (itemId: number) => {
-    const item = shoppingItems.find(i => i.id === itemId)
-    if (!item || item.purchaseAmount <= 0) return
-
-    setUpdating(itemId)
-    try {
-      const response = await fetch('/api/stock-logs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId: itemId,
-          quantityUsed: -item.purchaseAmount, // Negative for stock increase
-          reason: 'เจ้าของร้านซื้อเข้า'
-        }),
-      })
-
-      if (response.ok) {
-        // Remove the item from shopping list
-        setShoppingItems(items => items.filter(i => i.id !== itemId))
-        onStockUpdated()
-      } else {
-        console.error('Failed to update stock')
-      }
-    } catch (error) {
-      console.error('Error updating stock:', error)
-    } finally {
-      setUpdating(null)
-    }
   }
 
   const updateAllStocks = async () => {
@@ -194,25 +152,42 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
     return needed + buffer
   }
 
+  // Check if item is measured in "ถัง" (bucket/container)
+  const isBucketUnit = (unit: string) => {
+    return unit.toLowerCase().includes('ถัง')
+  }
+
+  // Get fraction buttons for bucket items
+  const getBucketFractions = () => [
+    { label: '1/4', value: 0.25 },
+    { label: '1/2', value: 0.5 },
+    { label: '3/4', value: 0.75 },
+    { label: '1', value: 1 },
+  ]
+
   if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 pt-4 sm:p-4 z-50">
-      <div className="bg-white rounded-xl max-w-[95vw] sm:max-w-3xl w-full max-h-[85vh] sm:max-h-[85vh] flex flex-col">
+      <div className="bg-white rounded-3xl max-w-[95vw] sm:max-w-3xl w-full max-h-[85vh] sm:max-h-[85vh] flex flex-col shadow-2xl overflow-hidden border-4 border-green-200">
         {/* Header */}
-        <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-300">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b-2 border-green-200 bg-gradient-to-r from-green-50 to-green-100">
           <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
-            <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600 flex-shrink-0" />
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 truncate">รายการอัพเดทสินค้า</h2>
-            <span className="bg-orange-100 text-orange-800 text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full font-bold flex-shrink-0">
-              {shoppingItems.length} รายการ
-            </span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">อัพเดทสินค้า</h2>
+              <p className="text-xs sm:text-sm text-gray-600 font-medium">
+                {shoppingItems.length} รายการต้องอัพเดท
+              </p>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+            className="p-2 hover:bg-white/50 rounded-2xl transition-colors flex-shrink-0"
           >
-            <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
           </button>
         </div>
 
@@ -229,90 +204,137 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
               <p className="text-sm sm:text-base">สินค้าทั้งหมดมีสต็อกเพียงพอแล้ว</p>
             </div>
           ) : (
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-3">
               {/* Shopping Items */}
               {shoppingItems.map((item) => (
                 <div
                   key={item.id}
-                  className="p-3 sm:p-4 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 transition-colors"
+                  className="bg-white rounded-2xl border-2 border-gray-200 p-4 hover:border-green-300 transition-all shadow-md hover:shadow-lg"
                 >
-                  <div className="mb-3 sm:mb-4">
-                    <div className="flex items-start space-x-3">
-                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${getStatusColor(item)}`}>
+                  {/* Item Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start space-x-3 flex-1 min-w-0">
+                      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md ${getStatusColor(item)}`}>
                         {getStatusIcon(item)}
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-black text-sm sm:text-base truncate">{String(item.name || '')}</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 mt-1">
-                          <span>คงเหลือ: {(item.currentStock || 0).toLocaleString()} {String(item.unit || '')}</span>
-                          <span>ขั้นต่ำ: {(item.minimumStock || 0).toLocaleString()} {String(item.unit || '')}</span>
-                          {item.category && (
-                            <span>หมวดหมู่: {String(item.category.name)}</span>
-                          )}
-                        </div>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2">
-                          <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium w-fit ${
-                            item.currentStock === 0 
-                              ? 'bg-red-600 text-white' 
-                              : 'bg-yellow-300 text-black'
+                        <h3 className="font-bold text-gray-900 text-base sm:text-lg mb-1">{String(item.name || '')}</h3>
+                        <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+                          <span className={`px-2.5 py-1 rounded-xl font-bold ${
+                            item.currentStock === 0
+                              ? 'bg-red-600 text-white'
+                              : 'bg-yellow-400 text-black'
                           }`}>
                             {getStatusText(item)}
                           </span>
-                          <span className="text-xs text-gray-500">
-                            แนะนำอัพเดท: {getSuggestedAmount(item)} {item.unit}
+                          <span className="text-gray-600">
+                            คงเหลือ: <span className="font-semibold text-gray-900">{(item.currentStock || 0).toLocaleString()}</span> {String(item.unit || '')}
+                          </span>
+                          <span className="text-gray-500">•</span>
+                          <span className="text-gray-600">
+                            ขั้นต่ำ: <span className="font-semibold">{(item.minimumStock || 0).toLocaleString()}</span> {String(item.unit || '')}
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Purchase Amount Input */}
-                  <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
-                    <div className="space-y-2 sm:space-y-0 sm:flex sm:items-center sm:space-x-3">
-                      <label className="block sm:inline text-xs sm:text-sm font-medium text-gray-700">จำนวนที่อัพเดท:</label>
-                      <div className="flex items-center justify-center space-x-2">
-                        <button
-                          onClick={() => decreasePurchaseAmount(item.id)}
-                          className="p-1.5 sm:p-1 hover:bg-gray-300 rounded-full transition-colors"
-                          disabled={item.purchaseAmount <= 0}
-                        >
-                          <Minus className="w-4 h-4 text-gray-600" />
-                        </button>
-                        
+
+                  {/* Quick Amount Buttons */}
+                  <div className="space-y-3">
+                    {isBucketUnit(item.unit) ? (
+                      // Bucket/Container units - show fractions
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          เลือกส่วนของถัง:
+                        </label>
+                        <div className="grid grid-cols-4 gap-2 mb-2">
+                          {getBucketFractions().map((fraction) => (
+                            <button
+                              key={fraction.label}
+                              onClick={() => addToPurchaseAmount(item.id, fraction.value)}
+                              className="px-3 py-3 bg-blue-100 hover:bg-blue-200 text-blue-900 rounded-2xl font-bold text-base border-2 border-blue-300 transition-all hover:scale-105 shadow-sm"
+                            >
+                              +{fraction.label}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="text-xs text-gray-600 bg-blue-50 rounded-xl p-2 border border-blue-200">
+                          💡 กดปุ่มเพื่อเพิ่มส่วนของถัง (เช่น กด 1/4 สองครั้ง = 1/2 ถัง)
+                        </div>
+                      </div>
+                    ) : (
+                      // Regular units - show numbers
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">เลือกจำนวนด่วน:</label>
+                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                          <button
+                            onClick={() => updatePurchaseAmount(item.id, getSuggestedAmount(item))}
+                            className="px-3 py-2.5 bg-green-100 hover:bg-green-200 text-green-800 rounded-2xl font-bold text-sm border-2 border-green-300 transition-all hover:scale-105 shadow-sm"
+                          >
+                            แนะนำ<br/><span className="text-xs">({getSuggestedAmount(item)})</span>
+                          </button>
+                          {[5, 10, 20, 50].map((amount) => (
+                            <button
+                              key={amount}
+                              onClick={() => addToPurchaseAmount(item.id, amount)}
+                              className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-2xl font-bold text-sm border-2 border-gray-300 transition-all hover:scale-105 shadow-sm"
+                            >
+                              +{amount}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Manual Input */}
+                    <div className="flex items-center space-x-3">
+                      <label className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+                        {isBucketUnit(item.unit) ? 'หรือระบุจำนวนถัง:' : 'หรือระบุเอง:'}
+                      </label>
+                      <div className="flex-1 flex items-center space-x-2">
                         <input
                           type="number"
                           min="0"
+                          step={isBucketUnit(item.unit) ? "0.25" : "1"}
                           value={item.purchaseAmount}
-                          onChange={(e) => updatePurchaseAmount(item.id, parseInt(e.target.value) || 0)}
-                          className="w-16 sm:w-20 px-2 py-1.5 sm:py-1 border border-gray-300 rounded text-center text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          onChange={(e) => updatePurchaseAmount(item.id, parseFloat(e.target.value) || 0)}
+                          className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-2xl text-center text-lg font-bold focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50"
+                          placeholder={isBucketUnit(item.unit) ? "0 หรือ 0.25, 0.5, ฯลฯ" : "0"}
                         />
-                        
-                        <button
-                          onClick={() => increasePurchaseAmount(item.id)}
-                          className="p-1.5 sm:p-1 hover:bg-gray-300 rounded-full transition-colors"
-                        >
-                          <Plus className="w-4 h-4 text-gray-600" />
-                        </button>
-                        
-                        <span className="text-xs sm:text-sm text-gray-600">{item.unit}</span>
+                        <span className="text-sm font-semibold text-gray-600 whitespace-nowrap">{item.unit}</span>
+                        {item.purchaseAmount > 0 && (
+                          <button
+                            onClick={() => updatePurchaseAmount(item.id, 0)}
+                            className="px-3 py-3 bg-red-100 hover:bg-red-200 text-red-700 rounded-2xl text-sm font-semibold transition-colors shadow-sm"
+                          >
+                            ล้าง
+                          </button>
+                        )}
                       </div>
-                      
-                      <button
-                        onClick={() => updatePurchaseAmount(item.id, getSuggestedAmount(item))}
-                        className="w-full sm:w-auto px-3 py-1.5 sm:px-2 sm:py-1 text-xs bg-gray-300 hover:bg-gray-400 rounded transition-colors"
-                      >
-                        ใส่จำนวนแนะนำ
-                      </button>
                     </div>
-                    
-                    <button
-                      onClick={() => updateIndividualStock(item.id)}
-                      disabled={item.purchaseAmount <= 0 || updating === item.id}
-                      className="w-full sm:w-auto px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-                    >
-                      {updating === item.id ? 'กำลังอัพเดท...' : 'อัพเดท'}
-                    </button>
+
+                    {/* Preview */}
+                    {item.purchaseAmount > 0 && (
+                      <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-3 shadow-sm">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-green-800 font-semibold">จำนวนที่จะอัพเดท:</span>
+                          <span className="text-green-900 font-bold text-lg">
+                            +{isBucketUnit(item.unit) && item.purchaseAmount % 1 !== 0
+                              ? item.purchaseAmount.toFixed(2).replace(/\.?0+$/, '')
+                              : item.purchaseAmount} {item.unit}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-green-700 mt-1">
+                          <span>สต็อกใหม่จะเป็น:</span>
+                          <span className="font-semibold">
+                            {isBucketUnit(item.unit) && (item.currentStock + item.purchaseAmount) % 1 !== 0
+                              ? (item.currentStock + item.purchaseAmount).toFixed(2).replace(/\.?0+$/, '')
+                              : (item.currentStock + item.purchaseAmount).toLocaleString()} {item.unit}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -322,24 +344,45 @@ const ShoppingListModal: React.FC<ShoppingListModalProps> = ({ isOpen, onClose, 
 
         {/* Footer */}
         {shoppingItems.length > 0 && (
-          <div className="p-3 sm:p-6 border-t border-gray-300 bg-gray-50">
-            <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
-              <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
-                รายการที่มีจำนวนอัพเดท: {shoppingItems.filter(item => item.purchaseAmount > 0).length} รายการ
+          <div className="p-4 sm:p-6 border-t-2 border-green-200 bg-gradient-to-r from-gray-50 to-green-50">
+            <div className="space-y-3">
+              {/* Summary */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">รายการที่พร้อมอัพเดท</p>
+                  <p className="text-2xl font-extrabold text-gray-900">
+                    {shoppingItems.filter(item => item.purchaseAmount > 0).length} / {shoppingItems.length}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-gray-600">จำนวนรวม</p>
+                  <p className="text-xl font-bold text-green-600">
+                    {shoppingItems.reduce((sum, item) => sum + item.purchaseAmount, 0)} รายการ
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={onClose}
-                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg transition-colors font-medium text-sm"
+                  className="w-full sm:w-auto px-6 py-3 bg-white hover:bg-gray-100 text-gray-800 rounded-2xl transition-colors font-semibold text-base border-2 border-gray-300 shadow-sm"
                 >
                   ปิด
                 </button>
                 <button
                   onClick={updateAllStocks}
                   disabled={shoppingItems.filter(item => item.purchaseAmount > 0).length === 0 || updating === 'all'}
-                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl transition-all font-bold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
                 >
-                  {updating === 'all' ? 'กำลังอัพเดททั้งหมด...' : 'อัพเดทสต็อกทั้งหมด'}
+                  {updating === 'all' ? (
+                    <span className="flex items-center justify-center space-x-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>กำลังอัพเดท...</span>
+                    </span>
+                  ) : (
+                    `อัพเดทสต็อกทั้งหมด (${shoppingItems.filter(item => item.purchaseAmount > 0).length})`
+                  )}
                 </button>
               </div>
             </div>

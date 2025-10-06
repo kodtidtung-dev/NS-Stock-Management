@@ -184,7 +184,7 @@ const OwnerDashboard = () => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setShowShoppingList(true)}
-                  className="flex items-center space-x-1 px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
+                  className="flex items-center space-x-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
                 >
                   <ShoppingBag className="w-3 h-3" />
                   <span className="text-sm font-semibold">อัพเดท</span>
@@ -224,7 +224,7 @@ const OwnerDashboard = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowShoppingList(true)}
-                className="flex items-center space-x-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span className="font-semibold">รายการอัพเดท</span>
