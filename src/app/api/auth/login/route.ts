@@ -83,8 +83,19 @@ export const POST = withRateLimit(20, 5 * 60 * 1000)(async (request: NextRequest
     return response
   } catch (error) {
     logger.error('Login error:', error)
+    logger.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      hasJwtSecret: !!process.env.JWT_SECRET,
+      hasDatabaseUrl: !!process.env.DATABASE_URL,
+    })
     return NextResponse.json(
-      { error: API_MESSAGES.GENERAL.INTERNAL_ERROR },
+      {
+        error: API_MESSAGES.GENERAL.INTERNAL_ERROR,
+        debug: process.env.NODE_ENV === 'development' ? {
+          message: error instanceof Error ? error.message : 'Unknown error'
+        } : undefined
+      },
       { status: HTTP_STATUS.INTERNAL_ERROR }
     )
   }
