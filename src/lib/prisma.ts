@@ -15,23 +15,8 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient({
     db: {
       url: databaseUrl
     }
-  },
-  // Critical: Configure connection for serverless
-  __internal: {
-    engine: {
-      // Retry on connection errors
-      connection_retries: 3,
-    }
   }
 })
-
-// Always disconnect after query in serverless (prevent stale connections)
-if (process.env.NODE_ENV === 'production') {
-  // Store original query method
-  const originalQuery = prisma.$queryRaw.bind(prisma)
-
-  // No auto-disconnect in serverless - let Vercel handle it
-}
 
 // Prevent hot reload from creating new instances
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
